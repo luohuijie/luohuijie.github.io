@@ -156,13 +156,29 @@
     <article id="post-跨标签页通信" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/09/08/%E8%B7%A8%E6%A0%87%E7%AD%BE%E9%A1%B5%E9%80%9A%E4%BF%A1/">跨标签页通信</a>
+    </h1>
+  
+
+        
+        <a href="/2023/09/08/%E8%B7%A8%E6%A0%87%E7%AD%BE%E9%A1%B5%E9%80%9A%E4%BF%A1/" class="archive-article-date">
+  	<time datetime="2023-09-07T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-08</time>
+</a>
+        
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="跨标签页通信"><a href="#跨标签页通信" class="headerlink" title="跨标签页通信"></a>跨标签页通信</h1><h1 id="技术讲解"><a href="#技术讲解" class="headerlink" title="技术讲解"></a>技术讲解</h1><h2 id="什么问题"><a href="#什么问题" class="headerlink" title="什么问题"></a>什么问题</h2><p>有时候我们会有一些比较特殊的需求，比如，当产品在多个标签页上打开时，在其中一个标签页上做了操作，其他页面需要同步对应的状态，这其实就涉及到前端的跨标签页通信。</p>
+        <!-- # 跨标签页通信 -->
+
+<h1 id="技术讲解"><a href="#技术讲解" class="headerlink" title="技术讲解"></a>技术讲解</h1><h2 id="什么问题"><a href="#什么问题" class="headerlink" title="什么问题"></a>什么问题</h2><p>有时候我们会有一些比较特殊的需求，比如，当产品在多个标签页上打开时，在其中一个标签页上做了操作，其他页面需要同步对应的状态，这其实就涉及到前端的跨标签页通信。</p>
 <p>比如一个常规的业务列表页，页面中提供了一个新增功能，由于新增功能的表单项内容比较多，所以交互上使用新开一个窗口来完成。这时问题来了，在新增完成后，如何通知列表页面刷新列表数据，以便展示出刚才新增的那一条数据。</p>
-<p>当然你无需质疑为什么在普遍使用SPA页面的现在，为啥有这种需求。如果用户的习惯是多显示屏操作呢？</p>
-<p>这还是比较常规的需求，如果项目涉及到设计相关的，用户希望在列表页打开模板，但是想在新的标签页面展示，又不想每次点击都打开一个新的标签页，就类似于大家常见的音乐播放网站，那这种也涉及到跨页面通信</p>
-<h2 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h2><p>首先，由于涉及到多标签页了，也就是说这种通信你不可能通过简单的<strong>仓库保存变量</strong>来实现，因为对于现在的前端项目来说，一个新的页面是不可能拿去到之前页面的变量的，所以我们思考的点，肯定是跨标签页的通信。</p>
+<p>这是比较常规的需求，如果项目涉及到设计相关的，用户希望在列表页打开模板，但是想在新的标签页面展示，又不想每次点击都打开一个新的标签页，就类似于大家常见的音乐播放网站，这种也涉及到跨页面通信</p>
+<h2 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h2><p>首先，由于涉及到多标签页了，所以这种通信不能通过简单的<strong>仓库保存变量</strong>来实现，因为对于现在的前端项目来说，一个新的页面是拿不到之前页面的变量的，所以我们思考的点，肯定是跨标签页的通信。</p>
 <h3 id="常见的跨标签页方案："><a href="#常见的跨标签页方案：" class="headerlink" title="常见的跨标签页方案："></a>常见的跨标签页方案：</h3><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Broadcast_Channel_API">BroadCastChannel</a></p>
 <p>LocalStorage <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/storage_event">window.onstorage 监听</a></p>
 <p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/WebSocket">Websocket</a></p>
@@ -217,7 +233,7 @@
 <p>如果需要支持跨域，且仅在该窗口打开另一个窗口的情况下，适合使用 <code>window.open + window.opener</code>，</p>
 <p>如果有 <code>WebSocket</code> 服务端的支持，使用 <code>WebSocket</code> 实现实时通信和双向数据传递。</p>
 <h2 id="解决细节"><a href="#解决细节" class="headerlink" title="解决细节"></a>解决细节</h2><p>选择好方案之后，实现其细节其实并不麻烦，特别是使用<code>BroadCastChannel</code>和<code>window.onstorage</code>使用起来很简单，我们这里使用<code>BroadCastChannel</code>，这个API可以在不同标签页之间广播消息。它使用类似于广播电台的模式，<strong>发送者将消息广播到所有订阅该频道的标签页</strong>，<strong>该频道在同源下的所有浏览器上下文共用，一个名称只对应一个频道</strong></p>
-<p><img src="/./assets/broadcastchannel.png" alt="Broadcast Channel API 的原理"></p>
+<p><img src="/../assets/broadcastchannel.png" alt="Broadcast Channel API 的原理"></p>
 <p>当然在使用中还有一些细节：</p>
 <p>一个是<strong>参数的传递</strong>，当然无论我们传递的是数字，字符串还是对象其实都没有问题，但是如果在Vue环境里面，两个标签页在传递对象数据的时候，会报错：</p>
 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Uncaught</span> (<span class="keyword">in</span> promise) <span class="title class_">DOMException</span>: <span class="title class_">Failed</span> to execute <span class="string">&#x27;postMessage&#x27;</span> on <span class="string">&#x27;BroadcastChannel&#x27;</span>: #&lt;<span class="title class_">Object</span>&gt; could not be cloned.</span><br></pre></td></tr></table></figure>
@@ -233,11 +249,22 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">前端</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/%E8%B7%A8%E6%A0%87%E7%AD%BE%E9%A1%B5%E9%80%9A%E4%BF%A1/">展开全文 >></a>
+          <a class="article-more-a" href="/2023/09/08/%E8%B7%A8%E6%A0%87%E7%AD%BE%E9%A1%B5%E9%80%9A%E4%BF%A1/">展开全文 >></a>
         </p>
       
 
@@ -274,13 +301,13 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/hello-world/">Hello World</a>
+      <a class="article-title" href="/2021/03/12/hello-world/">Hello World</a>
     </h1>
   
 
         
-        <a href="/hello-world/" class="archive-article-date">
-  	<time datetime="2024-10-16T08:24:40.654Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-10-16</time>
+        <a href="/2021/03/12/hello-world/" class="archive-article-date">
+  	<time datetime="2021-03-11T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-12</time>
 </a>
         
       </header>
@@ -308,11 +335,30 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Hello World</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Hexo</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Blog</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/hello-world/">展开全文 >></a>
+          <a class="article-more-a" href="/2021/03/12/hello-world/">展开全文 >></a>
         </p>
       
 
@@ -433,6 +479,22 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Hello World</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Hexo</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Blog</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">前端</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
