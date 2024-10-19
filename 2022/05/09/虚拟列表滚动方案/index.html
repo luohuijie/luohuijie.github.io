@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="技术讲解什么问题1. 长列表渲染问题问题：渲染整个长列表容易造成页面阻塞，用户体验不好 解决方案：  时间分片 效率低 不直观 性能差   虚拟列表（推荐使用）  2. 虚拟列表原理设置一个可视区域，然后用户在滚动列表的时候，本质上是动态修改可视区域里面的内容。 例如，一开始渲染前面 5 个项目   之后用户进行滚动，就会动态的修改可视区域里面的内容，如下图所示：   3. 虚拟列表的实现假设列表">
+<meta property="og:type" content="article">
+<meta property="og:title" content="虚拟列表滚动方案">
+<meta property="og:url" content="http://example.com/2022/05/09/%E8%99%9A%E6%8B%9F%E5%88%97%E8%A1%A8%E6%BB%9A%E5%8A%A8%E6%96%B9%E6%A1%88/index.html">
+<meta property="og:site_name" content="luohuijie">
+<meta property="og:description" content="技术讲解什么问题1. 长列表渲染问题问题：渲染整个长列表容易造成页面阻塞，用户体验不好 解决方案：  时间分片 效率低 不直观 性能差   虚拟列表（推荐使用）  2. 虚拟列表原理设置一个可视区域，然后用户在滚动列表的时候，本质上是动态修改可视区域里面的内容。 例如，一开始渲染前面 5 个项目   之后用户进行滚动，就会动态的修改可视区域里面的内容，如下图所示：   3. 虚拟列表的实现假设列表">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="article:published_time" content="2022-05-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-10-19T17:37:26.369Z">
+<meta property="article:author" content="Laura">
+<meta property="article:tag" content="移动端">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/404.jpg">
+
+    <meta name="keywords" content="前端,js,jquery,javascript,html5,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,html,css,css3,用户体验">
+
+
+<title >虚拟列表滚动方案</title>
+
+<!-- Favicon -->
+
+
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Laura","root":"/","typed_text":["Hungry | Stay Foolish"],"theme_version":"2.2.2","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":null,"icon16":null,"icon32":null,"apple_touch_icon":null,"webmanifest":null,"visibilitychange":true,"hidden":"failure.ico","show_text":"回来啦~","hide_text":"(●—●)看不见我！"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","sticky":"TOP","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":true,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":200},"toc":{"post_title":true},"live_time":{"start_time":"2020/05/16 17:00:00","prefix":"The blog has been lovely to run undefined day"},"danmu":{"enable":true,"el":".trm-banner","avatar":false,"delayRange":5000,"speed":80},"covers":["/img/block.jpg","https://img3.wallspic.com/previews/2/0/1/8/6/168102/168102-yi_shu-ka_tong-mian_bu_biao_qing-kuai_le_de-ji_qie-500x.jpg","https://img2.wallspic.com/previews/2/6/4/3/7/173462/173462-qi_fen-zi_se_de-zi_ran_jing_guan-yu_hui-de_ping_xian-500x.jpg","https://img2.wallspic.com/previews/3/3/9/1/3/131933/131933-mo_xing-xiao_jie-huang_se_de-nu_hai-fa_xing-500x.jpg","https://img1.wallspic.com/previews/8/3/4/6/2/126438/126438-wei_lai_zhu_yi-shu_ma_yi_shu-jie_duan-zi_ben_shi-yi_shu-500x.jpg","https://img2.wallspic.com/previews/0/1/5/0/7/170510/170510-guang-azure-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-500x.jpg","https://img2.wallspic.com/previews/3/6/9/6/5/156963/156963-yi_shu-qi_fen-yu_hui-shou_shi-ren_men_zai_zi_ran_jie-500x.jpg","https://img1.wallspic.com/previews/0/9/3/5/6/165390/165390-qi_fen-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-tian_wen_xue_dui_xiang-500x.jpg","https://img3.wallspic.com/previews/2/8/6/1/7/171682/171682-yi_kuai-xing_zhi-ye_ti-yi_shu-shui_xia-500x.jpg","https://img1.wallspic.com/previews/7/1/9/9/89917/89917-bo_xi_ta_nuo-an_zhuang_de_feng_jing-cheng_shi-suo_lun_tuo-shan_zhan-500x.jpg","https://img2.wallspic.com/previews/5/0/9/0/70905/70905-hai_yang-ma_er_dai_fu-tian_kong-du_jia_cun-huan_jiao-500x.jpg","https://img3.wallspic.com/previews/4/3/4/8/6/168434/168434-xing_zhi-zi_ran_jing_guan-dan_huang-shui_dao-zhi_bei-500x.jpg","https://img1.wallspic.com/previews/5/4/0/4/7/174045/174045-jian_ying-qi_fen-ren_men_zai_zi_ran_jie-tian_wen_xue_dui_xiang-yi_shu-500x.jpg","https://img1.wallspic.com/previews/9/3/1/6/5/156139/156139-feng_jing_hua-yi_shu-shu_ma_yi_shu-qi_fen-sheng_tai_qu-500x.jpg","https://img1.wallspic.com/previews/7/5/7/9/6/169757/169757-ji_bo_li_de_bo_wu_guan-zi_ran_jing_guan-yi_shu-ji_yun-500x.jpg","https://img1.wallspic.com/previews/5/2/0/6/7/176025/176025-qi_fen-tian_wen_xue_dui_xiang-yi_shu-dian_lan_se_de-yuan_quan-500x.jpg","https://img3.wallspic.com/previews/5/1/0/2/4/142015/142015-feng_ge-ka_ka_xi_qi_mu-huo_ying_ren_zhe-tu_xing_she_ji-shi_jue_yi_shu-500x.jpg"],"creative_commons":{"license":"by-nc-sa","language":"deed.zh-hans"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-10-20 01:37:26"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.2.2" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+
+ 
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+    
+        <div class="trm-logo-text">
+            La<span>ura</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    Home
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    Archives
+                </a>
+                
+                <ul>
+                    
+                    <li>
+                        <a  href="/tags/" target="">
+                            标签
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a  href="/categories/" target="">
+                            分类
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    Links
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/about/" target="">
+                    About
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont fas fa-search"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            虚拟列表滚动方案
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2022
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/img1.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Laura
+    </h5>
+    
+        <div class="trm-label">
+            Stay
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/luohuijie" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                CITY:
+            </div>
+            <div class="trm-label trm-label-light">
+                HANGZHOU
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:miss_rowe@163.com" class="trm-btn">
+            Contact Me
+            <i class="iconfont far fa-envelope"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            22/05/09
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            00:00
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Laura
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="技术讲解"><a href="#技术讲解" class="headerlink" title="技术讲解"></a>技术讲解</h1><h2 id="什么问题"><a href="#什么问题" class="headerlink" title="什么问题"></a>什么问题</h2><h3 id="1-长列表渲染问题"><a href="#1-长列表渲染问题" class="headerlink" title="1. 长列表渲染问题"></a>1. 长列表渲染问题</h3><p>问题：渲染整个长列表容易造成<strong>页面阻塞</strong>，用户体验不好</p>
+<p>解决方案：</p>
+<ul>
+<li>时间分片<ul>
+<li>效率低</li>
+<li>不直观</li>
+<li>性能差</li>
+</ul>
+</li>
+<li>虚拟列表（推荐使用）</li>
+</ul>
+<h3 id="2-虚拟列表原理"><a href="#2-虚拟列表原理" class="headerlink" title="2. 虚拟列表原理"></a>2. 虚拟列表原理</h3><p>设置一个<strong>可视区域</strong>，然后用户在滚动列表的时候，本质上是<strong>动态修改可视区域里面的内容</strong>。</p>
+<p>例如，一开始渲染前面 5 个项目</p>
+<img src="../assets/01.png" alt="image-20240701162418114" style="zoom:40%;"   data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'/>
+
+<p>之后用户进行滚动，就会动态的修改可视区域里面的内容，如下图所示：</p>
+<img src="../assets/02.png" alt="image-20240701162813149" style="zoom:50%;"   data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'/>
+
+<h3 id="3-虚拟列表的实现"><a href="#3-虚拟列表的实现" class="headerlink" title="3. 虚拟列表的实现"></a>3. 虚拟列表的实现</h3><p>假设列表里面每一项<strong>定高</strong>，我们需要得到一些信息：</p>
+<ol>
+<li>可视区域起始数据索引(startIndex)</li>
+<li>可视区域结束数据索引(endIndex)</li>
+<li>可视区域的数据</li>
+<li>整个列表中的偏移位置 startOffset</li>
+</ol>
+<p>如下图所示：</p>
+<img src="../assets/03.png" alt="image-20240701164454859" style="zoom:50%;"   data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'/>
+
+<p>整个虚拟列表的设计如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 可视区域容器 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;infinite-list-container&quot;</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 这是容器里面的占位，高度是总列表高度，用于形成滚动条 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;infinite-list-phantom&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 列表项渲染区域 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;infinite-list&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- item-1 --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- item-2 --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- ...... --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- item-n --&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>infinite-list-container: 可视区域容器</li>
+<li>infinite-list-phantom： 这是容器里面的占位，高度是总列表高度，用于形成滚动条</li>
+<li>infinite-list：列表项渲染区域</li>
+</ul>
+<p>如下图所示：</p>
+<img src="../assets/04.png" alt="image-20240701165847905" style="zoom:50%;"   data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'/>
+
+<p>接下来监听 infinite-list-container 的 scroll 事件，获取滚动位置的 scrollTop</p>
+<ul>
+<li>假定可视区域高度固定，称之为 screenHeight</li>
+<li>假定列表每项高度固定，称之为 itemSize</li>
+<li>假定列表数据称之为 listData</li>
+<li>假定当前滚动位置称之为 scrollTop</li>
+</ul>
+<p>那么我们能够计算出这么一些信息：</p>
+<ol>
+<li>列表总高度 listHeight &#x3D; listData.length * itemSize</li>
+<li>可显示的列表项数 visibleCount &#x3D; Math.ceil(screenHeight &#x2F; itemSize)</li>
+<li>数据的起始索引 startIndex &#x3D; Math.floor(scrollTop &#x2F; itemSize)</li>
+<li>数据的结束索引 endIndex &#x3D; startIndex + visibleCount</li>
+<li>列表显示数据为 visibleData &#x3D; listData.slice(startIndex, endIndex)</li>
+</ol>
+<p>当发生滚动之后，由于渲染区域相对于可视区域发生了偏移。我们需要计算出来这个偏移量，然后使用 transform 将 list 重新移回到可视区域。</p>
+<p>偏移量 startOffset &#x3D; scrollTop - (scrollTop % itemSize)</p>
+<img src="../assets/05.png" alt="image-20240701170126764" style="zoom:50%;"   data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'/>
+
+<h3 id="4-遗留问题"><a href="#4-遗留问题" class="headerlink" title="4. 遗留问题"></a>4. 遗留问题</h3><p><strong>1. 动态高度</strong></p>
+<p>目前的虚拟列表，是定高度 itemSize，所以很多东西很容易计算</p>
+<ul>
+<li>列表总高度：listHeight &#x3D; listData.length * itemSize </li>
+<li>偏移量的计算：startOffset &#x3D; scrollTop - (scrollTop % itemSize)</li>
+<li>数据的起始索引 startIndex &#x3D; Math.floor(scrollTop &#x2F; itemSize)</li>
+</ul>
+<p>但是在实际应用中，很多条目并非高度相同：</p>
+<img src="../assets/06.png" alt="image-20240702084546314" style="zoom:50%;"   data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'/>
+
+<p>因此在这种不定高的场景下，会遇到这么一些问题：</p>
+<ol>
+<li>如何获取真实高度？</li>
+<li>相关属性的计算有何变化？</li>
+<li>列表的渲染方式有什么改变？</li>
+</ol>
+<p><strong>2. 白屏问题</strong></p>
+<p>因为现在仅渲染可视区域的元素，如果用户滚动过快，会出现白屏闪烁。</p>
+<h2 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h2><h3 id="1-动态高度"><a href="#1-动态高度" class="headerlink" title="1. 动态高度"></a>1. 动态高度</h3><ol>
+<li>如何获取真实高度？<ul>
+<li>如果能获得列表项高度数组，真实高度问题就很好解决。但在实际渲染之前是<strong>很难拿到每一项的真实高度</strong>的，所以我们<strong>采用预估</strong>一个高度渲染出真实 DOM，<strong>再根据 DOM 的实际情况去设置真实高度</strong>。</li>
+<li>创建一个缓存列表，其中列表项字段为 索引、高度与定位，并<strong>预估列表项高度</strong>用于<strong>初始化缓存列表</strong>。在渲染后根据 DOM 实际情况<strong>更新缓存列表</strong>。</li>
+</ul>
+</li>
+<li>相关属性该如何计算？<ul>
+<li>显然以前的计算方式都<strong>无法使用</strong>了，因为那都是针对固定值设计的。</li>
+<li>于是我们需要 <strong>根据缓存列表重写计算属性、滚动回调函数</strong>，例如列表总高度的计算可以使用缓存列表最后一项的定位字段的值。</li>
+</ul>
+</li>
+<li>列表渲染方式有何改变？<ul>
+<li>因为用于渲染页面元素的数据是根据 <strong>开始&#x2F;结束索引</strong> 在 <strong>数据列表</strong> 中筛选出来的，所以只要保证索引的正确计算，那么<strong>渲染方式是无需变化</strong>的。</li>
+<li>对于开始索引，我们将原先的计算公式改为：在 <strong>缓存列表</strong> 中搜索<strong>第一个</strong>底部定位大于 <strong>列表垂直偏移量</strong> 的项并返回它的索引</li>
+<li>对于结束索引，它是根据开始索引生成的，无需修改。</li>
+</ul>
+</li>
+</ol>
+<h3 id="2-白屏闪烁"><a href="#2-白屏闪烁" class="headerlink" title="2. 白屏闪烁"></a>2. 白屏闪烁</h3><p>添加缓存区，整个渲染区域由 <strong>可视区 + 缓冲区</strong> 共同组成。</p>
+<img src="../assets/07.png" alt="image-20240702090152620" style="zoom:50%;"   data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'/>
+
+<h2 id="解决细节"><a href="#解决细节" class="headerlink" title="解决细节"></a>解决细节</h2><h3 id="1-动态高度-1"><a href="#1-动态高度-1" class="headerlink" title="1. 动态高度"></a>1. 动态高度</h3><p><strong>1. 预估并初始化列表</strong></p>
+<p>首先增加一个 props，存储预估高度</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> props = <span class="title function_">defineProps</span>(&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="comment">// 预估高度</span></span><br><span class="line">  <span class="attr">estimatedItemSize</span>: &#123;</span><br><span class="line">    <span class="attr">type</span>: <span class="title class_">Number</span>,</span><br><span class="line">    <span class="attr">required</span>: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>父组件在使用该虚拟列表组件时，就需要传递这个 props：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualList :listData=&quot;data&quot; :estimatedItemSize=&quot;100&quot; v-slot=&quot;slotProps&quot;&gt;</span><br><span class="line">  &lt;Item :item=&quot;slotProps.item&quot; /&gt;</span><br><span class="line">&lt;/VirtualList&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在虚拟列表组件里面，就需要维护一个缓存列表 postions，一开始以预估的高度来做初始化</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> positions = []</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">initPositions</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  positions = props.<span class="property">listData</span>.<span class="title function_">map</span>(<span class="function">(<span class="params">d, index</span>) =&gt;</span> (&#123;</span><br><span class="line">    index,</span><br><span class="line">    <span class="attr">height</span>: props.<span class="property">estimatedItemSize</span>, <span class="comment">// 一开始以预估高度来做初始化</span></span><br><span class="line">    <span class="attr">top</span>: index * props.<span class="property">estimatedItemSize</span>,</span><br><span class="line">    <span class="attr">bottom</span>: (index + <span class="number">1</span>) * props.<span class="property">estimatedItemSize</span></span><br><span class="line">  &#125;))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2. 更新真实数据</strong></p>
+<p>每次渲染之后，需要获取 DOM 的真实高度，然后去替换 postions 里面的预估高度。</p>
+<p>这个操作放在 Vue 里面 updated 钩子里面来处理：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 更新每一项的真实高度</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">updateItemsSize</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  items.<span class="property">value</span>.<span class="title function_">forEach</span>(<span class="function">(<span class="params">node</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> rect = node.<span class="title function_">getBoundingClientRect</span>()</span><br><span class="line">    <span class="keyword">let</span> height = rect.<span class="property">height</span></span><br><span class="line">    <span class="keyword">let</span> index = +node.<span class="property">id</span>.<span class="title function_">slice</span>(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">let</span> oldHeight = positions[index].<span class="property">height</span></span><br><span class="line">    <span class="keyword">let</span> dValue = oldHeight - height</span><br><span class="line">    <span class="keyword">if</span> (dValue) &#123;</span><br><span class="line">      positions[index].<span class="property">bottom</span> -= dValue</span><br><span class="line">      positions[index].<span class="property">height</span> = height</span><br><span class="line"></span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">let</span> k = index + <span class="number">1</span>; k &lt; positions.<span class="property">length</span>; k++) &#123;</span><br><span class="line">        positions[k].<span class="property">top</span> = positions[k - <span class="number">1</span>].<span class="property">bottom</span></span><br><span class="line">        positions[k].<span class="property">bottom</span> -= dValue</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 更新偏移量</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">setStartOffset</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> startOffset = start.<span class="property">value</span> &gt;= <span class="number">1</span> ? positions[start.<span class="property">value</span> - <span class="number">1</span>].<span class="property">bottom</span> : <span class="number">0</span></span><br><span class="line">  content.<span class="property">value</span>.<span class="property">style</span>.<span class="property">transform</span> = <span class="string">`translate3d(0,<span class="subst">$&#123;startOffset&#125;</span>px,0)`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">onUpdated</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">requestAnimationFrame</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!items.<span class="property">value</span> || !items.<span class="property">value</span>.<span class="property">length</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">updateItemsSize</span>()</span><br><span class="line">    <span class="keyword">let</span> height = positions[positions.<span class="property">length</span> - <span class="number">1</span>].<span class="property">bottom</span></span><br><span class="line">    phantom.<span class="property">value</span>.<span class="property">style</span>.<span class="property">height</span> = height + <span class="string">&#x27;px&#x27;</span></span><br><span class="line">    <span class="title function_">setStartOffset</span>()</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>3. 重写滚动回调</strong></p>
+<p>滚动回调里面，主要是需要更新获取 startIndex 的方式。</p>
+<p>遍历缓存列表 positions，找到第一个定位大于当前滚动距离 scorllTop 的条目，返回该条目的索引值即可。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取列表起始索引</span></span><br><span class="line"><span class="title function_">getStartIndex</span>(<span class="params">scrollTop = <span class="number">0</span></span>)&#123;</span><br><span class="line">  <span class="keyword">let</span> item = <span class="variable language_">this</span>.<span class="property">positions</span>.<span class="title function_">find</span>(<span class="function"><span class="params">i</span> =&gt;</span> i &amp;&amp; i.<span class="property">bottom</span> &gt; scrollTop);</span><br><span class="line">  <span class="keyword">return</span> item.<span class="property">index</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">scrollEvent</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> scrollTop = list.<span class="property">value</span>.<span class="property">scrollTop</span></span><br><span class="line">  start.<span class="property">value</span> = <span class="title function_">getStartIndex</span>(scrollTop) <span class="comment">// 获取 startIndex</span></span><br><span class="line">  end.<span class="property">value</span> = start.<span class="property">value</span> + visibleCount.<span class="property">value</span> <span class="comment">// 根据 startIndex 获取 endIndex</span></span><br><span class="line">  <span class="title function_">setStartOffset</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里有一个优化的点，postions 是一个有序的数组，因此我们在查找的时候就可以做优化。</p>
+<p>之前用的 find：顺序查找，时间复杂度为 O(<sub>n</sub>)</p>
+<p>因为是有序数组，可以改为二分查找，时间复杂度为  (O(logN))</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">getStartIndex</span> = (<span class="params">scrollTop = <span class="number">0</span></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">binarySearch</span>(positions, scrollTop)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">binarySearch</span> = (<span class="params">list, value</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> start = <span class="number">0</span></span><br><span class="line">  <span class="keyword">let</span> end = list.<span class="property">length</span> - <span class="number">1</span></span><br><span class="line">  <span class="keyword">let</span> tempIndex = <span class="literal">null</span></span><br><span class="line">  <span class="keyword">while</span> (start &lt;= end) &#123;</span><br><span class="line">    <span class="keyword">let</span> midIndex = <span class="built_in">parseInt</span>((start + end) / <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">let</span> midValue = list[midIndex].<span class="property">bottom</span></span><br><span class="line">    <span class="keyword">if</span> (midValue === value) &#123;</span><br><span class="line">      <span class="keyword">return</span> midIndex + <span class="number">1</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (midValue &lt; value) &#123;</span><br><span class="line">      start = midIndex + <span class="number">1</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (midValue &gt; value) &#123;</span><br><span class="line">      <span class="keyword">if</span> (tempIndex === <span class="literal">null</span> || tempIndex &gt; midIndex) &#123;</span><br><span class="line">        tempIndex = midIndex</span><br><span class="line">      &#125;</span><br><span class="line">      end = end - <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> tempIndex</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-白屏闪烁-1"><a href="#2-白屏闪烁-1" class="headerlink" title="2. 白屏闪烁"></a>2. 白屏闪烁</h3><p>通过设置缓冲区的方式来解决。</p>
+<p>增加一个 props 叫做 bufferScale，用于接收缓冲区数据和可视区域数据的一个比例</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> props = <span class="title function_">defineProps</span>(&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">bufferScale</span>: &#123;</span><br><span class="line">    <span class="attr">type</span>: <span class="title class_">Number</span>,</span><br><span class="line">    <span class="attr">default</span>: <span class="number">1</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>接下来就可以根据这个比例，计算出上下缓冲区的数量：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 上方缓冲区</span></span><br><span class="line"><span class="keyword">const</span> aboveCount = <span class="title function_">computed</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Math</span>.<span class="title function_">min</span>(start.<span class="property">value</span>, props.<span class="property">bufferScale</span> * visibleCount.<span class="property">value</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 下方缓冲区</span></span><br><span class="line"><span class="keyword">const</span> belowCount = <span class="title function_">computed</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Math</span>.<span class="title function_">min</span>(props.<span class="property">listData</span>.<span class="property">length</span> - end.<span class="property">value</span>, props.<span class="property">bufferScale</span> * visibleCount.<span class="property">value</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>现在 visibleData 的计算也需要更新，需要加入上下缓冲区</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> visibleData = <span class="title function_">computed</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> startIdx = start.<span class="property">value</span> - aboveCount.<span class="property">value</span></span><br><span class="line">  <span class="keyword">let</span> endIdx = end.<span class="property">value</span> + belowCount.<span class="property">value</span></span><br><span class="line">  <span class="keyword">return</span> _listData.<span class="property">value</span>.<span class="title function_">slice</span>(startIdx, endIdx)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>另外偏移量的计算也需要更新，需要将缓冲区考虑进去：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">setStartOffset</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> startOffset</span><br><span class="line">  <span class="keyword">if</span> (start.<span class="property">value</span> &gt;= <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> size =</span><br><span class="line">      positions.<span class="property">value</span>[start.<span class="property">value</span>].<span class="property">top</span> -</span><br><span class="line">      (positions.<span class="property">value</span>[start.<span class="property">value</span> - aboveCount.<span class="property">value</span>]</span><br><span class="line">        ? positions.<span class="property">value</span>[start.<span class="property">value</span> - aboveCount.<span class="property">value</span>].<span class="property">top</span></span><br><span class="line">        : <span class="number">0</span>)</span><br><span class="line">    startOffset = positions.<span class="property">value</span>[start.<span class="property">value</span> - <span class="number">1</span>].<span class="property">bottom</span> - size</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    startOffset = <span class="number">0</span></span><br><span class="line">  &#125;</span><br><span class="line">  content.<span class="property">value</span>.<span class="property">style</span>.<span class="property">transform</span> = <span class="string">`translate3d(0,<span class="subst">$&#123;startOffset&#125;</span>px,0)`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>-EOF-</p>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Laura
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a id="original-link" href="http://example.com/2022/05/09/虚拟列表滚动方案/" title="虚拟列表滚动方案">http://example.com/2022/05/09/虚拟列表滚动方案/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2023/09/08/%E8%B7%A8%E6%A0%87%E7%AD%BE%E9%A1%B5%E9%80%9A%E4%BF%A1/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+                </span>
+                <h6 class="trm-op-title">跨标签页通信</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/09/08</li>
+                <li>00:00</li>
+                <li>前端</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2021/03/12/hello-world/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+                </span>
+                <h6 class="trm-op-title">Hello World</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>21/03/12</li>
+                <li>00:00</li>
+                <li>Unclassified</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-footer-card trm-scroll-animation">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2020- 2024</span>
+            <span class="footer-separator"data-separator=" · "></span>
+            <span class="trm-accent-color">Laura</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v7.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.2.2
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item blog-run-long"></div>
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            
+
+    <div id="post-toc" class="trm-post-toc">
+      <div class="trm-post-toc-header">
+        Article table of contents
+				<span id="post-toc-top">
+					TOP
+				</span>
+      </div>
+      <div class="trm-post-toc-content">
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-1" title="技术讲解"><a rel="nofollow" class="trm-toc-link" href="#技术讲解"><span class="trm-toc-number">1.</span> <span class="trm-toc-text">技术讲解</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title="什么问题"><a rel="nofollow" class="trm-toc-link" href="#什么问题"><span class="trm-toc-number">1.1.</span> <span class="trm-toc-text">什么问题</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1. 长列表渲染问题"><a rel="nofollow" class="trm-toc-link" href="#1-长列表渲染问题"><span class="trm-toc-number">1.1.1.</span> <span class="trm-toc-text">1. 长列表渲染问题</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2. 虚拟列表原理"><a rel="nofollow" class="trm-toc-link" href="#2-虚拟列表原理"><span class="trm-toc-number">1.1.2.</span> <span class="trm-toc-text">2. 虚拟列表原理</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3. 虚拟列表的实现"><a rel="nofollow" class="trm-toc-link" href="#3-虚拟列表的实现"><span class="trm-toc-number">1.1.3.</span> <span class="trm-toc-text">3. 虚拟列表的实现</span></a></li><li class="trm-toc-item trm-toc-level-3" title="4. 遗留问题"><a rel="nofollow" class="trm-toc-link" href="#4-遗留问题"><span class="trm-toc-number">1.1.4.</span> <span class="trm-toc-text">4. 遗留问题</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="解决思路"><a rel="nofollow" class="trm-toc-link" href="#解决思路"><span class="trm-toc-number">1.2.</span> <span class="trm-toc-text">解决思路</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1. 动态高度"><a rel="nofollow" class="trm-toc-link" href="#1-动态高度"><span class="trm-toc-number">1.2.1.</span> <span class="trm-toc-text">1. 动态高度</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2. 白屏闪烁"><a rel="nofollow" class="trm-toc-link" href="#2-白屏闪烁"><span class="trm-toc-number">1.2.2.</span> <span class="trm-toc-text">2. 白屏闪烁</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="解决细节"><a rel="nofollow" class="trm-toc-link" href="#解决细节"><span class="trm-toc-number">1.3.</span> <span class="trm-toc-text">解决细节</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1. 动态高度"><a rel="nofollow" class="trm-toc-link" href="#1-动态高度-1"><span class="trm-toc-number">1.3.1.</span> <span class="trm-toc-text">1. 动态高度</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2. 白屏闪烁"><a rel="nofollow" class="trm-toc-link" href="#2-白屏闪烁-1"><span class="trm-toc-number">1.3.2.</span> <span class="trm-toc-text">2. 白屏闪烁</span></a></li></ol></li></ol></li></ol>
+      </div>
+    </div>
+
+            
+<div class="trm-fixed-container">
+    
+        <div class="trm-fixed-btn post-toc-btn" data-title="Open toc">
+            <i class="iconfont fas fa-th-list"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="Read Mode" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn hidden-md" data-title="Toggle between single-column and double-column" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont fas fa-arrows-alt-h"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="Back To Top">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont fas fa-search"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="Searching...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont fas fa-times"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    Please enter keywords to search
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+<script src="https://unpkg.com/swup@2.0.19/dist/swup.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.2.2"></script>
+    
+
+    
+        
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.2.2"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+		
+			<script src="/js/plugins/danmu.js?v=2.2.2"></script>
+		
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+    <script data-swup-reload-script>
+        (function () {
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            }
+            else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+    </script>
+
+
+
+<script id="async-script" src="/js/main.js?v=2.2.2"></script>
+
+<!-- CDN -->
+
+
+    
+<script src="/demo.js"></script>
+
+
+    
+
+    
+
+
+
+</body>
+
+</html>
