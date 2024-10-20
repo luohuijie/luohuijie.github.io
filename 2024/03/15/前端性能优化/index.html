@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="前言提升首屏的加载速度，是前端性能优化中最重要的环节，本文梳理出一些 常规且有效 的首屏优化建议，并附上相关原理，供大家参考 目标： 通过对比优化前后的性能变化，来验证方案的有效性，了解并掌握其原理 1、路由懒加载SPA 项目，一个路由对应一个页面，如果不做处理，项目打包后，会把所有页面打包成一个文件，当用户打开首页时，会一次性加载所有的资源，造成首页加载很慢，降低用户体验 列一个实际项目的打包详">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端性能优化">
+<meta property="og:url" content="http://example.com/2024/03/15/%E5%89%8D%E7%AB%AF%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="luohuijie">
+<meta property="og:description" content="前言提升首屏的加载速度，是前端性能优化中最重要的环节，本文梳理出一些 常规且有效 的首屏优化建议，并附上相关原理，供大家参考 目标： 通过对比优化前后的性能变化，来验证方案的有效性，了解并掌握其原理 1、路由懒加载SPA 项目，一个路由对应一个页面，如果不做处理，项目打包后，会把所有页面打包成一个文件，当用户打开首页时，会一次性加载所有的资源，造成首页加载很慢，降低用户体验 列一个实际项目的打包详">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="article:published_time" content="2024-03-15T08:00:00.000Z">
+<meta property="article:modified_time" content="2024-10-20T10:24:36.973Z">
+<meta property="article:author" content="Laura">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="性能优化">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/404.jpg">
+
+    <meta name="keywords" content="前端,js,jquery,javascript,html5,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,html,css,css3,用户体验">
+
+
+<title >前端性能优化</title>
+
+<!-- Favicon -->
+
+
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Laura","root":"/","typed_text":["Hungry | Stay Foolish"],"theme_version":"2.2.2","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":null,"icon16":null,"icon32":null,"apple_touch_icon":null,"webmanifest":null,"visibilitychange":true,"hidden":"failure.ico","show_text":"回来啦~","hide_text":"(●—●)看不见我！"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","sticky":"TOP","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":true,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":300},"toc":{"post_title":true},"live_time":{"start_time":"2020/05/16 17:00:00","prefix":"The blog has been lovely to run undefined day"},"danmu":{"enable":true,"el":".trm-banner","avatar":false,"delayRange":5000,"speed":80},"covers":["/img/block.jpg","https://img3.wallspic.com/previews/2/0/1/8/6/168102/168102-yi_shu-ka_tong-mian_bu_biao_qing-kuai_le_de-ji_qie-500x.jpg","https://img2.wallspic.com/previews/2/6/4/3/7/173462/173462-qi_fen-zi_se_de-zi_ran_jing_guan-yu_hui-de_ping_xian-500x.jpg","https://img2.wallspic.com/previews/3/3/9/1/3/131933/131933-mo_xing-xiao_jie-huang_se_de-nu_hai-fa_xing-500x.jpg","https://img1.wallspic.com/previews/8/3/4/6/2/126438/126438-wei_lai_zhu_yi-shu_ma_yi_shu-jie_duan-zi_ben_shi-yi_shu-500x.jpg","https://img2.wallspic.com/previews/0/1/5/0/7/170510/170510-guang-azure-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-500x.jpg","https://img2.wallspic.com/previews/3/6/9/6/5/156963/156963-yi_shu-qi_fen-yu_hui-shou_shi-ren_men_zai_zi_ran_jie-500x.jpg","https://img1.wallspic.com/previews/0/9/3/5/6/165390/165390-qi_fen-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-tian_wen_xue_dui_xiang-500x.jpg","https://img3.wallspic.com/previews/2/8/6/1/7/171682/171682-yi_kuai-xing_zhi-ye_ti-yi_shu-shui_xia-500x.jpg","https://img1.wallspic.com/previews/7/1/9/9/89917/89917-bo_xi_ta_nuo-an_zhuang_de_feng_jing-cheng_shi-suo_lun_tuo-shan_zhan-500x.jpg","https://img2.wallspic.com/previews/5/0/9/0/70905/70905-hai_yang-ma_er_dai_fu-tian_kong-du_jia_cun-huan_jiao-500x.jpg","https://img3.wallspic.com/previews/4/3/4/8/6/168434/168434-xing_zhi-zi_ran_jing_guan-dan_huang-shui_dao-zhi_bei-500x.jpg","https://img1.wallspic.com/previews/5/4/0/4/7/174045/174045-jian_ying-qi_fen-ren_men_zai_zi_ran_jie-tian_wen_xue_dui_xiang-yi_shu-500x.jpg","https://img1.wallspic.com/previews/9/3/1/6/5/156139/156139-feng_jing_hua-yi_shu-shu_ma_yi_shu-qi_fen-sheng_tai_qu-500x.jpg","https://img1.wallspic.com/previews/7/5/7/9/6/169757/169757-ji_bo_li_de_bo_wu_guan-zi_ran_jing_guan-yi_shu-ji_yun-500x.jpg","https://img1.wallspic.com/previews/5/2/0/6/7/176025/176025-qi_fen-tian_wen_xue_dui_xiang-yi_shu-dian_lan_se_de-yuan_quan-500x.jpg","https://img3.wallspic.com/previews/5/1/0/2/4/142015/142015-feng_ge-ka_ka_xi_qi_mu-huo_ying_ren_zhe-tu_xing_she_ji-shi_jue_yi_shu-500x.jpg"],"creative_commons":{"license":"by-nc-sa","language":"deed.zh-hans"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-10-20 18:24:36"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.2.2" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+
+ 
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+    
+        <div class="trm-logo-text">
+            La<span>ura</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    Home
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    Archives
+                </a>
+                
+                <ul>
+                    
+                    <li>
+                        <a  href="/tags/" target="">
+                            标签
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a  href="/categories/" target="">
+                            分类
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    Links
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/about/" target="">
+                    About
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont fas fa-search"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            前端性能优化
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2024
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/img1.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Laura
+    </h5>
+    
+        <div class="trm-label">
+            Stay
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/luohuijie" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                CITY:
+            </div>
+            <div class="trm-label trm-label-light">
+                HANGZHOU
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:miss_rowe@163.com" class="trm-btn">
+            Contact Me
+            <i class="iconfont far fa-envelope"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            24/03/15
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            16:00
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Laura
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>提升首屏的加载速度，是前端性能优化中<strong>最重要</strong>的环节，本文梳理出一些 <code>常规且有效</code> 的首屏优化建议，并附上相关原理，供大家参考</p>
+<p><strong>目标：</strong> 通过对比优化前后的性能变化，来验证方案的有效性，了解并掌握其原理</p>
+<h2 id="1、路由懒加载"><a href="#1、路由懒加载" class="headerlink" title="1、路由懒加载"></a>1、路由懒加载</h2><p>SPA 项目，一个路由对应一个页面，如果不做处理，项目打包后，会把所有页面打包成一个文件，<strong>当用户打开首页时，会一次性加载所有的资源</strong>，造成首页加载很慢，降低用户体验</p>
+<p>列一个实际项目的打包详情：</p>
+<ul>
+<li><p>app.js 初始体积： <code>1175 KB</code></p>
+<p><img src="/assets/2465947702.png" alt="appTotal.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+</li>
+<li><p>app.css 初始体积： <code>274 KB</code></p>
+<p><img src="/assets/3199804954.png" alt="appcssTotal.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+</li>
+</ul>
+<p>将路由全部改成懒加载</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过webpackChunkName设置分割后代码块的名字</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">Home</span> = (<span class="params"></span>) =&gt; <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;home&quot; */</span> <span class="string">&quot;@/views/home/index.vue&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title function_">MetricGroup</span> = (<span class="params"></span>) =&gt; <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;metricGroup&quot; */</span> <span class="string">&quot;@/views/metricGroup/index.vue&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> routes = [</span><br><span class="line">    &#123;</span><br><span class="line">       <span class="attr">path</span>: <span class="string">&quot;/&quot;</span>,</span><br><span class="line">       <span class="attr">name</span>: <span class="string">&quot;home&quot;</span>,</span><br><span class="line">       <span class="attr">component</span>: <span class="title class_">Home</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">       <span class="attr">path</span>: <span class="string">&quot;/metricGroup&quot;</span>,</span><br><span class="line">       <span class="attr">name</span>: <span class="string">&quot;metricGroup&quot;</span>,</span><br><span class="line">       <span class="attr">component</span>: <span class="title class_">MetricGroup</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"> ]</span><br></pre></td></tr></table></figure>
+
+<p>重新打包后，首页资源拆分为 app.js 和 home.js，以及对应的 css 文件</p>
+<ul>
+<li><p>app.js：<code>244 KB</code>、 home.js: <code>35KB</code></p>
+<p><img src="/assets/1489038879.png" alt="lazyRouter.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+</li>
+<li><p>app.css：<code>67 KB</code>、home.css: <code>15KB</code></p>
+<p><img src="/assets/3967679514.png" alt="lazyCss.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+</li>
+</ul>
+<p>通过路由懒加载，该项目的首页资源压缩约 <code>52%</code></p>
+<h3 id="路由懒加载的原理"><a href="#路由懒加载的原理" class="headerlink" title="路由懒加载的原理"></a>路由懒加载的原理</h3><p>懒加载前提的实现：ES6的动态地加载模块 <code>import()</code></p>
+<blockquote>
+<p>调用 import() 之处，被作为分离的模块起点，意思是，被请求的模块和它引用的所有子模块，会分离到一个单独的 chunk 中</p>
+<p>—摘自<a target="_blank" rel="noopener" href="https://webpack.docschina.org/api/module-methods/#import">《webpack—模块方法》的import()小节</a></p>
+</blockquote>
+<p>要实现懒加载，就得先将进行懒加载的子模块分离出来，打包成一个单独的文件</p>
+<p>webpackChunkName 作用是 webpack 在打包的时候，对异步引入的库代码（lodash）进行代码分割时，设置代码块的名字。webpack 会将任何一个异步模块与相同的块名称组合到相同的异步块中</p>
+<h2 id="2、组件懒加载"><a href="#2、组件懒加载" class="headerlink" title="2、组件懒加载"></a>2、组件懒加载</h2><p>除了路由的懒加载外，组件的懒加载在很多场景下也有重要的作用</p>
+<p>举个🌰：</p>
+<p>home 页面 和 about 页面，都引入了 dialogInfo 弹框组件，该弹框不是一进入页面就加载，而是需要用户手动触发后才展示出来</p>
+<p>home 页面示例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;homeView&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>home 页面<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">el-button</span> @<span class="attr">click</span>=<span class="string">&quot;dialogVisible = !dialogVisible&quot;</span>&gt;</span>打开弹框<span class="tag">&lt;/<span class="name">el-button</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;<span class="name">dialogInfo</span> <span class="attr">v-if</span>=<span class="string">&quot;dialogVisible&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">&lt;/template&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">import</span> dialogInfo <span class="keyword">from</span> <span class="string">&#x27;@/components/dialogInfo&#x27;</span>;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="attr">name</span>: <span class="string">&#x27;homeView&#x27;</span>,</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="attr">components</span>: &#123;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">    dialogInfo</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  &#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">&#125;</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>项目打包后，发现 home.js 和 about.js 均包括了该弹框组件的代码（在 dist 文件中搜索dialogInfo弹框组件）</p>
+<!-- ![dialogInfo.png](/assets/1224758939.png) -->
+
+<p>当用户打开 home 页时，会一次性加载该页面所有的资源，<strong>我们期望的是用户触发按钮后，再加载该弹框组件的资源</strong>，这种场景下，就很适合用懒加载的方式引入</p>
+<p>弹框组件懒加载：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">dialogInfo</span> = (<span class="params"></span>) =&gt; <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: &quot;dialogInfo&quot; */</span> <span class="string">&#x27;@/components/dialogInfo&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">name</span>: <span class="string">&#x27;homeView&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">components</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">    dialogInfo</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>重新打包后，home.js 和 about.js 中没有了弹框组件的代码，该组件被独立打包成 dialogInfo.js，<strong>当用户点击按钮时，才会去加载 dialogInfo.js 和 dialogInfo.css</strong></p>
+<p><img src="/assets/2999356333.png" alt="clickdialog.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>最终，使用组件路由懒后，该项目的首页资源进一步减少约 <code>11%</code></p>
+<h3 id="组件懒加载的使用场景"><a href="#组件懒加载的使用场景" class="headerlink" title="组件懒加载的使用场景"></a>组件懒加载的使用场景</h3><p>有时资源拆分的过细也不好，可能会造成浏览器 http 请求的增多</p>
+<p>总结出三种适合组件懒加载的场景：</p>
+<p>1）该页面的 JS 文件体积大，导致页面打开慢，可以通过组件懒加载进行资源拆分，利用浏览器并行下载资源，提升下载速度（比如首页）</p>
+<p>2）该组件不是一进入页面就展示，需要一定条件下才触发（比如弹框组件）</p>
+<p>3）该组件复用性高，很多页面都有引入，利用组件懒加载抽离出该组件，一方面可以很好利用缓存，同时也可以减少页面的 JS 文件大小（比如表格组件、图形组件等）</p>
+<h2 id="3、合理使用-Tree-shaking"><a href="#3、合理使用-Tree-shaking" class="headerlink" title="3、合理使用 Tree shaking"></a>3、合理使用 Tree shaking</h2><p>Tree shaking 的作用：消除无用的 JS 代码，减少代码体积</p>
+<p>举个🌰：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// util.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">targetType</span>(<span class="params">target</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(target).<span class="title function_">slice</span>(<span class="number">8</span>, -<span class="number">1</span>).<span class="title function_">toLowerCase</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">deepClone</span>(<span class="params">target</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(target));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>项目中只使用了 targetType 方法，但未使用 deepClone 方法，项目打包后，deepClone 方法不会被打包到项目里</p>
+<p>tree-shaking 原理：</p>
+<p>依赖于ES6的模块特性，ES6模块依赖关系是确定的，和运行时的状态无关，可以进行可靠的静态分析，这就是 tree-shaking 的基础</p>
+<p>静态分析就是不需要执行代码，就可以从字面量上对代码进行分析。ES6之前的模块化，比如 CommonJS 是动态加载，只有执行后才知道引用的什么模块，就不能通过静态分析去做优化，正是基于这个基础上，才使得 tree-shaking 成为可能</p>
+<h3 id="Tree-shaking-并不是万能的"><a href="#Tree-shaking-并不是万能的" class="headerlink" title="Tree shaking 并不是万能的"></a>Tree shaking 并不是万能的</h3><p>并不是说所有无用的代码都可以被消除，还是上面的代码，换个写法 tree-shaking 就失效了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// util.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="title function_">targetType</span>(<span class="params">target</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(target).<span class="title function_">slice</span>(<span class="number">8</span>, -<span class="number">1</span>).<span class="title function_">toLowerCase</span>();</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">deepClone</span>(<span class="params">target</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(target));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 引入并使用</span></span><br><span class="line"><span class="keyword">import</span> util <span class="keyword">from</span> <span class="string">&#x27;../util&#x27;</span>;</span><br><span class="line">util.<span class="title function_">targetType</span>(<span class="literal">null</span>)</span><br></pre></td></tr></table></figure>
+
+<p>同样的，项目中只使用了 targetType 方法，未使用 deepClone 方法，项目打包后，deepClone 方法还是被打包到项目里</p>
+<p>究其原因，export default 导出的是一个对象，<strong>无法通过静态分析判断出一个对象的哪些变量未被使用，所以 tree-shaking 只对使用 export 导出的变量生效</strong>，这也是函数式编程越来越火的原因，因为可以很好利用 tree-shaking 精简项目的体积，也是 vue3 全面拥抱了函数式编程的原因之一</p>
+<h2 id="4、骨架屏优化白屏时长"><a href="#4、骨架屏优化白屏时长" class="headerlink" title="4、骨架屏优化白屏时长"></a>4、骨架屏优化白屏时长</h2><p>使用骨架屏，可以缩短白屏时间，提升用户体验。国内大多数的主流网站都使用了骨架屏，特别是手机端的项目</p>
+<p>SPA 单页应用，无论 vue 还是 react，最初的 html 都是空白的，需要通过加载 JS 将内容挂载到根节点上，这套机制的副作用：会造成长时间的白屏</p>
+<p>常见的骨架屏插件就是基于这种原理，在项目打包时将骨架屏的内容直接放到 html 文件的根节点中</p>
+<p>使用骨架屏插件，打包后的 html 文件（根节点内部为骨架屏）：</p>
+<p><img src="/assets/430568197.png" alt="html.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>同一项目，对比使用骨架屏前后的 FP 白屏时间：</p>
+<ul>
+<li>无骨架屏：白屏时间 <code>1063ms</code></li>
+</ul>
+<p><img src="/assets/3403467424.png" alt="FPoriginal.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>有骨架屏：白屏时间 <code>144ms</code></li>
+</ul>
+<p><img src="/assets/1291641671.png" alt="FP.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>骨架屏确实是优化白屏的不二选择，白屏时间缩短了 <code>86%</code></p>
+<h3 id="骨架屏插件"><a href="#骨架屏插件" class="headerlink" title="骨架屏插件"></a>骨架屏插件</h3><p>这里以 <code>vue-skeleton-webpack-plugin</code> 插件为例，该插件的亮点是可以给不同的页面设置不同的骨架屏，这点确实很酷</p>
+<p>1）安装</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm <span class="selector-tag">i</span> vue-skeleton-webpack-plugin </span><br></pre></td></tr></table></figure>
+
+<p>2）vue.config.js 配置</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 骨架屏</span></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">SkeletonWebpackPlugin</span> = <span class="built_in">require</span>(<span class="string">&quot;vue-skeleton-webpack-plugin&quot;</span>);</span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">   <span class="attr">configureWebpack</span>: &#123;</span><br><span class="line">      <span class="attr">plugins</span>: [</span><br><span class="line">       <span class="keyword">new</span> <span class="title class_">SkeletonWebpackPlugin</span>(&#123;</span><br><span class="line">        <span class="comment">// 实例化插件对象</span></span><br><span class="line">        <span class="attr">webpackConfig</span>: &#123;</span><br><span class="line">          <span class="attr">entry</span>: &#123;</span><br><span class="line">            <span class="attr">app</span>: path.<span class="title function_">join</span>(__dirname, <span class="string">&#x27;./src/skeleton.js&#x27;</span>) <span class="comment">// 引入骨架屏入口文件</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">minimize</span>: <span class="literal">true</span>, <span class="comment">// SPA 下是否需要压缩注入 HTML 的 JS 代码</span></span><br><span class="line">        <span class="attr">quiet</span>: <span class="literal">true</span>, <span class="comment">// 在服务端渲染时是否需要输出信息到控制台</span></span><br><span class="line">        <span class="attr">router</span>: &#123;</span><br><span class="line">          <span class="attr">mode</span>: <span class="string">&#x27;hash&#x27;</span>, <span class="comment">// 路由模式</span></span><br><span class="line">          <span class="attr">routes</span>: [</span><br><span class="line">            <span class="comment">// 不同页面可以配置不同骨架屏</span></span><br><span class="line">            <span class="comment">// 对应路径所需要的骨架屏组件id，id的定义在入口文件内</span></span><br><span class="line">            &#123; <span class="attr">path</span>: <span class="regexp">/^\/home(?:\/)?/i</span>, <span class="attr">skeletonId</span>: <span class="string">&#x27;homeSkeleton&#x27;</span> &#125;,</span><br><span class="line">            &#123; <span class="attr">path</span>: <span class="regexp">/^\/detail(?:\/)?/i</span>, <span class="attr">skeletonId</span>: <span class="string">&#x27;detailSkeleton&#x27;</span> &#125;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)        </span><br><span class="line">      ]</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3）新建 skeleton.js 入口文件</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// skeleton.js</span></span><br><span class="line"><span class="keyword">import</span> Vue from <span class="string">&quot;vue&quot;</span>;</span><br><span class="line"><span class="comment">// 引入对应的骨架屏页面</span></span><br><span class="line"><span class="keyword">import</span> homeSkeleton from <span class="string">&quot;./views/homeSkeleton&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> detailSkeleton from <span class="string">&quot;./views/detailSkeleton&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">new</span> <span class="title">Vue</span><span class="params">(&#123;</span></span></span><br><span class="line"><span class="params"><span class="function">    components: &#123;</span></span></span><br><span class="line"><span class="params"><span class="function">        homeSkeleton,</span></span></span><br><span class="line"><span class="params"><span class="function">        detailSkeleton,</span></span></span><br><span class="line"><span class="params"><span class="function">    &#125;,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="keyword">template</span>: `</span></span></span><br><span class="line"><span class="params"><span class="function">    &lt;div&gt;</span></span></span><br><span class="line"><span class="params"><span class="function">      &lt;homeSkeleton id=<span class="string">&quot;homeSkeleton&quot;</span> style=<span class="string">&quot;display:none;&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="params"><span class="function">      &lt;detailSkeleton id=<span class="string">&quot;detailSkeleton&quot;</span> style=<span class="string">&quot;display:none;&quot;</span> /&gt;</span></span></span><br><span class="line"><span class="params"><span class="function">    &lt;/div&gt;</span></span></span><br><span class="line"><span class="params"><span class="function">  `,</span></span></span><br><span class="line"><span class="params"><span class="function">&#125;)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="5、长列表虚拟滚动"><a href="#5、长列表虚拟滚动" class="headerlink" title="5、长列表虚拟滚动"></a>5、长列表虚拟滚动</h2><p>首页中不乏有需要渲染长列表的场景，当渲染条数过多时，所需要的渲染时间会很长，滚动时还会造成页面卡顿，整体体验非常不好</p>
+<p><strong>虚拟滚动—指的是只渲染可视区域的列表项，非可见区域的</strong>不渲染，在滚动时动态更新可视区域，该方案在优化大量数据渲染时效果是很明显的</p>
+<p>虚拟滚动图例：</p>
+<p><img src="/assets/3415356823.png" alt="virtual.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>虚拟滚动基本原理：</p>
+<p>计算出 totalHeight 列表总高度，并在触发时滚动事件时根据 scrollTop 值不断更新 startIndex 以及 endIndex ，以此从列表数据 listData 中截取对应元素</p>
+<p>虚拟滚动性能对比：</p>
+<ul>
+<li><p>在不使用虚拟滚动的情况下，渲染10万个文本节点：</p>
+<p><img src="/assets/1189916987.png" alt="longList.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+</li>
+<li><p>使用虚拟滚动的情况后：</p>
+<p><img src="/assets/3021197371.png" alt="virtualList.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+</li>
+</ul>
+<p>使用虚拟滚动使性能提升了 <code>78%</code></p>
+<h3 id="虚拟滚动插件"><a href="#虚拟滚动插件" class="headerlink" title="虚拟滚动插件"></a>虚拟滚动插件</h3><p>虚拟滚动的插件有很多，比如 vue-virtual-scroller、vue-virtual-scroll-list、react-tiny-virtual-list、react-virtualized 等</p>
+<p>这里简单介绍 <a target="_blank" rel="noopener" href="https://github.com/Akryum/vue-virtual-scroller">vue-virtual-scroller</a> 的使用</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 安装插件</span></span><br><span class="line">npm install vue-virtual-scroller</span><br><span class="line"></span><br><span class="line"><span class="comment">// main.js</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">VueVirtualScroller</span> <span class="keyword">from</span> <span class="string">&#x27;vue-virtual-scroller&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;vue-virtual-scroller/dist/vue-virtual-scroller.css&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="title class_">Vue</span>.<span class="title function_">use</span>(<span class="title class_">VueVirtualScroller</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line">&lt;template&gt; </span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">RecycleScroller</span> </span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">class</span>=<span class="string">&quot;scroller&quot;</span> </span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">:items</span>=<span class="string">&quot;list&quot;</span> </span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">:item-size</span>=<span class="string">&quot;32&quot;</span> </span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">key-field</span>=<span class="string">&quot;id&quot;</span> </span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">v-slot</span>=<span class="string">&quot;&#123; item &#125;&quot;</span>&gt;</span> </span></span><br><span class="line"><span class="language-xml">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;user&quot;</span>&gt;</span> &#123;&#123; item.name &#125;&#125; <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;/<span class="name">RecycleScroller</span>&gt;</span></span> </span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure>
+
+<p>该插件主要有 RecycleScroller.vue、DynamicScroller.vue 这两个组件，其中 RecycleScroller 需要 item 的高度为静态的，也就是列表每个 item 的高度都是一致的，而 DynamicScroller 可以兼容 item 的高度为动态的情况</p>
+<h2 id="6、Web-Worker-优化长任务"><a href="#6、Web-Worker-优化长任务" class="headerlink" title="6、Web Worker 优化长任务"></a>6、Web Worker 优化长任务</h2><p>由于浏览器 GUI 渲染线程与 JS 引擎线程是互斥的关系，当页面中有很多长任务时，会造成页面 UI 阻塞，出现界面卡顿、掉帧等情况</p>
+<p>查看页面的长任务：</p>
+<p>打开控制台，选择 Performance 工具，点击 Start 按钮，展开 Main 选项，会发现有很多红色的三角，这些就属于长任务（长任务：执行时间超过50ms的任务）</p>
+<p><img src="/assets/2889195992.png" alt="longTask.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>测试：</p>
+<p>如果直接把下面这段代码直接丢到主线程中，计算过程中页面一直处于卡死状态，无法操作</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">200000</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">      sum += <span class="title class_">Math</span>.<span class="title function_">random</span>()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用 Web Worker 执行上述代码时，计算过程中页面正常可操作、无卡顿</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// worker.js</span></span><br><span class="line">onmessage = <span class="keyword">function</span> (<span class="params">e</span>) &#123;</span><br><span class="line">  <span class="comment">// onmessage获取传入的初始值</span></span><br><span class="line">  <span class="keyword">let</span> sum = e.<span class="property">data</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">200000</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">      sum += <span class="title class_">Math</span>.<span class="title function_">random</span>()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 将计算的结果传递出去</span></span><br><span class="line">  <span class="title function_">postMessage</span>(sum);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Web Worker 具体的使用与案例，详情见 <a target="_blank" rel="noopener" href="https://juejin.cn/post/7137728629986820126">一文彻底了解Web Worker，十万、百万条数据都是弟弟🔥</a></p>
+<h3 id="Web-Worker-的通信时长"><a href="#Web-Worker-的通信时长" class="headerlink" title="Web Worker 的通信时长"></a>Web Worker 的通信时长</h3><p>并不是执行时间超过 50ms 的任务，就可以使用 Web Worker，还要先考虑<code>通信时长</code>的问题</p>
+<p>假如一个运算执行时长为 100ms，但是通信时长为 300ms， 用了 Web Worker可能会更慢</p>
+<p>比如新建一个 web worker, 浏览器会加载对应的 worker.js 资源，下图中的 Time 是这个资源的通信时长（也叫加载时长）</p>
+<p><img src="/assets/1870782221.png" alt="load.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><strong>当任务的运算时长 - 通信时长 &gt; 50ms，推荐使用Web Worker</strong></p>
+<h2 id="7、requestAnimationFrame-制作动画"><a href="#7、requestAnimationFrame-制作动画" class="headerlink" title="7、requestAnimationFrame 制作动画"></a>7、requestAnimationFrame 制作动画</h2><p><code>requestAnimationFrame</code> 是浏览器专门为动画提供的 API，它的刷新频率与显示器的频率保持一致，使用该 api 可以解决用 setTimeout&#x2F;setInterval 制作动画卡顿的情况</p>
+<p>setTimeout&#x2F;setInterval、requestAnimationFrame 三者的区别：</p>
+<p>1）引擎层面</p>
+<p>setTimeout&#x2F;setInterval 属于 <code>JS引擎</code>，requestAnimationFrame 属于 <code>GUI引擎</code></p>
+<p><code>JS引擎与GUI引擎</code>是互斥的，也就是说 GUI 引擎在渲染时会阻塞 JS 引擎的计算</p>
+<p>2）时间是否准确</p>
+<p>requestAnimationFrame 刷新频率是固定且准确的，但 setTimeout&#x2F;setInterval 是宏任务，根据事件轮询机制，其他任务会阻塞或延迟js任务的执行，会出现定时器不准的情况</p>
+<p>3）性能层面</p>
+<p>当页面被隐藏或最小化时，setTimeout&#x2F;setInterval 定时器仍会在后台执行动画任务，而使用 requestAnimationFrame 当页面处于未激活的状态下，屏幕刷新任务会被系统暂停</p>
+<h2 id="8、JS-的6种加载方式"><a href="#8、JS-的6种加载方式" class="headerlink" title="8、JS 的6种加载方式"></a>8、JS 的6种加载方式</h2><h3 id="1）正常模式"><a href="#1）正常模式" class="headerlink" title="1）正常模式"></a>1）正常模式</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;index.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这种情况下 JS 会阻塞 dom 渲染，浏览器必须等待 index.js 加载和执行完成后才能去做其它事情</p>
+<h3 id="2）async-模式"><a href="#2）async-模式" class="headerlink" title="2）async 模式"></a>2）async 模式</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">async</span> <span class="attr">src</span>=<span class="string">&quot;index.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>async 模式下，它的加载是异步的，JS 不会阻塞 DOM 的渲染，async 加载是无顺序的，当它加载结束，JS 会立即执行</p>
+<p>使用场景：若该 JS 资源与 DOM 元素没有依赖关系，也不会产生其他资源所需要的数据时，可以使用async 模式，比如埋点统计</p>
+<h3 id="3）defer-模式"><a href="#3）defer-模式" class="headerlink" title="3）defer 模式"></a>3）defer 模式</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">defer</span> <span class="attr">src</span>=<span class="string">&quot;index.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>defer 模式下，JS 的加载也是异步的，defer 资源会在 <code>DOMContentLoaded</code> 执行之前，并且 defer 是有顺序的加载</p>
+<p>如果有多个设置了 defer 的 script 标签存在，则会按照引入的前后顺序执行，即便是后面的 script 资源先返回</p>
+<p>所以 defer 可以用来控制 JS 文件的执行顺序，比如 element-ui.js 和 vue.js，因为 element-ui.js 依赖于 vue，所以必须先引入 vue.js，再引入 element-ui.js</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">defer</span> <span class="attr">src</span>=<span class="string">&quot;vue.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">defer</span> <span class="attr">src</span>=<span class="string">&quot;element-ui.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>defer 使用场景：一般情况下都可以使用 defer，特别是需要控制资源加载顺序时</p>
+<h3 id="4）module-模式"><a href="#4）module-模式" class="headerlink" title="4）module 模式"></a>4）module 模式</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">&quot;module&quot;</span>&gt;</span><span class="language-javascript"><span class="keyword">import</span> &#123; a &#125; <span class="keyword">from</span> <span class="string">&#x27;./a.js&#x27;</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在主流的现代浏览器中，script 标签的属性可以加上 <code>type=&quot;module&quot;</code>，浏览器会对其内部的 import 引用发起 HTTP 请求，获取模块内容。这时 script 的行为会像是 defer 一样，在后台下载，并且等待 DOM 解析</p>
+<p>Vite 就是利用浏览器支持原生的 <code>es module</code> 模块，开发时跳过打包的过程，提升编译效率</p>
+<h3 id="5）-preload"><a href="#5）-preload" class="headerlink" title="5） preload"></a>5） preload</h3><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link <span class="attr">rel</span>=<span class="string">&quot;preload&quot;</span> as=<span class="string">&quot;script&quot;</span> href=<span class="string">&quot;index.js&quot;</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>link 标签的 preload 属性：用于提前加载一些需要的依赖，这些资源会优先加载，vue2 项目打包生成的 index.html 文件，会自动给首页所需要的资源，全部添加 preload，实现关键资源的提前加载</p>
+<p><img src="/assets/273501991.png" alt="htmlPreload.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>preload 特点：</p>
+<p>1）preload 加载的资源是在浏览器渲染机制之前进行处理的，并且不会阻塞 onload 事件；</p>
+<p>2）preload 加载的 JS 脚本其加载和执行的过程是分离的，即 preload 会预加载相应的脚本代码，待到需要时自行调用；</p>
+<h3 id="6）prefetch"><a href="#6）prefetch" class="headerlink" title="6）prefetch"></a>6）prefetch</h3><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;link <span class="attr">rel</span>=<span class="string">&quot;prefetch&quot;</span> as=<span class="string">&quot;script&quot;</span> href=<span class="string">&quot;index.js&quot;</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>prefetch 是利用浏览器的空闲时间，加载页面将来可能用到的资源的一种机制；通常可以用于加载其他页面（非首页）所需要的资源，以便加快后续页面的打开速度</p>
+<p>prefetch 特点：</p>
+<p>1）pretch 加载的资源可以获取非当前页面所需要的资源，并且将其放入缓存至少5分钟（无论资源是否可以缓存）</p>
+<p>2）当页面跳转时，未完成的 prefetch 请求不会被中断</p>
+<h3 id="加载方式总结"><a href="#加载方式总结" class="headerlink" title="加载方式总结"></a>加载方式总结</h3><p>async、defer 是 script 标签的专属属性，对于网页中的其他资源，可以通过 link 的 preload、prefetch 属性来预加载</p>
+<p>现代框架已经将 preload、prefetch 添加到打包流程中了，通过灵活的配置，去使用这些预加载功能，同时我们也可以向 script 标签添加 async、defer 属性去处理资源，这样可以显著提升性能</p>
+<h2 id="9、图片的优化"><a href="#9、图片的优化" class="headerlink" title="9、图片的优化"></a>9、图片的优化</h2><p>平常大部分性能优化工作都集中在 JS 方面，但图片也是非常重要的部分，特别是对于移动端来说，完全没有必要去加载原图，浪费带宽。如何去压缩图片，让图片更快的展示出来，有很多优化工作可以做</p>
+<h3 id="图片的动态裁剪"><a href="#图片的动态裁剪" class="headerlink" title="图片的动态裁剪"></a>图片的动态裁剪</h3><p>很多云服务，比如<a target="_blank" rel="noopener" href="https://help.aliyun.com/document_detail/144582.html">阿里云</a>或<a target="_blank" rel="noopener" href="https://developer.qiniu.com/dora/3683/img-directions-for-use">七牛云</a>，都提供了图片的动态裁剪功能，效果很棒，确实是钱没有白花</p>
+<p>只需在图片的url地址上动态添加参数，就可以得到你所需要的尺寸大小，比如：<code>http://7xkv1q.com1.z0.glb.clouddn.com/grape.jpg?imageView2/1/w/200/h/200</code></p>
+<p>图片瘦身前后对比：</p>
+<ul>
+<li>原图：<code>1.8M</code></li>
+</ul>
+<p><img src="/assets/2121128441.png" alt="imgOriginal.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<ul>
+<li>裁剪后：<code>12.8KB</code></li>
+</ul>
+<p><img src="/assets/456517069.png" alt="imgAfter.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>经过动态裁剪后的图片，加载速度会有非常明显的提升</p>
+<h3 id="图片的懒加载"><a href="#图片的懒加载" class="headerlink" title="图片的懒加载"></a>图片的懒加载</h3><p>对于一些图片量比较大的首页，用户打开页面后，只需要呈现出在屏幕可视区域内的图片，当用户滑动页面时，再去加载出现在屏幕内的图片，以优化图片的加载效果</p>
+<p>图片懒加载实现原理：</p>
+<p>由于浏览器会自动对页面中的 img 标签的 src 属性发送请求并下载图片，可以通过 html5 自定义属性 data-xxx 先暂存 src 的值，然后在图片出现在屏幕可视区域的时候，再将 data-xxx 的值重新赋值到 img 的 src 属性即可</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;img <span class="attr">src</span>=<span class="string">&quot;&quot;</span> alt=<span class="string">&quot;&quot;</span> data-src=<span class="string">&quot;./images/1.jpg&quot;</span>&gt;</span><br><span class="line">&lt;img <span class="attr">src</span>=<span class="string">&quot;&quot;</span> alt=<span class="string">&quot;&quot;</span> data-src=<span class="string">&quot;./images/2.jpg&quot;</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>以 <code>vue-lazyload</code> 插件为例</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 安装 </span></span><br><span class="line">npm install vue-lazyload </span><br><span class="line">    </span><br><span class="line"><span class="comment">// main.js 注册</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">VueLazyload</span> <span class="keyword">from</span> <span class="string">&#x27;vue-lazyload&#x27;</span></span><br><span class="line"><span class="title class_">Vue</span>.<span class="title function_">use</span>(<span class="title class_">VueLazyload</span>)</span><br><span class="line"><span class="comment">// 配置项</span></span><br><span class="line"><span class="title class_">Vue</span>.<span class="title function_">use</span>(<span class="title class_">VueLazyload</span>, &#123;</span><br><span class="line">  <span class="attr">preLoad</span>: <span class="number">1.3</span>,</span><br><span class="line">  <span class="attr">error</span>: <span class="string">&#x27;dist/error.png&#x27;</span>, <span class="comment">// 图片加载失败时的占位图</span></span><br><span class="line">  <span class="attr">loading</span>: <span class="string">&#x27;dist/loading.gif&#x27;</span>, <span class="comment">// 图片加载中时的占位图</span></span><br><span class="line">  <span class="attr">attempt</span>: <span class="number">1</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过 v-lazy 指令使用</span></span><br><span class="line">&lt;ul&gt;  </span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">li</span> <span class="attr">v-for</span>=<span class="string">&quot;img in list&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">img</span> <span class="attr">v-lazy</span>=<span class="string">&quot;img.src&quot;</span> <span class="attr">:key</span>=<span class="string">&quot;img.src&quot;</span> &gt;</span></span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="使用字体图标"><a href="#使用字体图标" class="headerlink" title="使用字体图标"></a>使用字体图标</h3><p>字体图标是页面使用小图标的不二选择，最常用的就是 <a target="_blank" rel="noopener" href="https://www.iconfont.cn/home/index">iconfont</a></p>
+<p>字体图标的优点：</p>
+<p>1）轻量级：一个图标字体要比一系列的图像要小。一旦字体加载了，图标就会马上渲染出来，减少了 http 请求</p>
+<p>2）灵活性：可以随意的改变颜色、产生阴影、透明效果、旋转等</p>
+<p>3）兼容性：几乎支持所有的浏览器，请放心使用</p>
+<h3 id="图片转-base64-格式"><a href="#图片转-base64-格式" class="headerlink" title="图片转 base64 格式"></a>图片转 base64 格式</h3><p>将小图片转换为 base64 编码字符串，并写入 HTML 或者 CSS 中，减少 http 请求</p>
+<p>转 base64 格式的优缺点：</p>
+<p>1）它处理的往往是非常小的图片，因为 Base64 编码后，图片大小会膨胀为原文件的 4&#x2F;3，如果对大图也使用 Base64 编码，后者的体积会明显增加，即便减少了 http 请求，也无法弥补这庞大的体积带来的性能开销，得不偿失</p>
+<p>2）在传输非常小的图片的时候，Base64 带来的文件体积膨胀、以及浏览器解析 Base64 的时间开销，与它节省掉的 http 请求开销相比，可以忽略不计，这时候才能真正体现出它在性能方面的优势</p>
+<p>项目可以使用 <code>url-loader</code> 将图片转 base64：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">npm install url-loader <span class="attr">--save-dev</span></span><br><span class="line">    </span><br><span class="line">// 配置</span><br><span class="line">module<span class="selector-class">.exports</span> = &#123;</span><br><span class="line">  module: &#123;</span><br><span class="line">    rules: [&#123;</span><br><span class="line">        test: /.(png|jpg|gif)$/i,</span><br><span class="line">        use: [&#123;</span><br><span class="line">            loader: <span class="string">&#x27;url-loader&#x27;</span>,</span><br><span class="line">            options: &#123;</span><br><span class="line">              // 小于 <span class="number">10</span>kb 的图片转化为 base64</span><br><span class="line">              limit: <span class="number">1024</span> * <span class="number">10</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;]</span><br><span class="line">     &#125;]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="优化总结"><a href="#优化总结" class="headerlink" title="优化总结"></a>优化总结</h2><p>本文主要介绍的是 <strong>代码层面</strong> 的性能优化，经过上面的一系列优化，首页打开速度有了明显的提升，虽然都是一些常规方案，但其中可以深挖的知识点并不少</p>
+<p>如有错误或不严谨的地方，请给予指正，十分感谢。</p>
+<hr>
+<p>-EOF-</p>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Laura
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a id="original-link" href="http://example.com/2024/03/15/前端性能优化/" title="前端性能优化">http://example.com/2024/03/15/前端性能优化/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2023/09/16/Webpack%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+                </span>
+                <h6 class="trm-op-title">Webpack 原理和配置</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/09/16</li>
+                <li>17:00</li>
+                <li>Webpack</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-footer-card trm-scroll-animation">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2020- 2024</span>
+            <span class="footer-separator"data-separator=" · "></span>
+            <span class="trm-accent-color">Laura</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v7.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.2.2
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item blog-run-long"></div>
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            
+
+    <div id="post-toc" class="trm-post-toc">
+      <div class="trm-post-toc-header">
+        Article table of contents
+				<span id="post-toc-top">
+					TOP
+				</span>
+      </div>
+      <div class="trm-post-toc-content">
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-2" title="前言"><a rel="nofollow" class="trm-toc-link" href="#前言"><span class="trm-toc-text">前言</span></a></li><li class="trm-toc-item trm-toc-level-2" title="1、路由懒加载"><a rel="nofollow" class="trm-toc-link" href="#1、路由懒加载"><span class="trm-toc-text">1、路由懒加载</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="路由懒加载的原理"><a rel="nofollow" class="trm-toc-link" href="#路由懒加载的原理"><span class="trm-toc-text">路由懒加载的原理</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="2、组件懒加载"><a rel="nofollow" class="trm-toc-link" href="#2、组件懒加载"><span class="trm-toc-text">2、组件懒加载</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="组件懒加载的使用场景"><a rel="nofollow" class="trm-toc-link" href="#组件懒加载的使用场景"><span class="trm-toc-text">组件懒加载的使用场景</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="3、合理使用 Tree shaking"><a rel="nofollow" class="trm-toc-link" href="#3、合理使用-Tree-shaking"><span class="trm-toc-text">3、合理使用 Tree shaking</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="Tree shaking 并不是万能的"><a rel="nofollow" class="trm-toc-link" href="#Tree-shaking-并不是万能的"><span class="trm-toc-text">Tree shaking 并不是万能的</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="4、骨架屏优化白屏时长"><a rel="nofollow" class="trm-toc-link" href="#4、骨架屏优化白屏时长"><span class="trm-toc-text">4、骨架屏优化白屏时长</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="骨架屏插件"><a rel="nofollow" class="trm-toc-link" href="#骨架屏插件"><span class="trm-toc-text">骨架屏插件</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="5、长列表虚拟滚动"><a rel="nofollow" class="trm-toc-link" href="#5、长列表虚拟滚动"><span class="trm-toc-text">5、长列表虚拟滚动</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="虚拟滚动插件"><a rel="nofollow" class="trm-toc-link" href="#虚拟滚动插件"><span class="trm-toc-text">虚拟滚动插件</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="6、Web Worker 优化长任务"><a rel="nofollow" class="trm-toc-link" href="#6、Web-Worker-优化长任务"><span class="trm-toc-text">6、Web Worker 优化长任务</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="Web Worker 的通信时长"><a rel="nofollow" class="trm-toc-link" href="#Web-Worker-的通信时长"><span class="trm-toc-text">Web Worker 的通信时长</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="7、requestAnimationFrame 制作动画"><a rel="nofollow" class="trm-toc-link" href="#7、requestAnimationFrame-制作动画"><span class="trm-toc-text">7、requestAnimationFrame 制作动画</span></a></li><li class="trm-toc-item trm-toc-level-2" title="8、JS 的6种加载方式"><a rel="nofollow" class="trm-toc-link" href="#8、JS-的6种加载方式"><span class="trm-toc-text">8、JS 的6种加载方式</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1）正常模式"><a rel="nofollow" class="trm-toc-link" href="#1）正常模式"><span class="trm-toc-text">1）正常模式</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2）async 模式"><a rel="nofollow" class="trm-toc-link" href="#2）async-模式"><span class="trm-toc-text">2）async 模式</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3）defer 模式"><a rel="nofollow" class="trm-toc-link" href="#3）defer-模式"><span class="trm-toc-text">3）defer 模式</span></a></li><li class="trm-toc-item trm-toc-level-3" title="4）module 模式"><a rel="nofollow" class="trm-toc-link" href="#4）module-模式"><span class="trm-toc-text">4）module 模式</span></a></li><li class="trm-toc-item trm-toc-level-3" title="5） preload"><a rel="nofollow" class="trm-toc-link" href="#5）-preload"><span class="trm-toc-text">5） preload</span></a></li><li class="trm-toc-item trm-toc-level-3" title="6）prefetch"><a rel="nofollow" class="trm-toc-link" href="#6）prefetch"><span class="trm-toc-text">6）prefetch</span></a></li><li class="trm-toc-item trm-toc-level-3" title="加载方式总结"><a rel="nofollow" class="trm-toc-link" href="#加载方式总结"><span class="trm-toc-text">加载方式总结</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="9、图片的优化"><a rel="nofollow" class="trm-toc-link" href="#9、图片的优化"><span class="trm-toc-text">9、图片的优化</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="图片的动态裁剪"><a rel="nofollow" class="trm-toc-link" href="#图片的动态裁剪"><span class="trm-toc-text">图片的动态裁剪</span></a></li><li class="trm-toc-item trm-toc-level-3" title="图片的懒加载"><a rel="nofollow" class="trm-toc-link" href="#图片的懒加载"><span class="trm-toc-text">图片的懒加载</span></a></li><li class="trm-toc-item trm-toc-level-3" title="使用字体图标"><a rel="nofollow" class="trm-toc-link" href="#使用字体图标"><span class="trm-toc-text">使用字体图标</span></a></li><li class="trm-toc-item trm-toc-level-3" title="图片转 base64 格式"><a rel="nofollow" class="trm-toc-link" href="#图片转-base64-格式"><span class="trm-toc-text">图片转 base64 格式</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="优化总结"><a rel="nofollow" class="trm-toc-link" href="#优化总结"><span class="trm-toc-text">优化总结</span></a></li></ol>
+      </div>
+    </div>
+
+            
+<div class="trm-fixed-container">
+    
+        <div class="trm-fixed-btn post-toc-btn" data-title="Open toc">
+            <i class="iconfont fas fa-th-list"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="Read Mode" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn hidden-md" data-title="Toggle between single-column and double-column" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont fas fa-arrows-alt-h"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="Back To Top">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont fas fa-search"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="Searching...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont fas fa-times"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    Please enter keywords to search
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+<script src="https://unpkg.com/swup@2.0.19/dist/swup.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.2.2"></script>
+    
+
+    
+        
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.2.2"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+		
+			<script src="/js/plugins/danmu.js?v=2.2.2"></script>
+		
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+    <script data-swup-reload-script>
+        (function () {
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            }
+            else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+    </script>
+
+
+
+<script id="async-script" src="/js/main.js?v=2.2.2"></script>
+
+<!-- CDN -->
+
+
+    
+<script src="/demo.js"></script>
+
+
+    
+
+    
+
+
+
+</body>
+
+</html>
