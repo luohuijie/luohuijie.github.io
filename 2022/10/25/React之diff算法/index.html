@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="前言React 的 diff 算法是其高效更新 UI 的核心机制。本文将深入探讨 diff 算法的原理、实现和优化策略，并通过代码示例和图解来帮助理解这一重要概念。 1. diff 算法的基本原则React 的 diff 算法基于以下三个主要原则：  只对同级元素进行比较 不同类型的元素会产生不同的树 通过 key 属性定位哪些子元素在不同的渲染中是稳定的  2. diff 算法的工作流程2.1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【React系列】React原理之diff算法">
+<meta property="og:url" content="http://example.com/2022/10/25/React%E4%B9%8Bdiff%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="luohuijie">
+<meta property="og:description" content="前言React 的 diff 算法是其高效更新 UI 的核心机制。本文将深入探讨 diff 算法的原理、实现和优化策略，并通过代码示例和图解来帮助理解这一重要概念。 1. diff 算法的基本原则React 的 diff 算法基于以下三个主要原则：  只对同级元素进行比较 不同类型的元素会产生不同的树 通过 key 属性定位哪些子元素在不同的渲染中是稳定的  2. diff 算法的工作流程2.1">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="article:published_time" content="2022-10-25T11:00:00.000Z">
+<meta property="article:modified_time" content="2024-10-20T17:20:43.881Z">
+<meta property="article:author" content="Laura">
+<meta property="article:tag" content="React">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/404.jpg">
+
+    <meta name="keywords" content="前端,js,jquery,javascript,html5,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,html,css,css3,用户体验">
+
+
+<title >【React系列】React原理之diff算法</title>
+
+<!-- Favicon -->
+
+
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Laura","root":"/","typed_text":["Hungry | Stay Foolish"],"theme_version":"2.2.2","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":null,"icon16":null,"icon32":null,"apple_touch_icon":null,"webmanifest":null,"visibilitychange":true,"hidden":"failure.ico","show_text":"回来啦~","hide_text":"(●—●)看不见我！"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","sticky":"TOP","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":true,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":300},"toc":{"post_title":true},"live_time":{"start_time":"2020/05/16 17:00:00","prefix":"The blog has been lovely to run undefined day"},"danmu":{"enable":true,"el":".trm-banner","avatar":false,"delayRange":5000,"speed":80},"covers":["/img/block.jpg","https://img3.wallspic.com/previews/2/0/1/8/6/168102/168102-yi_shu-ka_tong-mian_bu_biao_qing-kuai_le_de-ji_qie-500x.jpg","https://img2.wallspic.com/previews/2/6/4/3/7/173462/173462-qi_fen-zi_se_de-zi_ran_jing_guan-yu_hui-de_ping_xian-500x.jpg","https://img2.wallspic.com/previews/3/3/9/1/3/131933/131933-mo_xing-xiao_jie-huang_se_de-nu_hai-fa_xing-500x.jpg","https://img1.wallspic.com/previews/8/3/4/6/2/126438/126438-wei_lai_zhu_yi-shu_ma_yi_shu-jie_duan-zi_ben_shi-yi_shu-500x.jpg","https://img2.wallspic.com/previews/0/1/5/0/7/170510/170510-guang-azure-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-500x.jpg","https://img2.wallspic.com/previews/3/6/9/6/5/156963/156963-yi_shu-qi_fen-yu_hui-shou_shi-ren_men_zai_zi_ran_jie-500x.jpg","https://img1.wallspic.com/previews/0/9/3/5/6/165390/165390-qi_fen-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-tian_wen_xue_dui_xiang-500x.jpg","https://img3.wallspic.com/previews/2/8/6/1/7/171682/171682-yi_kuai-xing_zhi-ye_ti-yi_shu-shui_xia-500x.jpg","https://img1.wallspic.com/previews/7/1/9/9/89917/89917-bo_xi_ta_nuo-an_zhuang_de_feng_jing-cheng_shi-suo_lun_tuo-shan_zhan-500x.jpg","https://img2.wallspic.com/previews/5/0/9/0/70905/70905-hai_yang-ma_er_dai_fu-tian_kong-du_jia_cun-huan_jiao-500x.jpg","https://img3.wallspic.com/previews/4/3/4/8/6/168434/168434-xing_zhi-zi_ran_jing_guan-dan_huang-shui_dao-zhi_bei-500x.jpg","https://img1.wallspic.com/previews/5/4/0/4/7/174045/174045-jian_ying-qi_fen-ren_men_zai_zi_ran_jie-tian_wen_xue_dui_xiang-yi_shu-500x.jpg","https://img1.wallspic.com/previews/9/3/1/6/5/156139/156139-feng_jing_hua-yi_shu-shu_ma_yi_shu-qi_fen-sheng_tai_qu-500x.jpg","https://img1.wallspic.com/previews/7/5/7/9/6/169757/169757-ji_bo_li_de_bo_wu_guan-zi_ran_jing_guan-yi_shu-ji_yun-500x.jpg","https://img1.wallspic.com/previews/5/2/0/6/7/176025/176025-qi_fen-tian_wen_xue_dui_xiang-yi_shu-dian_lan_se_de-yuan_quan-500x.jpg","https://img3.wallspic.com/previews/5/1/0/2/4/142015/142015-feng_ge-ka_ka_xi_qi_mu-huo_ying_ren_zhe-tu_xing_she_ji-shi_jue_yi_shu-500x.jpg"],"creative_commons":{"license":"by-nc-sa","language":"deed.zh-hans"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-10-21 01:20:43"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.2.2" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+
+ 
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+    
+        <div class="trm-logo-text">
+            La<span>ura</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    Home
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    Archives
+                </a>
+                
+                <ul>
+                    
+                    <li>
+                        <a  href="/tags/" target="">
+                            标签
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a  href="/categories/" target="">
+                            分类
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    Links
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/about/" target="">
+                    About
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont fas fa-search"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            【React系列】React原理之diff算法
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2022
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/img1.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Laura
+    </h5>
+    
+        <div class="trm-label">
+            Stay
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/luohuijie" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                CITY:
+            </div>
+            <div class="trm-label trm-label-light">
+                HANGZHOU
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:miss_rowe@163.com" class="trm-btn">
+            Contact Me
+            <i class="iconfont far fa-envelope"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            10/25
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            19:00
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Laura
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>React 的 diff 算法是其高效更新 UI 的核心机制。本文将深入探讨 diff 算法的原理、实现和优化策略，并通过代码示例和图解来帮助理解这一重要概念。</p>
+<h2 id="1-diff-算法的基本原则"><a href="#1-diff-算法的基本原则" class="headerlink" title="1. diff 算法的基本原则"></a>1. diff 算法的基本原则</h2><p>React 的 diff 算法基于以下三个主要原则：</p>
+<ol>
+<li>只对同级元素进行比较</li>
+<li>不同类型的元素会产生不同的树</li>
+<li>通过 key 属性定位哪些子元素在不同的渲染中是稳定的</li>
+</ol>
+<h2 id="2-diff-算法的工作流程"><a href="#2-diff-算法的工作流程" class="headerlink" title="2. diff 算法的工作流程"></a>2. diff 算法的工作流程</h2><h3 id="2-1-树的比较（Tree-Diff）"><a href="#2-1-树的比较（Tree-Diff）" class="headerlink" title="2.1 树的比较（Tree Diff）"></a>2.1 树的比较（Tree Diff）</h3><p>React 只会对树的同一层级进行比较，而不会跨层级比较。</p>
+<p><img src="/assets/4290733392.png" alt="diff.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>在上图中，React 只会比较同一层级的节点，如 <code>Div</code> 和 <code>Span</code>，<code>P</code> 和 <code>Img</code>。当 <code>Img</code> 变为 <code>A</code> 时，React 会直接替换，而不会尝试将 <code>Img</code> 移动到其他位置。</p>
+<h3 id="2-2-组件的比较（Component-Diff）"><a href="#2-2-组件的比较（Component-Diff）" class="headerlink" title="2.2 组件的比较（Component Diff）"></a>2.2 组件的比较（Component Diff）</h3><p>对于组件的比较，React 采用以下策略：</p>
+<ul>
+<li>如果是同一类型的组件，React 会更新组件的 props，并通过 <code>shouldComponentUpdate()</code> 判断是否需要更新</li>
+<li>如果不是同一类型的组件，React 会卸载旧组件，并装载新组件</li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 旧组件</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">OldComponent</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span> &#123;</span><br><span class="line">  <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>Old Component<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 新组件</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">NewComponent</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span> &#123;</span><br><span class="line">  <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>New Component<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 更新</span></span><br><span class="line">&lt;<span class="title class_">OldComponent</span> /&gt; <span class="comment">// 第一次渲染</span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">NewComponent</span> /&gt;</span></span> <span class="comment">// 更新时</span></span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，React 会完全卸载 <code>OldComponent</code> 并装载 <code>NewComponent</code>。</p>
+<h3 id="2-3-元素的比较（Element-Diff）"><a href="#2-3-元素的比较（Element-Diff）" class="headerlink" title="2.3 元素的比较（Element Diff）"></a>2.3 元素的比较（Element Diff）</h3><p>对于同一层级的子节点，React 提供了三种操作：插入、移动和删除。React 使用 key 属性来优化这个过程。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 旧列表</span></span><br><span class="line">&lt;ul&gt;</span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">li</span> <span class="attr">key</span>=<span class="string">&quot;1&quot;</span>&gt;</span>First<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line">  <span class="language-xml"><span class="tag">&lt;<span class="name">li</span> <span class="attr">key</span>=<span class="string">&quot;2&quot;</span>&gt;</span>Second<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line">&lt;/ul&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 新列表</span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">li</span> <span class="attr">key</span>=<span class="string">&quot;2&quot;</span>&gt;</span>Second<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">li</span> <span class="attr">key</span>=<span class="string">&quot;3&quot;</span>&gt;</span>Third<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">  <span class="tag">&lt;<span class="name">li</span> <span class="attr">key</span>=<span class="string">&quot;1&quot;</span>&gt;</span>First<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，React 能够识别出 key 为 “1” 和 “2” 的元素仍然存在，只是位置发生了变化，因此只需要移动这些元素而不是重新创建。</p>
+<h2 id="3-key-的重要性"><a href="#3-key-的重要性" class="headerlink" title="3. key 的重要性"></a>3. key 的重要性</h2><p>key 是 React diff 算法中的一个关键概念。它帮助 React 识别哪些项目被修改、添加或删除。正确使用 key 可以显著提高 diff 算法的效率。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">TodoList</span>(<span class="params">&#123; todos &#125;</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      &#123;todos.map((todo) =&gt; (</span></span><br><span class="line"><span class="language-xml">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">key</span>=<span class="string">&#123;todo.id&#125;</span>&gt;</span>&#123;todo.text&#125;<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">      ))&#125;</span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，我们为每个 todo 项目使用唯一的 <code>id</code> 作为 key。这样，当 todo 列表发生变化时，React 可以准确地识别哪些项目需要更新、添加或删除。</p>
+<h2 id="4-diff-算法的优化策略"><a href="#4-diff-算法的优化策略" class="headerlink" title="4. diff 算法的优化策略"></a>4. diff 算法的优化策略</h2><h3 id="4-1-使用-shouldComponentUpdate"><a href="#4-1-使用-shouldComponentUpdate" class="headerlink" title="4.1 使用 shouldComponentUpdate()"></a>4.1 使用 shouldComponentUpdate()</h3><p><code>shouldComponentUpdate()</code> 方法允许我们自定义比较逻辑，避免不必要的更新。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyComponent</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.Component</span> &#123;</span><br><span class="line">  <span class="title function_">shouldComponentUpdate</span>(<span class="params">nextProps, nextState</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">props</span>.<span class="property">value</span> !== nextProps.<span class="property">value</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;this.props.value&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，只有当 <code>value</code> prop 发生变化时，组件才会重新渲染。</p>
+<h3 id="4-2-使用-React-memo-和-PureComponent"><a href="#4-2-使用-React-memo-和-PureComponent" class="headerlink" title="4.2 使用 React.memo 和 PureComponent"></a>4.2 使用 React.memo 和 PureComponent</h3><p>对于函数组件，我们可以使用 <code>React.memo</code>；对于类组件，可以继承 <code>PureComponent</code>。这两种方法都会自动进行浅比较，避免不必要的重渲染。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 函数组件</span></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">MyComponent</span> = <span class="title class_">React</span>.<span class="title function_">memo</span>(<span class="keyword">function</span> <span class="title function_">MyComponent</span>(<span class="params">props</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;props.value&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 类组件</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyComponent</span> <span class="keyword">extends</span> <span class="title class_ inherited__">React.PureComponent</span> &#123;</span><br><span class="line">  <span class="title function_">render</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;this.props.value&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-使用不可变数据结构"><a href="#4-3-使用不可变数据结构" class="headerlink" title="4.3 使用不可变数据结构"></a>4.3 使用不可变数据结构</h3><p>使用不可变数据结构可以简化比较过程，提高 diff 算法的效率。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不推荐</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">updateArray</span> = (<span class="params">array, index, newValue</span>) =&gt; &#123;</span><br><span class="line">  array[index] = newValue;</span><br><span class="line">  <span class="keyword">return</span> array;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 推荐</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">updateArray</span> = (<span class="params">array, index, newValue</span>) =&gt; [</span><br><span class="line">  ...array.<span class="title function_">slice</span>(<span class="number">0</span>, index),</span><br><span class="line">  newValue,</span><br><span class="line">  ...array.<span class="title function_">slice</span>(index + <span class="number">1</span>)</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-Fiber-架构下的-diff-算法"><a href="#5-Fiber-架构下的-diff-算法" class="headerlink" title="5. Fiber 架构下的 diff 算法"></a>5. Fiber 架构下的 diff 算法</h2><p>在 React 16 引入的 Fiber 架构中，diff 算法变得可中断和可恢复。这意味着 React 可以根据优先级来调度更新，提高应用的响应性。</p>
+<p><img src="/assets/824694524.png" alt="fiberDiff.png"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>在 Fiber 架构下，diff 过程被分为了 “render phase” 和 “commit phase”。render phase 是可中断的，而 commit phase 是不可中断的。这种设计允许 React 在进行 diff 时，可以暂停当前工作，处理更高优先级的更新，然后再回来继续之前的工作。</p>
+<h2 id="6-实践建议"><a href="#6-实践建议" class="headerlink" title="6. 实践建议"></a>6. 实践建议</h2><ol>
+<li>为列表项提供稳定的、唯一的 key。</li>
+<li>避免使用索引作为 key，特别是在列表项可能会重新排序的情况下。</li>
+<li>合理使用 <code>shouldComponentUpdate()</code> 或 <code>React.memo</code> 来避免不必要的重渲染。</li>
+<li>使用不可变数据结构，特别是在处理复杂状态时。</li>
+<li>避免过深的组件嵌套，这可能会增加 diff 的复杂度。</li>
+<li>考虑使用 React DevTools Profiler 来识别和优化不必要的重渲染。</li>
+</ol>
+<h2 id="7-diff-算法的局限性"><a href="#7-diff-算法的局限性" class="headerlink" title="7. diff 算法的局限性"></a>7. diff 算法的局限性</h2><p>尽管 React 的 diff 算法非常高效，但它仍然有一些局限性：</p>
+<ol>
+<li><p><strong>无法检测深层次的变化</strong>：由于性能考虑，React 只进行浅比较。这意味着对于嵌套对象或数组，可能无法检测到深层次的变化。</p>
+</li>
+<li><p><strong>列表重排的性能问题</strong>：当列表项发生重新排序时，如果没有提供适当的 key，可能会导致不必要的 DOM 操作。</p>
+</li>
+<li><p><strong>大规模更新的性能</strong>：对于非常大的组件树，即使是高效的 diff 算法也可能会导致性能问题。</p>
+</li>
+</ol>
+<h2 id="8-总结"><a href="#8-总结" class="headerlink" title="8. 总结"></a>8. 总结</h2><p>React 的 diff 算法是其高性能的关键因素之一。通过理解 diff 算法的工作原理，我们可以更好地优化我们的 React 代码，提高应用的性能和可维护性。然而，我们也应该意识到 diff 算法的局限性，虽然 diff 算法的优化很重要，但它并不是提高应用性能的唯一方法。良好的应用架构、合理的状态管理、适当的代码分割和懒加载等策略，都是构建高性能 React 应用不可或缺的部分。</p>
+<hr>
+<p>-END-</p>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Laura
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a id="original-link" href="http://example.com/2022/10/25/React之diff算法/" title="【React系列】React原理之diff算法">http://example.com/2022/10/25/React之diff算法/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2023/09/16/Webpack%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+                </span>
+                <h6 class="trm-op-title">Webpack 原理和配置</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/09/16</li>
+                <li>17:00</li>
+                <li>Webpack</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2022/07/20/%E8%99%9A%E6%8B%9F%E5%88%97%E8%A1%A8%E6%BB%9A%E5%8A%A8%E6%96%B9%E6%A1%88/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+                </span>
+                <h6 class="trm-op-title">虚拟列表滚动方案</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>22/07/20</li>
+                <li>15:00</li>
+                <li>移动端</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-footer-card trm-scroll-animation">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2020- 2025</span>
+            <span class="footer-separator"data-separator=" · "></span>
+            <span class="trm-accent-color">Laura</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v7.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.2.2
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item blog-run-long"></div>
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            
+
+    <div id="post-toc" class="trm-post-toc">
+      <div class="trm-post-toc-header">
+        Article table of contents
+				<span id="post-toc-top">
+					TOP
+				</span>
+      </div>
+      <div class="trm-post-toc-content">
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-2" title="前言"><a rel="nofollow" class="trm-toc-link" href="#前言"><span class="trm-toc-text">前言</span></a></li><li class="trm-toc-item trm-toc-level-2" title="1. diff 算法的基本原则"><a rel="nofollow" class="trm-toc-link" href="#1-diff-算法的基本原则"><span class="trm-toc-text">1. diff 算法的基本原则</span></a></li><li class="trm-toc-item trm-toc-level-2" title="2. diff 算法的工作流程"><a rel="nofollow" class="trm-toc-link" href="#2-diff-算法的工作流程"><span class="trm-toc-text">2. diff 算法的工作流程</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="2.1 树的比较（Tree Diff）"><a rel="nofollow" class="trm-toc-link" href="#2-1-树的比较（Tree-Diff）"><span class="trm-toc-text">2.1 树的比较（Tree Diff）</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2.2 组件的比较（Component Diff）"><a rel="nofollow" class="trm-toc-link" href="#2-2-组件的比较（Component-Diff）"><span class="trm-toc-text">2.2 组件的比较（Component Diff）</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2.3 元素的比较（Element Diff）"><a rel="nofollow" class="trm-toc-link" href="#2-3-元素的比较（Element-Diff）"><span class="trm-toc-text">2.3 元素的比较（Element Diff）</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="3. key 的重要性"><a rel="nofollow" class="trm-toc-link" href="#3-key-的重要性"><span class="trm-toc-text">3. key 的重要性</span></a></li><li class="trm-toc-item trm-toc-level-2" title="4. diff 算法的优化策略"><a rel="nofollow" class="trm-toc-link" href="#4-diff-算法的优化策略"><span class="trm-toc-text">4. diff 算法的优化策略</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="4.1 使用 shouldComponentUpdate()"><a rel="nofollow" class="trm-toc-link" href="#4-1-使用-shouldComponentUpdate"><span class="trm-toc-text">4.1 使用 shouldComponentUpdate()</span></a></li><li class="trm-toc-item trm-toc-level-3" title="4.2 使用 React.memo 和 PureComponent"><a rel="nofollow" class="trm-toc-link" href="#4-2-使用-React-memo-和-PureComponent"><span class="trm-toc-text">4.2 使用 React.memo 和 PureComponent</span></a></li><li class="trm-toc-item trm-toc-level-3" title="4.3 使用不可变数据结构"><a rel="nofollow" class="trm-toc-link" href="#4-3-使用不可变数据结构"><span class="trm-toc-text">4.3 使用不可变数据结构</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="5. Fiber 架构下的 diff 算法"><a rel="nofollow" class="trm-toc-link" href="#5-Fiber-架构下的-diff-算法"><span class="trm-toc-text">5. Fiber 架构下的 diff 算法</span></a></li><li class="trm-toc-item trm-toc-level-2" title="6. 实践建议"><a rel="nofollow" class="trm-toc-link" href="#6-实践建议"><span class="trm-toc-text">6. 实践建议</span></a></li><li class="trm-toc-item trm-toc-level-2" title="7. diff 算法的局限性"><a rel="nofollow" class="trm-toc-link" href="#7-diff-算法的局限性"><span class="trm-toc-text">7. diff 算法的局限性</span></a></li><li class="trm-toc-item trm-toc-level-2" title="8. 总结"><a rel="nofollow" class="trm-toc-link" href="#8-总结"><span class="trm-toc-text">8. 总结</span></a></li></ol>
+      </div>
+    </div>
+
+            
+<div class="trm-fixed-container">
+    
+        <div class="trm-fixed-btn post-toc-btn" data-title="Open toc">
+            <i class="iconfont fas fa-th-list"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="Read Mode" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn hidden-md" data-title="Toggle between single-column and double-column" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont fas fa-arrows-alt-h"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="Back To Top">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont fas fa-search"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="Searching...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont fas fa-times"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    Please enter keywords to search
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+<script src="https://unpkg.com/swup@2.0.19/dist/swup.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.2.2"></script>
+    
+
+    
+        
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.2.2"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+		
+			<script src="/js/plugins/danmu.js?v=2.2.2"></script>
+		
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+    <script data-swup-reload-script>
+        (function () {
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            }
+            else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+    </script>
+
+
+
+<script id="async-script" src="/js/main.js?v=2.2.2"></script>
+
+<!-- CDN -->
+
+
+    
+<script src="/demo.js"></script>
+
+
+    
+
+    
+
+
+
+</body>
+
+</html>

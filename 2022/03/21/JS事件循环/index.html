@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="前言JavaScript 是单线程的脚本语言，意味着它一次只能执行一个任务。然而，现代 Web 应用常常需要处理异步操作，如网络请求、定时器等，为了让线程不阻塞，Event Loop 出现了，它是 JavaScript 引擎管理异步操作的核心机制。 什么是事件循环？EventLoop（事件循环）是编程中管理异步操作和非阻塞IO的一种重要机制，它的目的就是让程序可以在等待某些耗时操作（如网络请求、定">
+<meta property="og:type" content="article">
+<meta property="og:title" content="不了解事件循环EventLoop的不是一个好前端er">
+<meta property="og:url" content="http://example.com/2022/03/21/JS%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/index.html">
+<meta property="og:site_name" content="luohuijie">
+<meta property="og:description" content="前言JavaScript 是单线程的脚本语言，意味着它一次只能执行一个任务。然而，现代 Web 应用常常需要处理异步操作，如网络请求、定时器等，为了让线程不阻塞，Event Loop 出现了，它是 JavaScript 引擎管理异步操作的核心机制。 什么是事件循环？EventLoop（事件循环）是编程中管理异步操作和非阻塞IO的一种重要机制，它的目的就是让程序可以在等待某些耗时操作（如网络请求、定">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-03-21T03:00:00.000Z">
+<meta property="article:modified_time" content="2024-10-20T17:30:39.463Z">
+<meta property="article:author" content="Laura">
+<meta property="article:tag" content="JS">
+<meta property="article:tag" content="事件循环">
+<meta name="twitter:card" content="summary">
+
+    <meta name="keywords" content="前端,js,jquery,javascript,html5,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,html,css,css3,用户体验">
+
+
+<title >不了解事件循环EventLoop的不是一个好前端er</title>
+
+<!-- Favicon -->
+
+
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Laura","root":"/","typed_text":["Hungry | Stay Foolish"],"theme_version":"2.2.2","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":null,"icon16":null,"icon32":null,"apple_touch_icon":null,"webmanifest":null,"visibilitychange":true,"hidden":"failure.ico","show_text":"回来啦~","hide_text":"(●—●)看不见我！"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","sticky":"TOP","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":true,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":300},"toc":{"post_title":true},"live_time":{"start_time":"2020/05/16 17:00:00","prefix":"The blog has been lovely to run undefined day"},"danmu":{"enable":true,"el":".trm-banner","avatar":false,"delayRange":5000,"speed":80},"covers":["/img/block.jpg","https://img3.wallspic.com/previews/2/0/1/8/6/168102/168102-yi_shu-ka_tong-mian_bu_biao_qing-kuai_le_de-ji_qie-500x.jpg","https://img2.wallspic.com/previews/2/6/4/3/7/173462/173462-qi_fen-zi_se_de-zi_ran_jing_guan-yu_hui-de_ping_xian-500x.jpg","https://img2.wallspic.com/previews/3/3/9/1/3/131933/131933-mo_xing-xiao_jie-huang_se_de-nu_hai-fa_xing-500x.jpg","https://img1.wallspic.com/previews/8/3/4/6/2/126438/126438-wei_lai_zhu_yi-shu_ma_yi_shu-jie_duan-zi_ben_shi-yi_shu-500x.jpg","https://img2.wallspic.com/previews/0/1/5/0/7/170510/170510-guang-azure-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-500x.jpg","https://img2.wallspic.com/previews/3/6/9/6/5/156963/156963-yi_shu-qi_fen-yu_hui-shou_shi-ren_men_zai_zi_ran_jie-500x.jpg","https://img1.wallspic.com/previews/0/9/3/5/6/165390/165390-qi_fen-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-tian_wen_xue_dui_xiang-500x.jpg","https://img3.wallspic.com/previews/2/8/6/1/7/171682/171682-yi_kuai-xing_zhi-ye_ti-yi_shu-shui_xia-500x.jpg","https://img1.wallspic.com/previews/7/1/9/9/89917/89917-bo_xi_ta_nuo-an_zhuang_de_feng_jing-cheng_shi-suo_lun_tuo-shan_zhan-500x.jpg","https://img2.wallspic.com/previews/5/0/9/0/70905/70905-hai_yang-ma_er_dai_fu-tian_kong-du_jia_cun-huan_jiao-500x.jpg","https://img3.wallspic.com/previews/4/3/4/8/6/168434/168434-xing_zhi-zi_ran_jing_guan-dan_huang-shui_dao-zhi_bei-500x.jpg","https://img1.wallspic.com/previews/5/4/0/4/7/174045/174045-jian_ying-qi_fen-ren_men_zai_zi_ran_jie-tian_wen_xue_dui_xiang-yi_shu-500x.jpg","https://img1.wallspic.com/previews/9/3/1/6/5/156139/156139-feng_jing_hua-yi_shu-shu_ma_yi_shu-qi_fen-sheng_tai_qu-500x.jpg","https://img1.wallspic.com/previews/7/5/7/9/6/169757/169757-ji_bo_li_de_bo_wu_guan-zi_ran_jing_guan-yi_shu-ji_yun-500x.jpg","https://img1.wallspic.com/previews/5/2/0/6/7/176025/176025-qi_fen-tian_wen_xue_dui_xiang-yi_shu-dian_lan_se_de-yuan_quan-500x.jpg","https://img3.wallspic.com/previews/5/1/0/2/4/142015/142015-feng_ge-ka_ka_xi_qi_mu-huo_ying_ren_zhe-tu_xing_she_ji-shi_jue_yi_shu-500x.jpg"],"creative_commons":{"license":"by-nc-sa","language":"deed.zh-hans"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-10-21 01:30:39"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.2.2" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+
+ 
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+    
+        <div class="trm-logo-text">
+            La<span>ura</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    Home
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    Archives
+                </a>
+                
+                <ul>
+                    
+                    <li>
+                        <a  href="/tags/" target="">
+                            标签
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a  href="/categories/" target="">
+                            分类
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    Links
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/about/" target="">
+                    About
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont fas fa-search"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            不了解事件循环EventLoop的不是一个好前端er
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2022
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/img1.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Laura
+    </h5>
+    
+        <div class="trm-label">
+            Stay
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/luohuijie" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                CITY:
+            </div>
+            <div class="trm-label trm-label-light">
+                HANGZHOU
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:miss_rowe@163.com" class="trm-btn">
+            Contact Me
+            <i class="iconfont far fa-envelope"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            03/21
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            11:00
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Laura
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>JavaScript 是单线程的脚本语言，意味着它一次只能执行一个任务。然而，现代 Web 应用常常需要处理异步操作，如网络请求、定时器等，为了让线程不阻塞，Event Loop 出现了，它是 JavaScript 引擎管理异步操作的核心机制。</p>
+<h3 id="什么是事件循环？"><a href="#什么是事件循环？" class="headerlink" title="什么是事件循环？"></a>什么是事件循环？</h3><p>EventLoop（事件循环）是编程中管理异步操作和非阻塞IO的一种重要机制，它的目的就是让程序可以在等待某些耗时操作（如网络请求、定时器等）完成的同时，能够执行其他任务，从而避免程序阻塞。换句话说，我在等咖啡的同时EventLoop让我可以边写文章而不是发呆坐在那。</p>
+<h3 id="事件循环的组成部分"><a href="#事件循环的组成部分" class="headerlink" title="事件循环的组成部分"></a>事件循环的组成部分</h3><ol>
+<li>调用栈（Call Stack）</li>
+<li>任务队列（Task Queue）</li>
+<li>微任务队列（Microtask Queue）</li>
+</ol>
+<h3 id="调用栈"><a href="#调用栈" class="headerlink" title="调用栈"></a>调用栈</h3><p>调用栈是一个 LIFO（后进先出）的数据结构，用于跟踪程序的执行。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">bar</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="title function_">foo</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">bar</span>();</span><br></pre></td></tr></table></figure>
+
+<p>在这个例子中，调用栈的顺序是：</p>
+<ol>
+<li><code>bar()</code></li>
+<li><code>foo()</code></li>
+<li><code>console.log(&quot;Hello&quot;)</code></li>
+</ol>
+<h3 id="任务队列"><a href="#任务队列" class="headerlink" title="任务队列"></a>任务队列</h3><p>任务队列存储待执行的回调函数，如 setTimeout、setInterval、I&#x2F;O 操作等。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Start&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Timeout&quot;</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;End&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Start</span><br><span class="line">End</span><br><span class="line">Timeout</span><br></pre></td></tr></table></figure>
+
+<h3 id="微任务队列"><a href="#微任务队列" class="headerlink" title="微任务队列"></a>微任务队列</h3><p>微任务队列优先级高于任务队列，包含 Promise 回调、MutationObserver 等。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Start&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Promise&quot;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Timeout&quot;</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;End&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Start</span><br><span class="line">End</span><br><span class="line">Promise</span><br><span class="line">Timeout</span><br></pre></td></tr></table></figure>
+
+<h3 id="事件循环的工作流程"><a href="#事件循环的工作流程" class="headerlink" title="事件循环的工作流程"></a>事件循环的工作流程</h3><ol>
+<li>执行同步代码，这些代码被推入调用栈</li>
+<li>调用栈清空后，检查微任务队列并执行</li>
+<li>微任务队列清空后，从任务队列中取出一个任务执行</li>
+<li>重复步骤2-3</li>
+</ol>
+<h3 id="实际应用示例"><a href="#实际应用示例" class="headerlink" title="实际应用示例"></a>实际应用示例</h3><p>让我们通过一个更复杂的例子来理解事件循环：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Script start&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;setTimeout&#x27;</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Promise 1&#x27;</span>);</span><br><span class="line">&#125;).<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Promise 2&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Promise 3&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Script end&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Script start</span><br><span class="line">Script end</span><br><span class="line">Promise 1</span><br><span class="line">Promise 3</span><br><span class="line">Promise 2</span><br><span class="line">setTimeout</span><br></pre></td></tr></table></figure>
+
+<p>解释：</p>
+<ol>
+<li>首先执行同步代码，输出”Script start”和”Script end”</li>
+<li>setTimeout回调被放入任务队列</li>
+<li>Promise回调被放入微任务队列</li>
+<li>同步代码执行完毕，开始处理微任务队列</li>
+<li>输出”Promise 1”，”Promise 3”，然后是”Promise 2”</li>
+<li>微任务队列清空，执行任务队列中的setTimeout回调</li>
+</ol>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ol>
+<li>微任务可能会阻塞渲染，因为它们会在下一次渲染之前执行</li>
+<li>过多的同步操作或微任务可能会导致页面无响应</li>
+<li>Node.js的事件循环与浏览器环境略有不同，但基本原理相同</li>
+</ol>
+<h3 id="Node-js-中的事件循环"><a href="#Node-js-中的事件循环" class="headerlink" title="Node.js 中的事件循环"></a>Node.js 中的事件循环</h3><p>Node.js 的事件循环比浏览器环境更复杂，它包含多个阶段：</p>
+<ol>
+<li>timers：执行 setTimeout() 和 setInterval() 的回调</li>
+<li>pending callbacks：执行延迟到下一个循环迭代的 I&#x2F;O 回调</li>
+<li>idle, prepare：仅系统内部使用</li>
+<li>poll：检索新的 I&#x2F;O 事件；执行与 I&#x2F;O 相关的回调</li>
+<li>check：执行 setImmediate() 回调</li>
+<li>close callbacks：执行 close 事件的回调，如 socket.on(‘close’, …)</li>
+</ol>
+<p>让我们通过一个 Node.js 示例来理解这个过程：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Start&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// timers 阶段</span></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Timer 1&#x27;</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Immediate 1&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// I/O 操作</span></span><br><span class="line">fs.<span class="title function_">readFile</span>(__filename, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;File read&#x27;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Timer 2&#x27;</span>);</span><br><span class="line">    &#125;, <span class="number">0</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Immediate 2&#x27;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Next tick&#x27;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 微任务</span></span><br><span class="line"><span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Promise&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">process.<span class="title function_">nextTick</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Next tick 1&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;End&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>输出可能会是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Start</span><br><span class="line">End</span><br><span class="line">Next tick 1</span><br><span class="line">Promise</span><br><span class="line">Timer 1</span><br><span class="line">Immediate 1</span><br><span class="line">File read</span><br><span class="line">Next tick</span><br><span class="line">Immediate 2</span><br><span class="line">Timer 2</span><br></pre></td></tr></table></figure>
+
+<p>注意：实际输出可能会有所不同，特别是 Timer 1 和 Immediate 1 的顺序，这取决于进程性能。</p>
+<h3 id="性能优化与事件循环"><a href="#性能优化与事件循环" class="headerlink" title="性能优化与事件循环"></a>性能优化与事件循环</h3><p>理解事件循环机制可以帮助我们优化 JavaScript 应用的性能：</p>
+<ol>
+<li>避免长时间运行的同步操作，它们会阻塞事件循环。</li>
+<li>使用微任务（如 Promise）来处理高优先级的异步操作。</li>
+<li>合理使用 setTimeout 和 setImmediate 来调度任务。</li>
+<li>在 Node.js 中，理解不同阶段的特性，合理安排代码执行顺序。</li>
+</ol>
+<h3 id="事件循环与异步编程模式"><a href="#事件循环与异步编程模式" class="headerlink" title="事件循环与异步编程模式"></a>事件循环与异步编程模式</h3><p>理解事件循环机制对于掌握各种异步编程模式至关重要：</p>
+<h4 id="1-回调函数"><a href="#1-回调函数" class="headerlink" title="1. 回调函数"></a>1. 回调函数</h4><p>最基本的异步编程方式，但容易导致回调地狱。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fs.<span class="title function_">readFile</span>(<span class="string">&#x27;file1.txt&#x27;</span>, <span class="function">(<span class="params">err, data1</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</span><br><span class="line">    fs.<span class="title function_">readFile</span>(<span class="string">&#x27;file2.txt&#x27;</span>, <span class="function">(<span class="params">err, data2</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(data1.<span class="title function_">toString</span>() + data2.<span class="title function_">toString</span>());</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-Promise"><a href="#2-Promise" class="headerlink" title="2. Promise"></a>2. Promise</h4><p>Promise 提供了更优雅的方式处理异步操作，避免了回调地狱。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">readFilePromise</span> = (<span class="params">filename</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">        fs.<span class="title function_">readFile</span>(filename, <span class="function">(<span class="params">err, data</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (err) <span class="title function_">reject</span>(err);</span><br><span class="line">            <span class="keyword">else</span> <span class="title function_">resolve</span>(data);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="title function_">readFilePromise</span>(<span class="string">&#x27;file1.txt&#x27;</span>)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function"><span class="params">data1</span> =&gt;</span> <span class="title function_">readFilePromise</span>(<span class="string">&#x27;file2.txt&#x27;</span>).<span class="title function_">then</span>(<span class="function"><span class="params">data2</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(data1.<span class="title function_">toString</span>() + data2.<span class="title function_">toString</span>());</span><br><span class="line">    &#125;))</span><br><span class="line">    .<span class="title function_">catch</span>(<span class="function"><span class="params">err</span> =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">error</span>(err));</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-Async-Await"><a href="#3-Async-Await" class="headerlink" title="3. Async&#x2F;Await"></a>3. Async&#x2F;Await</h4><p>基于 Promise 的语法糖，使异步代码看起来更像同步代码。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">readFiles</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> data1 = <span class="keyword">await</span> <span class="title function_">readFilePromise</span>(<span class="string">&#x27;file1.txt&#x27;</span>);</span><br><span class="line">        <span class="keyword">const</span> data2 = <span class="keyword">await</span> <span class="title function_">readFilePromise</span>(<span class="string">&#x27;file2.txt&#x27;</span>);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(data1.<span class="title function_">toString</span>() + data2.<span class="title function_">toString</span>());</span><br><span class="line">    &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">error</span>(err);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">readFiles</span>();</span><br></pre></td></tr></table></figure>
+
+<h3 id="事件循环与框架-库"><a href="#事件循环与框架-库" class="headerlink" title="事件循环与框架&#x2F;库"></a>事件循环与框架&#x2F;库</h3><p>很多现代 JavaScript 框架和库都深度利用了事件循环机制：</p>
+<ol>
+<li><p><strong>React</strong>：React 的调度器（Scheduler）利用 <code>requestIdleCallback</code> 和 <code>requestAnimationFrame</code> 在浏览器空闲时执行任务，优化性能。</p>
+</li>
+<li><p><strong>Vue</strong>：Vue 的响应式系统使用微任务来批量更新 DOM，提高渲染效率。</p>
+</li>
+<li><p><strong>Express&#x2F;Koa</strong>：这些 Node.js Web 框架利用事件循环来处理并发请求，实现非阻塞 I&#x2F;O。</p>
+</li>
+</ol>
+<h3 id="常见陷阱和最佳实践"><a href="#常见陷阱和最佳实践" class="headerlink" title="常见陷阱和最佳实践"></a>常见陷阱和最佳实践</h3><ol>
+<li><p><strong>阻塞事件循环</strong>：避免在主线程中执行长时间运行的同步操作。考虑使用 Web Workers（浏览器）或 Worker Threads（Node.js）来处理复杂计算。</p>
+</li>
+<li><p><strong>微任务队列阻塞</strong>：过多的微任务可能会延迟宏任务的执行。确保微任务执行时间短暂。</p>
+</li>
+<li><p><strong>定时器精度</strong>：<code>setTimeout</code> 和 <code>setInterval</code> 的执行时间可能不精确，特别是在繁忙的事件循环中。对于高精度计时，考虑使用 <code>performance.now()</code>。</p>
+</li>
+<li><p><strong>内存泄漏</strong>：闭包和事件监听器可能导致内存泄漏。记得及时清理不再需要的事件监听器和引用。</p>
+</li>
+</ol>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>JavaScript 的事件循环机制是其异步非阻塞特性的核心。深入理解事件循环不仅有助于编写更高效的代码，还能帮助调试复杂的异步问题。</p>
+<hr>
+<p>-END-</p>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Laura
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a id="original-link" href="http://example.com/2022/03/21/JS事件循环/" title="不了解事件循环EventLoop的不是一个好前端er">http://example.com/2022/03/21/JS事件循环/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2022/05/09/React%E7%9A%84Fiber%E6%9E%B6%E6%9E%84/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+                </span>
+                <h6 class="trm-op-title">【React系列】React Fiber架构</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>22/05/09</li>
+                <li>18:00</li>
+                <li>React</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2021/11/16/React%20Hooks%E5%85%A8%E9%9D%A2%E8%A7%A3%E8%AF%BB/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+                </span>
+                <h6 class="trm-op-title">【React系列】React Hooks全面解读</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>21/11/16</li>
+                <li>20:00</li>
+                <li>React</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-footer-card trm-scroll-animation">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2020- 2025</span>
+            <span class="footer-separator"data-separator=" · "></span>
+            <span class="trm-accent-color">Laura</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v7.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.2.2
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item blog-run-long"></div>
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            
+
+    <div id="post-toc" class="trm-post-toc">
+      <div class="trm-post-toc-header">
+        Article table of contents
+				<span id="post-toc-top">
+					TOP
+				</span>
+      </div>
+      <div class="trm-post-toc-content">
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-2" title="前言"><a rel="nofollow" class="trm-toc-link" href="#前言"><span class="trm-toc-text">前言</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="什么是事件循环？"><a rel="nofollow" class="trm-toc-link" href="#什么是事件循环？"><span class="trm-toc-text">什么是事件循环？</span></a></li><li class="trm-toc-item trm-toc-level-3" title="事件循环的组成部分"><a rel="nofollow" class="trm-toc-link" href="#事件循环的组成部分"><span class="trm-toc-text">事件循环的组成部分</span></a></li><li class="trm-toc-item trm-toc-level-3" title="调用栈"><a rel="nofollow" class="trm-toc-link" href="#调用栈"><span class="trm-toc-text">调用栈</span></a></li><li class="trm-toc-item trm-toc-level-3" title="任务队列"><a rel="nofollow" class="trm-toc-link" href="#任务队列"><span class="trm-toc-text">任务队列</span></a></li><li class="trm-toc-item trm-toc-level-3" title="微任务队列"><a rel="nofollow" class="trm-toc-link" href="#微任务队列"><span class="trm-toc-text">微任务队列</span></a></li><li class="trm-toc-item trm-toc-level-3" title="事件循环的工作流程"><a rel="nofollow" class="trm-toc-link" href="#事件循环的工作流程"><span class="trm-toc-text">事件循环的工作流程</span></a></li><li class="trm-toc-item trm-toc-level-3" title="实际应用示例"><a rel="nofollow" class="trm-toc-link" href="#实际应用示例"><span class="trm-toc-text">实际应用示例</span></a></li><li class="trm-toc-item trm-toc-level-3" title="注意事项"><a rel="nofollow" class="trm-toc-link" href="#注意事项"><span class="trm-toc-text">注意事项</span></a></li><li class="trm-toc-item trm-toc-level-3" title="Node.js 中的事件循环"><a rel="nofollow" class="trm-toc-link" href="#Node-js-中的事件循环"><span class="trm-toc-text">Node.js 中的事件循环</span></a></li><li class="trm-toc-item trm-toc-level-3" title="性能优化与事件循环"><a rel="nofollow" class="trm-toc-link" href="#性能优化与事件循环"><span class="trm-toc-text">性能优化与事件循环</span></a></li><li class="trm-toc-item trm-toc-level-3" title="事件循环与异步编程模式"><a rel="nofollow" class="trm-toc-link" href="#事件循环与异步编程模式"><span class="trm-toc-text">事件循环与异步编程模式</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-4" title="1. 回调函数"><a rel="nofollow" class="trm-toc-link" href="#1-回调函数"><span class="trm-toc-text">1. 回调函数</span></a></li><li class="trm-toc-item trm-toc-level-4" title="2. Promise"><a rel="nofollow" class="trm-toc-link" href="#2-Promise"><span class="trm-toc-text">2. Promise</span></a></li><li class="trm-toc-item trm-toc-level-4" title="3. Async&#x2F;Await"><a rel="nofollow" class="trm-toc-link" href="#3-Async-Await"><span class="trm-toc-text">3. Async&#x2F;Await</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-3" title="事件循环与框架&#x2F;库"><a rel="nofollow" class="trm-toc-link" href="#事件循环与框架-库"><span class="trm-toc-text">事件循环与框架&#x2F;库</span></a></li><li class="trm-toc-item trm-toc-level-3" title="常见陷阱和最佳实践"><a rel="nofollow" class="trm-toc-link" href="#常见陷阱和最佳实践"><span class="trm-toc-text">常见陷阱和最佳实践</span></a></li><li class="trm-toc-item trm-toc-level-3" title="结论"><a rel="nofollow" class="trm-toc-link" href="#结论"><span class="trm-toc-text">结论</span></a></li></ol></li></ol>
+      </div>
+    </div>
+
+            
+<div class="trm-fixed-container">
+    
+        <div class="trm-fixed-btn post-toc-btn" data-title="Open toc">
+            <i class="iconfont fas fa-th-list"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="Read Mode" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn hidden-md" data-title="Toggle between single-column and double-column" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont fas fa-arrows-alt-h"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="Back To Top">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont fas fa-search"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="Searching...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont fas fa-times"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    Please enter keywords to search
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+<script src="https://unpkg.com/swup@2.0.19/dist/swup.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.2.2"></script>
+    
+
+    
+        
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.2.2"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+		
+			<script src="/js/plugins/danmu.js?v=2.2.2"></script>
+		
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+    <script data-swup-reload-script>
+        (function () {
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            }
+            else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+    </script>
+
+
+
+<script id="async-script" src="/js/main.js?v=2.2.2"></script>
+
+<!-- CDN -->
+
+
+    
+<script src="/demo.js"></script>
+
+
+    
+
+    
+
+
+
+</body>
+
+</html>

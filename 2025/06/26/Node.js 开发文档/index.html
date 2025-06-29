@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="目录 Node.js 简介   全局对象 Node的模块化 基本内置模块 文件 IO 文件流 HTTP 服务器 事件模块 错误处理 推荐学习资源  Node.js 简介Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行环境，它允许开发者使用 JavaScript 编写后端代码，具有非阻塞 I&#x2F;O、事件驱动等特性，适合高并发应用场景。  官方网站：https">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node.js 开发文档：从基础到进阶">
+<meta property="og:url" content="http://example.com/2025/06/26/Node.js%20%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3/index.html">
+<meta property="og:site_name" content="luohuijie">
+<meta property="og:description" content="目录 Node.js 简介   全局对象 Node的模块化 基本内置模块 文件 IO 文件流 HTTP 服务器 事件模块 错误处理 推荐学习资源  Node.js 简介Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行环境，它允许开发者使用 JavaScript 编写后端代码，具有非阻塞 I&#x2F;O、事件驱动等特性，适合高并发应用场景。  官方网站：https">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-06-26T11:52:00.000Z">
+<meta property="article:modified_time" content="2025-06-29T08:51:33.466Z">
+<meta property="article:author" content="Laura">
+<meta property="article:tag" content="NodeJS">
+<meta name="twitter:card" content="summary">
+
+    <meta name="keywords" content="前端,js,jquery,javascript,html5,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,html,css,css3,用户体验">
+
+
+<title >Node.js 开发文档：从基础到进阶</title>
+
+<!-- Favicon -->
+
+
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Laura","root":"/","typed_text":["Hungry | Stay Foolish"],"theme_version":"2.2.2","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":null,"icon16":null,"icon32":null,"apple_touch_icon":null,"webmanifest":null,"visibilitychange":true,"hidden":"failure.ico","show_text":"回来啦~","hide_text":"(●—●)看不见我！"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","sticky":"TOP","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":true,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":300},"toc":{"post_title":true},"live_time":{"start_time":"2020/05/16 17:00:00","prefix":"The blog has been lovely to run undefined day"},"danmu":{"enable":true,"el":".trm-banner","avatar":false,"delayRange":5000,"speed":80},"covers":["/img/block.jpg","https://img3.wallspic.com/previews/2/0/1/8/6/168102/168102-yi_shu-ka_tong-mian_bu_biao_qing-kuai_le_de-ji_qie-500x.jpg","https://img2.wallspic.com/previews/2/6/4/3/7/173462/173462-qi_fen-zi_se_de-zi_ran_jing_guan-yu_hui-de_ping_xian-500x.jpg","https://img2.wallspic.com/previews/3/3/9/1/3/131933/131933-mo_xing-xiao_jie-huang_se_de-nu_hai-fa_xing-500x.jpg","https://img1.wallspic.com/previews/8/3/4/6/2/126438/126438-wei_lai_zhu_yi-shu_ma_yi_shu-jie_duan-zi_ben_shi-yi_shu-500x.jpg","https://img2.wallspic.com/previews/0/1/5/0/7/170510/170510-guang-azure-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-500x.jpg","https://img2.wallspic.com/previews/3/6/9/6/5/156963/156963-yi_shu-qi_fen-yu_hui-shou_shi-ren_men_zai_zi_ran_jie-500x.jpg","https://img1.wallspic.com/previews/0/9/3/5/6/165390/165390-qi_fen-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-tian_wen_xue_dui_xiang-500x.jpg","https://img3.wallspic.com/previews/2/8/6/1/7/171682/171682-yi_kuai-xing_zhi-ye_ti-yi_shu-shui_xia-500x.jpg","https://img1.wallspic.com/previews/7/1/9/9/89917/89917-bo_xi_ta_nuo-an_zhuang_de_feng_jing-cheng_shi-suo_lun_tuo-shan_zhan-500x.jpg","https://img2.wallspic.com/previews/5/0/9/0/70905/70905-hai_yang-ma_er_dai_fu-tian_kong-du_jia_cun-huan_jiao-500x.jpg","https://img3.wallspic.com/previews/4/3/4/8/6/168434/168434-xing_zhi-zi_ran_jing_guan-dan_huang-shui_dao-zhi_bei-500x.jpg","https://img1.wallspic.com/previews/5/4/0/4/7/174045/174045-jian_ying-qi_fen-ren_men_zai_zi_ran_jie-tian_wen_xue_dui_xiang-yi_shu-500x.jpg","https://img1.wallspic.com/previews/9/3/1/6/5/156139/156139-feng_jing_hua-yi_shu-shu_ma_yi_shu-qi_fen-sheng_tai_qu-500x.jpg","https://img1.wallspic.com/previews/7/5/7/9/6/169757/169757-ji_bo_li_de_bo_wu_guan-zi_ran_jing_guan-yi_shu-ji_yun-500x.jpg","https://img1.wallspic.com/previews/5/2/0/6/7/176025/176025-qi_fen-tian_wen_xue_dui_xiang-yi_shu-dian_lan_se_de-yuan_quan-500x.jpg","https://img3.wallspic.com/previews/5/1/0/2/4/142015/142015-feng_ge-ka_ka_xi_qi_mu-huo_ying_ren_zhe-tu_xing_she_ji-shi_jue_yi_shu-500x.jpg"],"creative_commons":{"license":"by-nc-sa","language":"deed.zh-hans"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2025-06-29 16:51:33"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.2.2" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+
+ 
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+    
+        <div class="trm-logo-text">
+            La<span>ura</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    Home
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    Archives
+                </a>
+                
+                <ul>
+                    
+                    <li>
+                        <a  href="/tags/" target="">
+                            标签
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a  href="/categories/" target="">
+                            分类
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    Links
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/about/" target="">
+                    About
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont fas fa-search"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            Node.js 开发文档：从基础到进阶
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2025
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/img1.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Laura
+    </h5>
+    
+        <div class="trm-label">
+            Stay
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/luohuijie" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                CITY:
+            </div>
+            <div class="trm-label trm-label-light">
+                HANGZHOU
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:miss_rowe@163.com" class="trm-btn">
+            Contact Me
+            <i class="iconfont far fa-envelope"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            06/26
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            19:52
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Laura
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
+<li><a href="#nodejs-%E7%AE%80%E4%BB%8B">Node.js 简介</a>  </li>
+<li><a href="#%E5%85%A8%E5%B1%80%E5%AF%B9%E8%B1%A1">全局对象</a></li>
+<li><a href="#node%E7%9A%84%E6%A8%A1%E5%9D%97%E5%8C%96">Node的模块化</a></li>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97">基本内置模块</a></li>
+<li><a href="#%E6%96%87%E4%BB%B6io">文件 IO</a></li>
+<li><a href="#%E6%96%87%E4%BB%B6%E6%B5%81">文件流</a></li>
+<li><a href="#http%E6%9C%8D%E5%8A%A1%E5%99%A8">HTTP 服务器</a></li>
+<li><a href="#%E4%BA%8B%E4%BB%B6%E6%A8%A1%E5%9D%97">事件模块</a></li>
+<li><a href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86">错误处理</a></li>
+<li><a href="#%E6%8E%A8%E8%8D%90%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90">推荐学习资源</a></li>
+</ol>
+<h2 id="Node-js-简介"><a href="#Node-js-简介" class="headerlink" title="Node.js 简介"></a>Node.js 简介</h2><p><strong>Node.js</strong> 是一个基于 Chrome V8 引擎的 JavaScript 运行环境，它允许开发者使用 JavaScript 编写后端代码，具有非阻塞 I&#x2F;O、事件驱动等特性，适合高并发应用场景。</p>
+<ul>
+<li>官方网站：<a target="_blank" rel="noopener" href="https://nodejs.org/">https://nodejs.org</a></li>
+<li>当前主流版本支持 ES6+、CommonJS、部分 ES 模块。</li>
+</ul>
+<h2 id="全局对象"><a href="#全局对象" class="headerlink" title="全局对象"></a>全局对象</h2><p>Node.js 提供了一些可以在任意模块中直接访问的 <strong>全局变量&#x2F;对象</strong>，不需要 <code>require</code> 引入。以下是一些重要的全局对象：</p>
+<h3 id="1-global"><a href="#1-global" class="headerlink" title="1. global"></a>1. global</h3><p><code>global</code> 是 Node.js 中的全局作用域对象，类似于浏览器中的 <code>window</code> 对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">global</span>.<span class="property">myVariable</span> = <span class="string">&quot;Hello, World!&quot;</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(myVariable); <span class="comment">// 输出: Hello, World!</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-process"><a href="#2-process" class="headerlink" title="2. process"></a>2. process</h3><p><code>process</code> 对象提供了与当前 Node.js 进程相关的信息和控制。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(process.<span class="property">version</span>); <span class="comment">// 输出 Node.js 版本</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(process.<span class="property">platform</span>); <span class="comment">// 输出运行平台</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(process.<span class="property">argv</span>); <span class="comment">// 输出命令行参数数组</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-console"><a href="#3-console" class="headerlink" title="3. console"></a>3. console</h3><p><code>console</code> 对象提供标准输出、错误输出的接口。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;日志信息&quot;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&quot;错误信息&quot;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">warn</span>(<span class="string">&quot;警告信息&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-dirname-和-filename"><a href="#4-dirname-和-filename" class="headerlink" title="4. __dirname 和 __filename"></a>4. __dirname 和 __filename</h3><p><code>__dirname</code> 表示当前模块文件所在目录的绝对路径，<code>__filename</code> 表示当前模块文件的绝对路径的文件名。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(__dirname);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(__filename);</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-setTimeout-setInterval-setImmediate"><a href="#5-setTimeout-setInterval-setImmediate" class="headerlink" title="5. setTimeout, setInterval, setImmediate"></a>5. setTimeout, setInterval, setImmediate</h3><p>全局定时器函数，用于处理定时器和延迟执行。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;延迟1秒执行&quot;</span>);</span><br><span class="line">&#125;, <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;每1秒执行一次&quot;</span>);</span><br><span class="line">&#125;, <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line"><span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;在当前事件循环结束时执行&quot;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="Node的模块化"><a href="#Node的模块化" class="headerlink" title="Node的模块化"></a>Node的模块化</h2><p>Node.js 使用 <strong>CommonJS 模块化规范</strong>，每个文件都是一个模块，具有自己的作用域。</p>
+<h3 id="1-创建模块"><a href="#1-创建模块" class="headerlink" title="1. 创建模块"></a>1. 创建模块</h3><p>在 <code>myModule.js</code> 文件中：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">myFunction</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;This is a function from myModule&quot;</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  myFunction</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-导入模块"><a href="#2-导入模块" class="headerlink" title="2. 导入模块"></a>2. 导入模块</h3><p>在另一个文件中使用 <code>require</code> 函数导入模块：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myModule = <span class="built_in">require</span>(<span class="string">&#x27;./myModule&#x27;</span>);</span><br><span class="line">myModule.<span class="title function_">myFunction</span>(); <span class="comment">// 输出: This is a function from myModule</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-ES6-模块语法"><a href="#3-ES6-模块语法" class="headerlink" title="3. ES6 模块语法"></a>3. ES6 模块语法</h3><p>从 Node.js 13.2.0 版本开始，可以使用 ES6 模块语法。需要将文件扩展名改为 <code>.mjs</code> 或在 <code>package.json</code> 中设置 <code>&quot;type&quot;: &quot;module&quot;</code>。</p>
+<p>导出模块：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// myModule.mjs</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title function_">myFunction</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;This is a function from myModule&quot;</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>导入模块：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.mjs</span></span><br><span class="line"><span class="keyword">import</span> &#123; myFunction &#125; <span class="keyword">from</span> <span class="string">&#x27;./myModule.mjs&#x27;</span>;</span><br><span class="line"><span class="title function_">myFunction</span>(); <span class="comment">// 输出: This is a function from myModule</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="基本内置模块"><a href="#基本内置模块" class="headerlink" title="基本内置模块"></a>基本内置模块</h2><p>Node.js 提供了许多内置模块，以下是一些常用的模块：</p>
+<h3 id="1-path"><a href="#1-path" class="headerlink" title="1. path"></a>1. path</h3><p><code>path</code> 模块用于处理文件路径。常用方法有：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>path.join()</code></td>
+<td>拼接路径</td>
+</tr>
+<tr>
+<td><code>path.resolve()</code></td>
+<td>解析为绝对路径</td>
+</tr>
+<tr>
+<td><code>path.basename()</code></td>
+<td>获取文件名</td>
+</tr>
+<tr>
+<td><code>path.dirname()</code></td>
+<td>获取目录名</td>
+</tr>
+<tr>
+<td><code>path.extname()</code></td>
+<td>获取扩展名</td>
+</tr>
+</tbody></table>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(path.<span class="title function_">join</span>(<span class="string">&#x27;/foo&#x27;</span>, <span class="string">&#x27;bar&#x27;</span>, <span class="string">&#x27;baz/asdf&#x27;</span>, <span class="string">&#x27;quux&#x27;</span>, <span class="string">&#x27;..&#x27;</span>)); <span class="comment">// 输出: /foo/bar/baz/asdf</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(path.<span class="title function_">resolve</span>(<span class="string">&#x27;foo/bar&#x27;</span>, <span class="string">&#x27;/tmp/file/&#x27;</span>, <span class="string">&#x27;..&#x27;</span>, <span class="string">&#x27;a/../subfile&#x27;</span>));</span><br><span class="line"><span class="comment">// 输出: /tmp/subfile</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(path.<span class="title function_">basename</span>(<span class="string">&#x27;/foo/bar/file.txt&#x27;</span>)); <span class="comment">// 输出: file.txt</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(path.<span class="title function_">extname</span>(<span class="string">&#x27;index.html&#x27;</span>)); <span class="comment">// 输出: .html</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-os"><a href="#2-os" class="headerlink" title="2. os"></a>2. os</h3><p><code>os</code> 模块提供了与操作系统相关的实用方法和属性。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> os = <span class="built_in">require</span>(<span class="string">&#x27;os&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(os.<span class="title function_">platform</span>()); <span class="comment">// 输出操作系统平台</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(os.<span class="title function_">cpus</span>()); <span class="comment">// 输出 CPU 信息</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(os.<span class="title function_">totalmem</span>()); <span class="comment">// 输出系统总内存</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(os.<span class="title function_">freemem</span>()); <span class="comment">// 输出可用内存</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-url"><a href="#3-url" class="headerlink" title="3. url"></a>3. url</h3><p><code>url</code> 模块用于 URL 解析和处理。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">&#x27;url&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> myUrl = <span class="keyword">new</span> <span class="title function_">URL</span>(<span class="string">&#x27;https://example.com/path?query=123&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(myUrl.<span class="property">hostname</span>); <span class="comment">// 输出: example.com</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(myUrl.<span class="property">pathname</span>); <span class="comment">// 输出: /path</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(myUrl.<span class="property">searchParams</span>.<span class="title function_">get</span>(<span class="string">&#x27;query&#x27;</span>)); <span class="comment">// 输出: 123</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-querystring"><a href="#4-querystring" class="headerlink" title="4. querystring"></a>4. querystring</h3><p><code>querystring</code> 模块用于解析和格式化 URL 查询字符串。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> querystring = <span class="built_in">require</span>(<span class="string">&#x27;querystring&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> qs = <span class="string">&#x27;foo=bar&amp;abc=xyz&amp;abc=123&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(querystring.<span class="title function_">parse</span>(qs));</span><br><span class="line"><span class="comment">// 输出: &#123; foo: &#x27;bar&#x27;, abc: [&#x27;xyz&#x27;, &#x27;123&#x27;] &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(querystring.<span class="title function_">stringify</span>(&#123; <span class="attr">foo</span>: <span class="string">&#x27;bar&#x27;</span>, <span class="attr">baz</span>: [<span class="string">&#x27;qux&#x27;</span>, <span class="string">&#x27;quux&#x27;</span>], <span class="attr">corge</span>: <span class="string">&#x27;&#x27;</span> &#125;));</span><br><span class="line"><span class="comment">// 输出: foo=bar&amp;baz=qux&amp;baz=quux&amp;corge=</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="文件IO"><a href="#文件IO" class="headerlink" title="文件IO"></a>文件IO</h2><p>Node.js 提供了 <code>fs</code> (文件系统) 模块来处理文件 I&#x2F;O 操作。</p>
+<h3 id="1-同步读取文件"><a href="#1-同步读取文件" class="headerlink" title="1. 同步读取文件"></a>1. 同步读取文件</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> data = fs.<span class="title function_">readFileSync</span>(<span class="string">&#x27;example.txt&#x27;</span>, <span class="string">&#x27;utf8&#x27;</span>);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br><span class="line">&#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;Error reading file:&#x27;</span>, err);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-异步读取文件"><a href="#2-异步读取文件" class="headerlink" title="2. 异步读取文件"></a>2. 异步读取文件</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"></span><br><span class="line">fs.<span class="title function_">readFile</span>(<span class="string">&#x27;example.txt&#x27;</span>, <span class="string">&#x27;utf8&#x27;</span>, <span class="function">(<span class="params">err, data</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (err) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;Error reading file:&#x27;</span>, err);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(data);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-写入文件"><a href="#3-写入文件" class="headerlink" title="3. 写入文件"></a>3. 写入文件</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> content = <span class="string">&#x27;Hello, Node.js!&#x27;</span>;</span><br><span class="line"></span><br><span class="line">fs.<span class="title function_">writeFile</span>(<span class="string">&#x27;output.txt&#x27;</span>, content, <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (err) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;Error writing file:&#x27;</span>, err);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;File has been written&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-追加内容到文件"><a href="#4-追加内容到文件" class="headerlink" title="4. 追加内容到文件"></a>4. 追加内容到文件</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> content = <span class="string">&#x27;\nThis is a new line.&#x27;</span>;</span><br><span class="line"></span><br><span class="line">fs.<span class="title function_">appendFile</span>(<span class="string">&#x27;output.txt&#x27;</span>, content, <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (err) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;Error appending to file:&#x27;</span>, err);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Content has been appended to file&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-检查文件是否存在"><a href="#5-检查文件是否存在" class="headerlink" title="5. 检查文件是否存在"></a>5. 检查文件是否存在</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"></span><br><span class="line">fs.<span class="title function_">access</span>(<span class="string">&#x27;example.txt&#x27;</span>, fs.<span class="property">constants</span>.<span class="property">F_OK</span>, <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`<span class="subst">$&#123;err ? <span class="string">&#x27;does not exist&#x27;</span> : <span class="string">&#x27;exists&#x27;</span>&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="文件流"><a href="#文件流" class="headerlink" title="文件流"></a>文件流</h2><p>文件流允许你以流的形式读取或写入数据，适用于处理大文件。</p>
+<h3 id="1-读取流"><a href="#1-读取流" class="headerlink" title="1. 读取流"></a>1. 读取流</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> readStream = fs.<span class="title function_">createReadStream</span>(<span class="string">&#x27;example.txt&#x27;</span>, <span class="string">&#x27;utf8&#x27;</span>);</span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&#x27;data&#x27;</span>, <span class="function">(<span class="params">chunk</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Received chunk:&#x27;</span>, chunk);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&#x27;end&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Finished reading file&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&#x27;error&#x27;</span>, <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;Error reading file:&#x27;</span>, err);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-写入流"><a href="#2-写入流" class="headerlink" title="2. 写入流"></a>2. 写入流</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> writeStream = fs.<span class="title function_">createWriteStream</span>(<span class="string">&#x27;output.txt&#x27;</span>);</span><br><span class="line"></span><br><span class="line">writeStream.<span class="title function_">write</span>(<span class="string">&#x27;Hello, &#x27;</span>);</span><br><span class="line">writeStream.<span class="title function_">write</span>(<span class="string">&#x27;Node.js!&#x27;</span>);</span><br><span class="line">writeStream.<span class="title function_">end</span>();</span><br><span class="line"></span><br><span class="line">writeStream.<span class="title function_">on</span>(<span class="string">&#x27;finish&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Finished writing to file&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">writeStream.<span class="title function_">on</span>(<span class="string">&#x27;error&#x27;</span>, <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;Error writing to file:&#x27;</span>, err);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-管道操作"><a href="#3-管道操作" class="headerlink" title="3. 管道操作"></a>3. 管道操作</h3><p>管道操作允许你将一个流的输出直接连接到另一个流的输入。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> readStream = fs.<span class="title function_">createReadStream</span>(<span class="string">&#x27;input.txt&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> writeStream = fs.<span class="title function_">createWriteStream</span>(<span class="string">&#x27;output.txt&#x27;</span>);</span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">pipe</span>(writeStream);</span><br><span class="line"></span><br><span class="line">readStream.<span class="title function_">on</span>(<span class="string">&#x27;end&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Finished copying file&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>文件 IO（fs.readFile）</th>
+<th>文件流（fs.createReadStream）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>适合小文件</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>适合大文件</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>内存占用</td>
+<td>一次性加载，内存消耗高</td>
+<td>分块加载，内存消耗低</td>
+</tr>
+<tr>
+<td>控制粒度</td>
+<td>无</td>
+<td>可控制 buffer 大小、监听事件</td>
+</tr>
+</tbody></table>
+<h2 id="HTTP-服务器"><a href="#HTTP-服务器" class="headerlink" title="HTTP 服务器"></a>HTTP 服务器</h2><p>Node.js 内置 http 模块可创建 Web 服务，支持原始 HTTP 协议处理：</p>
+<h3 id="1-创建基本的-HTTP-服务器"><a href="#1-创建基本的-HTTP-服务器" class="headerlink" title="1. 创建基本的 HTTP 服务器"></a>1. 创建基本的 HTTP 服务器</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">&#x27;http&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.<span class="title function_">createServer</span>(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  res.<span class="property">statusCode</span> = <span class="number">200</span>;</span><br><span class="line">  res.<span class="title function_">setHeader</span>(<span class="string">&#x27;Content-Type&#x27;</span>, <span class="string">&#x27;text/plain&#x27;</span>);</span><br><span class="line">  res.<span class="title function_">end</span>(<span class="string">&#x27;Hello, World!&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.<span class="title function_">listen</span>(<span class="number">3000</span>, <span class="string">&#x27;localhost&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Server running at http://localhost:3000/&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-处理不同的路由"><a href="#2-处理不同的路由" class="headerlink" title="2. 处理不同的路由"></a>2. 处理不同的路由</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">&#x27;http&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.<span class="title function_">createServer</span>(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (req.<span class="property">url</span> === <span class="string">&#x27;/&#x27;</span>) &#123;</span><br><span class="line">    res.<span class="title function_">writeHead</span>(<span class="number">200</span>, &#123; <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;text/plain&#x27;</span> &#125;);</span><br><span class="line">    res.<span class="title function_">end</span>(<span class="string">&#x27;Home Page&#x27;</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (req.<span class="property">url</span> === <span class="string">&#x27;/about&#x27;</span>) &#123;</span><br><span class="line">    res.<span class="title function_">writeHead</span>(<span class="number">200</span>, &#123; <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;text/plain&#x27;</span> &#125;);</span><br><span class="line">    res.<span class="title function_">end</span>(<span class="string">&#x27;About Page&#x27;</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    res.<span class="title function_">writeHead</span>(<span class="number">404</span>, &#123; <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;text/plain&#x27;</span> &#125;);</span><br><span class="line">    res.<span class="title function_">end</span>(<span class="string">&#x27;404 Not Found&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.<span class="title function_">listen</span>(<span class="number">3000</span>, <span class="string">&#x27;localhost&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Server running at http://localhost:3000/&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="事件模块"><a href="#事件模块" class="headerlink" title="事件模块"></a>事件模块</h2><p>Node.js 使用事件驱动架构,<code>events</code> 模块用于处理事件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">EventEmitter</span> = <span class="built_in">require</span>(<span class="string">&#x27;events&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyEmitter</span> <span class="keyword">extends</span> <span class="title class_ inherited__">EventEmitter</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个 MyEmitter 实例</span></span><br><span class="line"><span class="keyword">const</span> myEmitter = <span class="keyword">new</span> <span class="title class_">MyEmitter</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注册 &#x27;event&#x27; 事件监听器</span></span><br><span class="line">myEmitter.<span class="title function_">on</span>(<span class="string">&#x27;event&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;An event occurred!&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 触发 &#x27;event&#x27; 事件</span></span><br><span class="line">myEmitter.<span class="title function_">emit</span>(<span class="string">&#x27;event&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h2><p>Node.js 中的错误分为两类：</p>
+<ul>
+<li><p>同步错误：使用 try…catch 捕获</p>
+</li>
+<li><p>异步错误：需要在回调 &#x2F; Promise 中手动处理</p>
+</li>
+</ul>
+<h3 id="1-同步代码中的错误处理"><a href="#1-同步代码中的错误处理" class="headerlink" title="1. 同步代码中的错误处理"></a>1. 同步代码中的错误处理</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="comment">// 可能抛出错误的代码</span></span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;Something went wrong&#x27;</span>);</span><br><span class="line">&#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;Caught an error:&#x27;</span>, err);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-异步代码中的错误处理"><a href="#2-异步代码中的错误处理" class="headerlink" title="2. 异步代码中的错误处理"></a>2. 异步代码中的错误处理</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">asyncOperation</span>(<span class="params">callback</span>) &#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;Async error&#x27;</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">      <span class="title function_">callback</span>(err);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">asyncOperation</span>(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (err) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;Caught an async error:&#x27;</span>, err);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-Promise-中的错误处理"><a href="#3-Promise-中的错误处理" class="headerlink" title="3. Promise 中的错误处理"></a>3. Promise 中的错误处理</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">asyncOperation</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">reject</span>(<span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;Promise error&#x27;</span>));</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">asyncOperation</span>()</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">result</span> =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(result))</span><br><span class="line">  .<span class="title function_">catch</span>(<span class="function"><span class="params">err</span> =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;Caught an error:&#x27;</span>, err));</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-Async-Await-中的错误处理"><a href="#4-Async-Await-中的错误处理" class="headerlink" title="4. Async&#x2F;Await 中的错误处理"></a>4. Async&#x2F;Await 中的错误处理</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">asyncFunction</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">asyncOperation</span>();</span><br><span class="line">  &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;Caught an error:&#x27;</span>, err);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">asyncFunction</span>();</span><br></pre></td></tr></table></figure>
+
+<!-- ## 总结
+
+Node.js 的优点包括：
+
+- 高性能：基于 Chrome V8 引擎，执行 JavaScript 代码非常快。
+- 异步编程：通过回调函数、Promise 和 Async/Await 等方式实现非阻塞操作，提高并发处理能力。
+- 丰富的模块和 API：提供了大量的内置模块和第三方模块，可以方便地实现各种功能。
+- 社区活跃：拥有庞大的开源社区，可以方便地找到解决方案和资源。
+
+Node.js 的缺点包括：
+- 单线程：虽然异步编程可以提高并发处理能力，但单线程模型在处理 CPU 密集型任务时可能会成为瓶颈。
+- 事件循环：事件循环机制可能导致某些任务长时间占用 CPU，影响其他任务的执行。
+- 内存限制：Node.js 进程的内存限制相对较低，不适合处理大规模数据。 -->
+
+
+<h2 id="推荐学习资源"><a href="#推荐学习资源" class="headerlink" title="推荐学习资源"></a>推荐学习资源</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://nodejs.org/">Node.js 官方文档（中文）</a></li>
+<li><a target="_blank" rel="noopener" href="https://nodejs.cn/">Node.js 中文网</a></li>
+<li><a target="_blank" rel="noopener" href="https://book.douban.com/subject/25768396/">《深入浅出 Node.js》</a></li>
+<li><a target="_blank" rel="noopener" href="https://nodejs.org/dist/latest-v20.x/docs/api/">Node.js API 文档</a></li>
+</ul>
+<hr>
+<p>-END-</p>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Laura
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a id="original-link" href="http://example.com/2025/06/26/Node.js 开发文档/" title="Node.js 开发文档：从基础到进阶">http://example.com/2025/06/26/Node.js 开发文档/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2024/10/26/Vue3%E5%A4%9A%E7%A7%8D%E4%BC%A0%E5%8F%82%E9%80%9A%E8%AE%AF%E6%96%B9%E5%BC%8F/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+                </span>
+                <h6 class="trm-op-title">Vue3 多种传参通信方式总结</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>24/10/26</li>
+                <li>14:20</li>
+                <li>Vue</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-footer-card trm-scroll-animation">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2020- 2025</span>
+            <span class="footer-separator"data-separator=" · "></span>
+            <span class="trm-accent-color">Laura</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v7.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.2.2
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item blog-run-long"></div>
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            
+
+    <div id="post-toc" class="trm-post-toc">
+      <div class="trm-post-toc-header">
+        Article table of contents
+				<span id="post-toc-top">
+					TOP
+				</span>
+      </div>
+      <div class="trm-post-toc-content">
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-2" title="目录"><a rel="nofollow" class="trm-toc-link" href="#目录"><span class="trm-toc-text">目录</span></a></li><li class="trm-toc-item trm-toc-level-2" title="Node.js 简介"><a rel="nofollow" class="trm-toc-link" href="#Node-js-简介"><span class="trm-toc-text">Node.js 简介</span></a></li><li class="trm-toc-item trm-toc-level-2" title="全局对象"><a rel="nofollow" class="trm-toc-link" href="#全局对象"><span class="trm-toc-text">全局对象</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1. global"><a rel="nofollow" class="trm-toc-link" href="#1-global"><span class="trm-toc-text">1. global</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2. process"><a rel="nofollow" class="trm-toc-link" href="#2-process"><span class="trm-toc-text">2. process</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3. console"><a rel="nofollow" class="trm-toc-link" href="#3-console"><span class="trm-toc-text">3. console</span></a></li><li class="trm-toc-item trm-toc-level-3" title="4. __dirname 和 __filename"><a rel="nofollow" class="trm-toc-link" href="#4-dirname-和-filename"><span class="trm-toc-text">4. __dirname 和 __filename</span></a></li><li class="trm-toc-item trm-toc-level-3" title="5. setTimeout, setInterval, setImmediate"><a rel="nofollow" class="trm-toc-link" href="#5-setTimeout-setInterval-setImmediate"><span class="trm-toc-text">5. setTimeout, setInterval, setImmediate</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="Node的模块化"><a rel="nofollow" class="trm-toc-link" href="#Node的模块化"><span class="trm-toc-text">Node的模块化</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1. 创建模块"><a rel="nofollow" class="trm-toc-link" href="#1-创建模块"><span class="trm-toc-text">1. 创建模块</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2. 导入模块"><a rel="nofollow" class="trm-toc-link" href="#2-导入模块"><span class="trm-toc-text">2. 导入模块</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3. ES6 模块语法"><a rel="nofollow" class="trm-toc-link" href="#3-ES6-模块语法"><span class="trm-toc-text">3. ES6 模块语法</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="基本内置模块"><a rel="nofollow" class="trm-toc-link" href="#基本内置模块"><span class="trm-toc-text">基本内置模块</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1. path"><a rel="nofollow" class="trm-toc-link" href="#1-path"><span class="trm-toc-text">1. path</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2. os"><a rel="nofollow" class="trm-toc-link" href="#2-os"><span class="trm-toc-text">2. os</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3. url"><a rel="nofollow" class="trm-toc-link" href="#3-url"><span class="trm-toc-text">3. url</span></a></li><li class="trm-toc-item trm-toc-level-3" title="4. querystring"><a rel="nofollow" class="trm-toc-link" href="#4-querystring"><span class="trm-toc-text">4. querystring</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="文件IO"><a rel="nofollow" class="trm-toc-link" href="#文件IO"><span class="trm-toc-text">文件IO</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1. 同步读取文件"><a rel="nofollow" class="trm-toc-link" href="#1-同步读取文件"><span class="trm-toc-text">1. 同步读取文件</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2. 异步读取文件"><a rel="nofollow" class="trm-toc-link" href="#2-异步读取文件"><span class="trm-toc-text">2. 异步读取文件</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3. 写入文件"><a rel="nofollow" class="trm-toc-link" href="#3-写入文件"><span class="trm-toc-text">3. 写入文件</span></a></li><li class="trm-toc-item trm-toc-level-3" title="4. 追加内容到文件"><a rel="nofollow" class="trm-toc-link" href="#4-追加内容到文件"><span class="trm-toc-text">4. 追加内容到文件</span></a></li><li class="trm-toc-item trm-toc-level-3" title="5. 检查文件是否存在"><a rel="nofollow" class="trm-toc-link" href="#5-检查文件是否存在"><span class="trm-toc-text">5. 检查文件是否存在</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="文件流"><a rel="nofollow" class="trm-toc-link" href="#文件流"><span class="trm-toc-text">文件流</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1. 读取流"><a rel="nofollow" class="trm-toc-link" href="#1-读取流"><span class="trm-toc-text">1. 读取流</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2. 写入流"><a rel="nofollow" class="trm-toc-link" href="#2-写入流"><span class="trm-toc-text">2. 写入流</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3. 管道操作"><a rel="nofollow" class="trm-toc-link" href="#3-管道操作"><span class="trm-toc-text">3. 管道操作</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="HTTP 服务器"><a rel="nofollow" class="trm-toc-link" href="#HTTP-服务器"><span class="trm-toc-text">HTTP 服务器</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1. 创建基本的 HTTP 服务器"><a rel="nofollow" class="trm-toc-link" href="#1-创建基本的-HTTP-服务器"><span class="trm-toc-text">1. 创建基本的 HTTP 服务器</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2. 处理不同的路由"><a rel="nofollow" class="trm-toc-link" href="#2-处理不同的路由"><span class="trm-toc-text">2. 处理不同的路由</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="事件模块"><a rel="nofollow" class="trm-toc-link" href="#事件模块"><span class="trm-toc-text">事件模块</span></a></li><li class="trm-toc-item trm-toc-level-2" title="错误处理"><a rel="nofollow" class="trm-toc-link" href="#错误处理"><span class="trm-toc-text">错误处理</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1. 同步代码中的错误处理"><a rel="nofollow" class="trm-toc-link" href="#1-同步代码中的错误处理"><span class="trm-toc-text">1. 同步代码中的错误处理</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2. 异步代码中的错误处理"><a rel="nofollow" class="trm-toc-link" href="#2-异步代码中的错误处理"><span class="trm-toc-text">2. 异步代码中的错误处理</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3. Promise 中的错误处理"><a rel="nofollow" class="trm-toc-link" href="#3-Promise-中的错误处理"><span class="trm-toc-text">3. Promise 中的错误处理</span></a></li><li class="trm-toc-item trm-toc-level-3" title="4. Async&#x2F;Await 中的错误处理"><a rel="nofollow" class="trm-toc-link" href="#4-Async-Await-中的错误处理"><span class="trm-toc-text">4. Async&#x2F;Await 中的错误处理</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="推荐学习资源"><a rel="nofollow" class="trm-toc-link" href="#推荐学习资源"><span class="trm-toc-text">推荐学习资源</span></a></li></ol>
+      </div>
+    </div>
+
+            
+<div class="trm-fixed-container">
+    
+        <div class="trm-fixed-btn post-toc-btn" data-title="Open toc">
+            <i class="iconfont fas fa-th-list"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="Read Mode" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn hidden-md" data-title="Toggle between single-column and double-column" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont fas fa-arrows-alt-h"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="Back To Top">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont fas fa-search"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="Searching...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont fas fa-times"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    Please enter keywords to search
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+<script src="https://unpkg.com/swup@2.0.19/dist/swup.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.2.2"></script>
+    
+
+    
+        
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.2.2"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+		
+			<script src="/js/plugins/danmu.js?v=2.2.2"></script>
+		
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+    <script data-swup-reload-script>
+        (function () {
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            }
+            else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+    </script>
+
+
+
+<script id="async-script" src="/js/main.js?v=2.2.2"></script>
+
+<!-- CDN -->
+
+
+    
+<script src="/demo.js"></script>
+
+
+    
+
+    
+
+
+
+</body>
+
+</html>
