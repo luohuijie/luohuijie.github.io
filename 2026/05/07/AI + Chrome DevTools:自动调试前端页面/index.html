@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="前言以前用 AI 写前端代码，经常会遇到一个尴尬的问题： 12345678910111213页面报错了↓打开 Chrome DevTools↓复制 Console 报错↓粘贴给 AI↓AI 根据报错猜问题↓再改代码↓再刷新页面验证  这个流程能用，但不够高效。 因为 AI 看不到真实页面，也看不到接口请求、DOM 结构、样式计算、性能数据。它只能根据你复制过去的错误信息推测问题。 现在可以换一种方">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Codex + Chrome DevTools：让 AI 直接调试前端页面">
+<meta property="og:url" content="http://example.com/2026/05/07/AI%20+%20Chrome%20DevTools:%E8%87%AA%E5%8A%A8%E8%B0%83%E8%AF%95%E5%89%8D%E7%AB%AF%E9%A1%B5%E9%9D%A2/index.html">
+<meta property="og:site_name" content="luohuijie">
+<meta property="og:description" content="前言以前用 AI 写前端代码，经常会遇到一个尴尬的问题： 12345678910111213页面报错了↓打开 Chrome DevTools↓复制 Console 报错↓粘贴给 AI↓AI 根据报错猜问题↓再改代码↓再刷新页面验证  这个流程能用，但不够高效。 因为 AI 看不到真实页面，也看不到接口请求、DOM 结构、样式计算、性能数据。它只能根据你复制过去的错误信息推测问题。 现在可以换一种方">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-05-07T11:18:00.000Z">
+<meta property="article:modified_time" content="2026-05-08T05:48:35.717Z">
+<meta property="article:author" content="Laura">
+<meta property="article:tag" content="Codex">
+<meta property="article:tag" content="Chrome DevTools">
+<meta name="twitter:card" content="summary">
+
+    <meta name="keywords" content="前端,js,jquery,javascript,html5,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,html,css,css3,用户体验">
+
+
+<title >Codex + Chrome DevTools：让 AI 直接调试前端页面</title>
+
+<!-- Favicon -->
+
+
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Laura","root":"/","typed_text":["Hungry | Stay Foolish"],"theme_version":"2.2.2","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":null,"icon16":null,"icon32":null,"apple_touch_icon":null,"webmanifest":null,"visibilitychange":true,"hidden":"failure.ico","show_text":"回来啦~","hide_text":"(●—●)看不见我！"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","sticky":"TOP","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":true,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":300},"toc":{"post_title":true},"live_time":{"start_time":"2020/05/16 17:00:00","prefix":"The blog has been lovely to run undefined day"},"danmu":{"enable":true,"el":".trm-banner","avatar":false,"delayRange":5000,"speed":80},"covers":["/img/block.jpg","https://img3.wallspic.com/previews/2/0/1/8/6/168102/168102-yi_shu-ka_tong-mian_bu_biao_qing-kuai_le_de-ji_qie-500x.jpg","https://img2.wallspic.com/previews/2/6/4/3/7/173462/173462-qi_fen-zi_se_de-zi_ran_jing_guan-yu_hui-de_ping_xian-500x.jpg","https://img2.wallspic.com/previews/3/3/9/1/3/131933/131933-mo_xing-xiao_jie-huang_se_de-nu_hai-fa_xing-500x.jpg","https://img1.wallspic.com/previews/8/3/4/6/2/126438/126438-wei_lai_zhu_yi-shu_ma_yi_shu-jie_duan-zi_ben_shi-yi_shu-500x.jpg","https://img2.wallspic.com/previews/0/1/5/0/7/170510/170510-guang-azure-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-500x.jpg","https://img2.wallspic.com/previews/3/6/9/6/5/156963/156963-yi_shu-qi_fen-yu_hui-shou_shi-ren_men_zai_zi_ran_jie-500x.jpg","https://img1.wallspic.com/previews/0/9/3/5/6/165390/165390-qi_fen-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-tian_wen_xue_dui_xiang-500x.jpg","https://img3.wallspic.com/previews/2/8/6/1/7/171682/171682-yi_kuai-xing_zhi-ye_ti-yi_shu-shui_xia-500x.jpg","https://img1.wallspic.com/previews/7/1/9/9/89917/89917-bo_xi_ta_nuo-an_zhuang_de_feng_jing-cheng_shi-suo_lun_tuo-shan_zhan-500x.jpg","https://img2.wallspic.com/previews/5/0/9/0/70905/70905-hai_yang-ma_er_dai_fu-tian_kong-du_jia_cun-huan_jiao-500x.jpg","https://img3.wallspic.com/previews/4/3/4/8/6/168434/168434-xing_zhi-zi_ran_jing_guan-dan_huang-shui_dao-zhi_bei-500x.jpg","https://img1.wallspic.com/previews/5/4/0/4/7/174045/174045-jian_ying-qi_fen-ren_men_zai_zi_ran_jie-tian_wen_xue_dui_xiang-yi_shu-500x.jpg","https://img1.wallspic.com/previews/9/3/1/6/5/156139/156139-feng_jing_hua-yi_shu-shu_ma_yi_shu-qi_fen-sheng_tai_qu-500x.jpg","https://img1.wallspic.com/previews/7/5/7/9/6/169757/169757-ji_bo_li_de_bo_wu_guan-zi_ran_jing_guan-yi_shu-ji_yun-500x.jpg","https://img1.wallspic.com/previews/5/2/0/6/7/176025/176025-qi_fen-tian_wen_xue_dui_xiang-yi_shu-dian_lan_se_de-yuan_quan-500x.jpg","https://img3.wallspic.com/previews/5/1/0/2/4/142015/142015-feng_ge-ka_ka_xi_qi_mu-huo_ying_ren_zhe-tu_xing_she_ji-shi_jue_yi_shu-500x.jpg"],"creative_commons":{"license":"by-nc-sa","language":"deed.zh-hans"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2026-05-08 13:48:35"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.2.2" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+
+ 
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+    
+        <div class="trm-logo-text">
+            La<span>ura</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    Home
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    Archives
+                </a>
+                
+                <ul>
+                    
+                    <li>
+                        <a  href="/tags/" target="">
+                            标签
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a  href="/categories/" target="">
+                            分类
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    Links
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/about/" target="">
+                    About
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont fas fa-search"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            Codex + Chrome DevTools：让 AI 直接调试前端页面
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2026
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/img1.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Laura
+    </h5>
+    
+        <div class="trm-label">
+            Stay
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/luohuijie" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                CITY:
+            </div>
+            <div class="trm-label trm-label-light">
+                HANGZHOU
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:miss_rowe@163.com" class="trm-btn">
+            Contact Me
+            <i class="iconfont far fa-envelope"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            05/07
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            19:18
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Laura
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>以前用 AI 写前端代码，经常会遇到一个尴尬的问题：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">页面报错了</span><br><span class="line">↓</span><br><span class="line">打开 Chrome DevTools</span><br><span class="line">↓</span><br><span class="line">复制 Console 报错</span><br><span class="line">↓</span><br><span class="line">粘贴给 AI</span><br><span class="line">↓</span><br><span class="line">AI 根据报错猜问题</span><br><span class="line">↓</span><br><span class="line">再改代码</span><br><span class="line">↓</span><br><span class="line">再刷新页面验证</span><br></pre></td></tr></table></figure>
+
+<p>这个流程能用，但不够高效。</p>
+<p>因为 AI 看不到真实页面，也看不到接口请求、DOM 结构、样式计算、性能数据。它只能根据你复制过去的错误信息推测问题。</p>
+<p>现在可以换一种方式：让 Codex 通过 <strong>Chrome DevTools MCP</strong> 直接接入 Chrome。</p>
+<p>这样 Codex 就可以自己查看：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Console 报错</span><br><span class="line">Network 请求</span><br><span class="line">DOM 结构</span><br><span class="line">CSS 样式</span><br><span class="line">页面截图</span><br><span class="line">Performance Trace 性能分析</span><br><span class="line">页面交互结果</span><br></pre></td></tr></table></figure>
+
+<p>AI 可以真正进入浏览器运行环境调试。</p>
+<h2 id="1-整体流程"><a href="#1-整体流程" class="headerlink" title="1. 整体流程"></a>1. 整体流程</h2><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Codex</span><br><span class="line">  ↓</span><br><span class="line">MCP Server</span><br><span class="line">  ↓</span><br><span class="line">chrome-devtools-mcp</span><br><span class="line">  ↓</span><br><span class="line">Chrome 浏览器</span><br><span class="line">  ↓</span><br><span class="line">你的前端页面</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="2-它能解决什么问题"><a href="#2-它能解决什么问题" class="headerlink" title="2. 它能解决什么问题"></a>2. 它能解决什么问题</h2><p>接入之后，你可以让 Codex 做这些事情：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">检查页面为什么白屏</span><br><span class="line">分析 console 报错</span><br><span class="line">查看接口为什么 401 / 403 / 500</span><br><span class="line">分析 CORS 问题</span><br><span class="line">查看按钮点击后为什么没反应</span><br><span class="line">检查 DOM 是否正确渲染</span><br><span class="line">检查 CSS 为什么不生效</span><br><span class="line">分析页面加载慢的原因</span><br><span class="line">跑 performance trace</span><br><span class="line">验证代码修改是否真的生效</span><br></pre></td></tr></table></figure>
+
+<p>以前是：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">你复制错误 → AI 分析</span><br></pre></td></tr></table></figure>
+
+<p>现在是：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AI 进入浏览器 → AI 自己观察 → AI 定位问题 → AI 修改代码 → AI 验证结果</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="3-准备环境"><a href="#3-准备环境" class="headerlink" title="3. 准备环境"></a>3. 准备环境</h2><p>需要准备：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Node.js</span><br><span class="line">npm</span><br><span class="line">Google Chrome</span><br><span class="line">Codex CLI</span><br><span class="line">chrome-devtools-mcp</span><br></pre></td></tr></table></figure>
+
+<p>建议 Node 使用 20+。</p>
+<p>先检查本机环境：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br><span class="line">npm -v</span><br><span class="line">npx -v</span><br></pre></td></tr></table></figure>
+
+<p>然后确认你已经安装 Codex CLI：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">codex --version</span><br></pre></td></tr></table></figure>
+
+<p>如果没有安装 Codex CLI：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i -g @openai/codex</span><br></pre></td></tr></table></figure>
+
+<p>升级到最新版本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i -g @openai/codex@latest</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="4-安装-Chrome-DevTools-MCP"><a href="#4-安装-Chrome-DevTools-MCP" class="headerlink" title="4. 安装 Chrome DevTools MCP"></a>4. 安装 Chrome DevTools MCP</h2><p>官方推荐可以直接用 Codex 添加：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">codex mcp add chrome-devtools -- npx -y chrome-devtools-mcp@latest</span><br></pre></td></tr></table></figure>
+
+<p>然后检查：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">codex mcp list</span><br></pre></td></tr></table></figure>
+
+<p>看到类似：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chrome-devtools</span><br></pre></td></tr></table></figure>
+
+<p>说明已经加上了。</p>
+<p>Codex 的 MCP 配置默认存放在：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/.codex/config.toml</span><br></pre></td></tr></table></figure>
+
+<p>也可以在可信项目中使用项目级配置：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.codex/config.toml</span><br></pre></td></tr></table></figure>
+
+<p>Codex CLI 和 IDE extension 会共享这份 MCP 配置。(<a target="_blank" rel="noopener" href="https://developers.openai.com/codex/mcp">OpenAI 开发者</a>)</p>
+<h2 id="5-手动配置方式"><a href="#5-手动配置方式" class="headerlink" title="5. 手动配置方式"></a>5. 手动配置方式</h2><p>如果命令添加失败，也可以手动编辑：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/.codex</span><br><span class="line">vim ~/.codex/config.toml</span><br></pre></td></tr></table></figure>
+
+<p>加入：</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[mcp_servers.chrome-devtools]</span></span><br><span class="line"><span class="attr">command</span> = <span class="string">&quot;npx&quot;</span></span><br><span class="line"><span class="attr">args</span> = [<span class="string">&quot;-y&quot;</span>, <span class="string">&quot;chrome-devtools-mcp@latest&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-项目级配置"><a href="#6-项目级配置" class="headerlink" title="6. 项目级配置"></a>6. 项目级配置</h2><p>如果只想在某个项目里启用 Chrome MCP，可以在项目根目录创建：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p .codex</span><br><span class="line"><span class="built_in">touch</span> .codex/config.toml</span><br></pre></td></tr></table></figure>
+
+<p>写入：</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[mcp_servers.chrome-devtools]</span></span><br><span class="line"><span class="attr">command</span> = <span class="string">&quot;npx&quot;</span></span><br><span class="line"><span class="attr">args</span> = [<span class="string">&quot;-y&quot;</span>, <span class="string">&quot;chrome-devtools-mcp@latest&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="7-是否需要手动启动-Chrome-？"><a href="#7-是否需要手动启动-Chrome-？" class="headerlink" title="7. 是否需要手动启动 Chrome ？"></a>7. 是否需要手动启动 Chrome ？</h2><p>一般不需要。</p>
+<p>Chrome DevTools MCP 官方说明：MCP Server 被连接后不会立刻启动浏览器，只有当 MCP Client 调用需要浏览器的工具时，才会自动启动 Chrome。(<a target="_blank" rel="noopener" href="https://github.com/ChromeDevTools/chrome-devtools-mcp">GitHub</a>)</p>
+<p>也就是说，你配置好后，在 Codex 里说：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">请使用 Chrome DevTools 打开 http://localhost:5173</span><br></pre></td></tr></table></figure>
+
+<p>它才会启动 Chrome。</p>
+<h2 id="8-启动前端项目"><a href="#8-启动前端项目" class="headerlink" title="8. 启动前端项目"></a>8. 启动前端项目</h2><p>比如 Vite &#x2F; Vue &#x2F; React 项目：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pnpm install</span><br><span class="line">pnpm dev</span><br></pre></td></tr></table></figure>
+
+<p>常见地址：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Vue / Vite: http://localhost:5173</span><br><span class="line">React / Next: http://localhost:3000</span><br></pre></td></tr></table></figure>
+
+<p>确认浏览器里能正常打开。</p>
+<h2 id="9-在-Codex-中开始调试"><a href="#9-在-Codex-中开始调试" class="headerlink" title="9. 在 Codex 中开始调试"></a>9. 在 Codex 中开始调试</h2><p>进入项目目录：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">codex</span><br></pre></td></tr></table></figure>
+
+<p>然后输入：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">请打开 http://localhost:5173，检查页面是否有 console 报错，并定位到源码文件。</span><br></pre></td></tr></table></figure>
+
+<p>Codex 理想情况下会：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">打开页面</span><br><span class="line">读取 console</span><br><span class="line">读取 network</span><br><span class="line">分析错误堆栈</span><br><span class="line">定位源码文件</span><br><span class="line">修改代码</span><br><span class="line">刷新页面验证</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="10-常用调试-Prompt"><a href="#10-常用调试-Prompt" class="headerlink" title="10. 常用调试 Prompt"></a>10. 常用调试 Prompt</h2><h4 id="10-1-白屏问题"><a href="#10-1-白屏问题" class="headerlink" title="10.1 白屏问题"></a>10.1 白屏问题</h4><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">请打开 http://localhost:5173，排查页面白屏问题。需要查看 console、network、DOM，并结合源码定位问题。</span><br></pre></td></tr></table></figure>
+
+<h4 id="10-2-Console-报错"><a href="#10-2-Console-报错" class="headerlink" title="10.2 Console 报错"></a>10.2 Console 报错</h4><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">请检查当前页面的 console 报错，说明每个错误的原因，并定位到对应源码文件。修复后刷新页面验证。</span><br></pre></td></tr></table></figure>
+
+<h4 id="10-3-接口失败"><a href="#10-3-接口失败" class="headerlink" title="10.3 接口失败"></a>10.3 接口失败</h4><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">请检查 http://localhost:5173 页面接口请求为什么失败，重点查看 network 中的 request headers、payload、status code 和 response body。</span><br></pre></td></tr></table></figure>
+
+<h4 id="10-4-样式不生效"><a href="#10-4-样式不生效" class="headerlink" title="10.4 样式不生效"></a>10.4 样式不生效</h4><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">请检查这个页面中按钮样式为什么没有生效。需要查看 DOM class、computed style、CSS 优先级，并定位相关组件文件。</span><br></pre></td></tr></table></figure>
+
+<h4 id="10-5-页面卡顿"><a href="#10-5-页面卡顿" class="headerlink" title="10.5 页面卡顿"></a>10.5 页面卡顿</h4><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">请检查 http://localhost:5173 页面为什么加载慢，使用 Chrome DevTools MCP 做 performance 分析。</span><br><span class="line"></span><br><span class="line">重点看：</span><br><span class="line">1. 首屏加载耗时</span><br><span class="line">2. 是否有大资源</span><br><span class="line">3. 是否有长任务</span><br><span class="line">4. 是否有重复请求</span><br><span class="line">5. 是否有明显渲染阻塞</span><br><span class="line">6. 给出按优先级排序的优化建议</span><br></pre></td></tr></table></figure>
+
+<p>Chrome 官方也给过类似使用场景：让 AI 检查 localhost 页面加载慢，并使用 DevTools MCP 分析、优化。(<a target="_blank" rel="noopener" href="https://developer.chrome.com/blog/chrome-devtools-mcp">Chrome for Developers</a>)</p>
+<h2 id="11-连接你自己启动的-Chrome"><a href="#11-连接你自己启动的-Chrome" class="headerlink" title="11. 连接你自己启动的 Chrome"></a>11. 连接你自己启动的 Chrome</h2><p>默认情况下，Chrome MCP 会启动自己的 Chrome Profile。如果你想连接自己手动启动的 Chrome，可以手动启动 Chrome 的远程调试端口。这种方式适合：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">需要复用登录状态</span><br><span class="line">需要复用 cookie</span><br><span class="line">需要复用浏览器 profile</span><br><span class="line">需要手动操作和 AI 调试交替进行</span><br><span class="line">Codex 在沙盒环境里无法启动 Chrome</span><br></pre></td></tr></table></figure>
+
+<p>先启动 Chrome：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \</span><br><span class="line">  --remote-debugging-port=9222</span><br></pre></td></tr></table></figure>
+
+<p>然后把 Codex MCP 配置改成：</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[mcp_servers.chrome-devtools]</span></span><br><span class="line"><span class="attr">command</span> = <span class="string">&quot;npx&quot;</span></span><br><span class="line"><span class="attr">args</span> = [</span><br><span class="line">  <span class="string">&quot;-y&quot;</span>,</span><br><span class="line">  <span class="string">&quot;chrome-devtools-mcp@latest&quot;</span>,</span><br><span class="line">  <span class="string">&quot;--browser-url=http://127.0.0.1:9222&quot;</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>Chrome DevTools MCP 官方文档说明，在需要保持应用状态、登录网站等场景，可以先启动 Chrome，再让 MCP 连接它；手动连接方式通常使用 remote debugging port。 (<a target="_blank" rel="noopener" href="https://github.com/ChromeDevTools/chrome-devtools-mcp">GitHub</a>)</p>
+<h2 id="12-安全建议"><a href="#12-安全建议" class="headerlink" title="12. 安全建议"></a>12. 安全建议</h2><p>Chrome MCP 很强，但 AI 可能看到页面里的 Cookie、Token、接口返回、账号信息。</p>
+<p>建议：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. 只在本地开发环境使用</span><br><span class="line">2. 不要连接生产后台</span><br><span class="line">3. 不要用真实账号密码</span><br><span class="line">4. 不要打开邮箱、支付后台、公司敏感系统</span><br><span class="line">5. 使用单独的 Chrome Profile</span><br></pre></td></tr></table></figure>
+
+<p>推荐调试 Chrome Profile：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \</span><br><span class="line">  --remote-debugging-port=9222 \</span><br><span class="line">  --user-data-dir=/tmp/chrome-ai-debug \</span><br><span class="line">  http://localhost:5173</span><br></pre></td></tr></table></figure>
+
+<p>然后连接：</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[mcp_servers.chrome-devtools]</span></span><br><span class="line"><span class="attr">command</span> = <span class="string">&quot;npx&quot;</span></span><br><span class="line"><span class="attr">args</span> = [</span><br><span class="line">  <span class="string">&quot;-y&quot;</span>,</span><br><span class="line">  <span class="string">&quot;chrome-devtools-mcp@latest&quot;</span>,</span><br><span class="line">  <span class="string">&quot;--browser-url=http://127.0.0.1:9222&quot;</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="13-直接扔给-Codex-的任务说明"><a href="#13-直接扔给-Codex-的任务说明" class="headerlink" title="13. 直接扔给 Codex 的任务说明"></a>13. 直接扔给 Codex 的任务说明</h2><p>复制下面整段给 Codex：</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="section"># 任务：为当前前端项目配置 Codex + Chrome DevTools MCP 调试方案</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 背景</span></span><br><span class="line"></span><br><span class="line">我现在使用 Codex + ChatGPT Plus 写前端代码。以前遇到页面报错，只能手动打开浏览器控制台，把 console 报错复制给 Codex。现在希望让 Codex 通过 Chrome DevTools MCP 直接连接 Chrome，自动查看页面运行状态、Console、Network、DOM、性能数据，并辅助定位和修复问题。</span><br><span class="line"></span><br><span class="line"><span class="section">## 目标</span></span><br><span class="line"></span><br><span class="line">请你在当前项目中完成一套「Codex + Chrome DevTools MCP」本地调试方案，包括：</span><br><span class="line"></span><br><span class="line"><span class="bullet">1.</span> 检查本机 Codex CLI 是否可用</span><br><span class="line"><span class="bullet">2.</span> 检查 Node.js / npm / Chrome 是否满足要求</span><br><span class="line"><span class="bullet">3.</span> 为 Codex 配置 chrome-devtools-mcp</span><br><span class="line"><span class="bullet">4.</span> 支持打开本地前端页面，例如：</span><br><span class="line"><span class="bullet">   -</span> http://localhost:7778</span><br><span class="line"><span class="bullet">5.</span> 提供可执行的调试命令</span><br><span class="line"><span class="bullet">6.</span> 提供一份项目内文档，说明如何使用 AI 调试页面</span><br><span class="line"><span class="bullet">7.</span> 提供常见问题排查方案</span><br><span class="line"></span><br><span class="line"><span class="section">## 参考官方事实</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">-</span> Codex CLI 是 OpenAI 的本地命令行 coding agent，可以读取、修改并运行当前目录下的代码。</span><br><span class="line"><span class="bullet">-</span> Codex MCP 配置默认存放在 <span class="code">`~/.codex/config.toml`</span>，也可以在可信项目中使用 <span class="code">`.codex/config.toml`</span> 做项目级配置。</span><br><span class="line"><span class="bullet">-</span> Chrome DevTools MCP 可以让 AI coding agent 分析页面 console、network、DOM、截图、性能 trace 等信息。</span><br><span class="line"><span class="bullet">-</span> Chrome DevTools MCP 官方推荐使用：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">  codex mcp add chrome-devtools -- npx chrome-devtools-mcp@latest</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="bullet">*</span> Chrome DevTools MCP 需要 Node.js 20.19+、npm、当前稳定版 Chrome。</span><br><span class="line"><span class="bullet">*</span> 注意：Chrome DevTools MCP 会暴露浏览器内容给 MCP 客户端，不要在开启调试时浏览敏感页面。</span><br><span class="line"></span><br><span class="line"><span class="section">## 请你执行的事情</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 1. 检查环境</span></span><br><span class="line"></span><br><span class="line">请在终端执行并解释结果：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">node -v</span></span><br><span class="line"><span class="code">npm -v</span></span><br><span class="line"><span class="code">codex --version</span></span><br><span class="line"><span class="code">google-chrome --version || /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --version</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">如果 <span class="code">`codex`</span> 不存在，请提示安装：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">npm i -g @openai/codex</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">如果 Codex 已安装但版本较旧，请提示升级：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">npm i -g @openai/codex@latest</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 2. 添加 Chrome DevTools MCP</span></span><br><span class="line"></span><br><span class="line">优先使用 Codex CLI 添加 MCP：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">codex mcp add chrome-devtools -- npx -y chrome-devtools-mcp@latest</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">然后执行：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">codex mcp list</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">确认 <span class="code">`chrome-devtools`</span> 已存在。</span><br><span class="line"></span><br><span class="line"><span class="section">### 3. 如果 CLI 添加失败，手动写入配置</span></span><br><span class="line"></span><br><span class="line">请检查并创建：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">mkdir -p ~/.codex</span></span><br><span class="line"><span class="code">touch ~/.codex/config.toml</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">然后在 <span class="code">`~/.codex/config.toml`</span> 中加入：</span><br><span class="line"></span><br><span class="line"><span class="code">```toml</span></span><br><span class="line"><span class="code">[mcp_servers.chrome-devtools]</span></span><br><span class="line"><span class="code">command = &quot;npx&quot;</span></span><br><span class="line"><span class="code">args = [&quot;-y&quot;, &quot;chrome-devtools-mcp@latest&quot;]</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 4. Windows 兼容配置</span></span><br><span class="line"></span><br><span class="line">如果当前系统是 Windows，请提供以下配置：</span><br><span class="line"></span><br><span class="line"><span class="code">```toml</span></span><br><span class="line"><span class="code">[mcp_servers.chrome-devtools]</span></span><br><span class="line"><span class="code">command = &quot;cmd&quot;</span></span><br><span class="line"><span class="code">args = [</span></span><br><span class="line"><span class="code">  &quot;/c&quot;,</span></span><br><span class="line"><span class="code">  &quot;npx&quot;,</span></span><br><span class="line"><span class="code">  &quot;-y&quot;,</span></span><br><span class="line"><span class="code">  &quot;chrome-devtools-mcp@latest&quot;,</span></span><br><span class="line"><span class="code">]</span></span><br><span class="line"><span class="code">env = &#123; SystemRoot=&quot;C:\\Windows&quot;, PROGRAMFILES=&quot;C:\\Program Files&quot; &#125;</span></span><br><span class="line"><span class="code">startup_timeout_ms = 20000</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 5. 本地项目启动</span></span><br><span class="line"></span><br><span class="line">请识别当前项目使用的包管理器：</span><br><span class="line"></span><br><span class="line"><span class="bullet">*</span> pnpm-lock.yaml → pnpm</span><br><span class="line"><span class="bullet">*</span> yarn.lock → yarn</span><br><span class="line"><span class="bullet">*</span> package-lock.json → npm</span><br><span class="line"></span><br><span class="line">然后从 <span class="code">`package.json`</span> 中读取 scripts，优先找到：</span><br><span class="line"></span><br><span class="line"><span class="bullet">*</span> dev</span><br><span class="line"><span class="bullet">*</span> start</span><br><span class="line"><span class="bullet">*</span> serve</span><br><span class="line"></span><br><span class="line">并提示用户执行对应命令，例如：</span><br><span class="line"></span><br><span class="line"><span class="code">```bash</span></span><br><span class="line"><span class="code">pnpm dev</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">如果是 Vite 项目，默认调试地址通常是：</span><br><span class="line"></span><br><span class="line"><span class="code">```txt</span></span><br><span class="line"><span class="code">http://localhost:5173</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">如果是 React / Next / Vue CLI 项目，常见地址是：</span><br><span class="line"></span><br><span class="line"><span class="code">```txt</span></span><br><span class="line"><span class="code">http://localhost:3000</span></span><br><span class="line"><span class="code">http://localhost:8080</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 6. 创建项目文档</span></span><br><span class="line"></span><br><span class="line">请在项目中创建：</span><br><span class="line"></span><br><span class="line"><span class="code">```txt</span></span><br><span class="line"><span class="code">docs/ai-debug-with-codex-chrome-mcp.md</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">文档内容包括：</span><br><span class="line"></span><br><span class="line"><span class="bullet">*</span> 什么是 Chrome DevTools MCP</span><br><span class="line"><span class="bullet">*</span> 为什么前端调试需要它</span><br><span class="line"><span class="bullet">*</span> 安装 Codex CLI</span><br><span class="line"><span class="bullet">*</span> 配置 Chrome DevTools MCP</span><br><span class="line"><span class="bullet">*</span> 如何启动项目</span><br><span class="line"><span class="bullet">*</span> 如何让 Codex 打开页面调试</span><br><span class="line"><span class="bullet">*</span> 常用调试 Prompt</span><br><span class="line"><span class="bullet">*</span> Console 报错调试</span><br><span class="line"><span class="bullet">*</span> Network 接口调试</span><br><span class="line"><span class="bullet">*</span> DOM / CSS 布局调试</span><br><span class="line"><span class="bullet">*</span> 性能调试</span><br><span class="line"><span class="bullet">*</span> 常见问题排查</span><br><span class="line"><span class="bullet">*</span> 安全注意事项</span><br><span class="line"></span><br><span class="line"><span class="section">### 7. 添加常用调试 Prompt</span></span><br><span class="line"></span><br><span class="line">文档中请加入这些 Prompt：</span><br><span class="line"></span><br><span class="line"><span class="code">```txt</span></span><br><span class="line"><span class="code">请打开 http://localhost:7778，检查页面是否有 console 报错，并定位到源码文件。</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="code">```txt</span></span><br><span class="line"><span class="code">请打开 http://localhost:7778/login，检查登录按钮点击后为什么没有反应。需要查看 console、network 和 DOM 状态。</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="code">```txt</span></span><br><span class="line"><span class="code">请检查 http://localhost:7778 页面首屏加载为什么慢，使用 Chrome DevTools MCP 做性能分析，并给出优化建议。</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="code">```txt</span></span><br><span class="line"><span class="code">请检查这个页面接口请求为什么失败，重点查看 network 的 request headers、payload、status code 和 response。</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="code">```txt</span></span><br><span class="line"><span class="code">请检查页面中这个按钮为什么样式不生效，查看 DOM、CSS class、computed style，并定位相关组件文件。</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 8. 验证 MCP 是否成功</span></span><br><span class="line"></span><br><span class="line">请让我在 Codex 中输入以下测试 Prompt：</span><br><span class="line"></span><br><span class="line"><span class="code">```txt</span></span><br><span class="line"><span class="code">请使用 Chrome DevTools MCP 打开 https://developers.chrome.com，并检查页面性能。</span></span><br><span class="line"><span class="code">```</span></span><br><span class="line"></span><br><span class="line">如果能自动打开 Chrome 并读取页面信息，说明配置成功。</span><br><span class="line"></span><br><span class="line"><span class="section">### 9. 输出最终结果</span></span><br><span class="line"></span><br><span class="line">最后请输出：</span><br><span class="line"></span><br><span class="line"><span class="bullet">1.</span> 当前环境检查结果</span><br><span class="line"><span class="bullet">2.</span> MCP 配置是否成功</span><br><span class="line"><span class="bullet">3.</span> 配置文件路径</span><br><span class="line"><span class="bullet">4.</span> 本地项目启动命令</span><br><span class="line"><span class="bullet">5.</span> 推荐调试地址</span><br><span class="line"><span class="bullet">6.</span> 已创建的文档路径</span><br><span class="line"><span class="bullet">7.</span> 下一步如何使用</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Laura
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a id="original-link" href="http://example.com/2026/05/07/AI + Chrome DevTools:自动调试前端页面/" title="Codex + Chrome DevTools：让 AI 直接调试前端页面">http://example.com/2026/05/07/AI + Chrome DevTools:自动调试前端页面/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2026/04/15/Tailwind%20CSS%204%E5%8D%87%E7%BA%A7%E6%8C%87%E5%8D%97/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+                </span>
+                <h6 class="trm-op-title">Tailwind CSS 3 升级到 4：一份实用迁移指南</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>26/04/15</li>
+                <li>18:52</li>
+                <li>Unclassified</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-footer-card trm-scroll-animation">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2020- 2026</span>
+            <span class="footer-separator"data-separator=" · "></span>
+            <span class="trm-accent-color">Laura</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v7.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.2.2
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item blog-run-long"></div>
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            
+
+    <div id="post-toc" class="trm-post-toc">
+      <div class="trm-post-toc-header">
+        Article table of contents
+				<span id="post-toc-top">
+					TOP
+				</span>
+      </div>
+      <div class="trm-post-toc-content">
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-2" title="前言"><a rel="nofollow" class="trm-toc-link" href="#前言"><span class="trm-toc-text">前言</span></a></li><li class="trm-toc-item trm-toc-level-2" title="1. 整体流程"><a rel="nofollow" class="trm-toc-link" href="#1-整体流程"><span class="trm-toc-text">1. 整体流程</span></a></li><li class="trm-toc-item trm-toc-level-2" title="2. 它能解决什么问题"><a rel="nofollow" class="trm-toc-link" href="#2-它能解决什么问题"><span class="trm-toc-text">2. 它能解决什么问题</span></a></li><li class="trm-toc-item trm-toc-level-2" title="3. 准备环境"><a rel="nofollow" class="trm-toc-link" href="#3-准备环境"><span class="trm-toc-text">3. 准备环境</span></a></li><li class="trm-toc-item trm-toc-level-2" title="4. 安装 Chrome DevTools MCP"><a rel="nofollow" class="trm-toc-link" href="#4-安装-Chrome-DevTools-MCP"><span class="trm-toc-text">4. 安装 Chrome DevTools MCP</span></a></li><li class="trm-toc-item trm-toc-level-2" title="5. 手动配置方式"><a rel="nofollow" class="trm-toc-link" href="#5-手动配置方式"><span class="trm-toc-text">5. 手动配置方式</span></a></li><li class="trm-toc-item trm-toc-level-2" title="6. 项目级配置"><a rel="nofollow" class="trm-toc-link" href="#6-项目级配置"><span class="trm-toc-text">6. 项目级配置</span></a></li><li class="trm-toc-item trm-toc-level-2" title="7. 是否需要手动启动 Chrome ？"><a rel="nofollow" class="trm-toc-link" href="#7-是否需要手动启动-Chrome-？"><span class="trm-toc-text">7. 是否需要手动启动 Chrome ？</span></a></li><li class="trm-toc-item trm-toc-level-2" title="8. 启动前端项目"><a rel="nofollow" class="trm-toc-link" href="#8-启动前端项目"><span class="trm-toc-text">8. 启动前端项目</span></a></li><li class="trm-toc-item trm-toc-level-2" title="9. 在 Codex 中开始调试"><a rel="nofollow" class="trm-toc-link" href="#9-在-Codex-中开始调试"><span class="trm-toc-text">9. 在 Codex 中开始调试</span></a></li><li class="trm-toc-item trm-toc-level-2" title="10. 常用调试 Prompt"><a rel="nofollow" class="trm-toc-link" href="#10-常用调试-Prompt"><span class="trm-toc-text">10. 常用调试 Prompt</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-4" title="10.1 白屏问题"><a rel="nofollow" class="trm-toc-link" href="#10-1-白屏问题"><span class="trm-toc-text">10.1 白屏问题</span></a></li><li class="trm-toc-item trm-toc-level-4" title="10.2 Console 报错"><a rel="nofollow" class="trm-toc-link" href="#10-2-Console-报错"><span class="trm-toc-text">10.2 Console 报错</span></a></li><li class="trm-toc-item trm-toc-level-4" title="10.3 接口失败"><a rel="nofollow" class="trm-toc-link" href="#10-3-接口失败"><span class="trm-toc-text">10.3 接口失败</span></a></li><li class="trm-toc-item trm-toc-level-4" title="10.4 样式不生效"><a rel="nofollow" class="trm-toc-link" href="#10-4-样式不生效"><span class="trm-toc-text">10.4 样式不生效</span></a></li><li class="trm-toc-item trm-toc-level-4" title="10.5 页面卡顿"><a rel="nofollow" class="trm-toc-link" href="#10-5-页面卡顿"><span class="trm-toc-text">10.5 页面卡顿</span></a></li></ol></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="11. 连接你自己启动的 Chrome"><a rel="nofollow" class="trm-toc-link" href="#11-连接你自己启动的-Chrome"><span class="trm-toc-text">11. 连接你自己启动的 Chrome</span></a></li><li class="trm-toc-item trm-toc-level-2" title="12. 安全建议"><a rel="nofollow" class="trm-toc-link" href="#12-安全建议"><span class="trm-toc-text">12. 安全建议</span></a></li><li class="trm-toc-item trm-toc-level-2" title="13. 直接扔给 Codex 的任务说明"><a rel="nofollow" class="trm-toc-link" href="#13-直接扔给-Codex-的任务说明"><span class="trm-toc-text">13. 直接扔给 Codex 的任务说明</span></a></li></ol>
+      </div>
+    </div>
+
+            
+<div class="trm-fixed-container">
+    
+        <div class="trm-fixed-btn post-toc-btn" data-title="Open toc">
+            <i class="iconfont fas fa-th-list"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="Read Mode" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn hidden-md" data-title="Toggle between single-column and double-column" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont fas fa-arrows-alt-h"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="Back To Top">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont fas fa-search"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="Searching...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont fas fa-times"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    Please enter keywords to search
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+<script src="https://unpkg.com/swup@2.0.19/dist/swup.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.2.2"></script>
+    
+
+    
+        
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.2.2"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+		
+			<script src="/js/plugins/danmu.js?v=2.2.2"></script>
+		
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+    <script data-swup-reload-script>
+        (function () {
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            }
+            else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+    </script>
+
+
+
+<script id="async-script" src="/js/main.js?v=2.2.2"></script>
+
+<!-- CDN -->
+
+
+    
+<script src="/demo.js"></script>
+
+
+    
+
+    
+
+
+
+</body>
+
+</html>
