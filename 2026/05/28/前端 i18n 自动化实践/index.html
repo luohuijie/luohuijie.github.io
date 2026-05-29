@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="前端 i18n 自动化实践：从中文扫描到 TMS 导入我们现在管理后台的项目在处理 i18n 时，整个流程是比较繁琐的。项目里的翻译文件由 TMS 系统统一维护，前端通过 pnpm lang 拉取最新翻译文件。但新增文案时，中间有很多重复的人工操作： 12345678扫描中文翻译英文生成 key整理 Excel上传 TMS拉取翻译文件替换源码中文检查遗漏  如果每次都靠人工复制、翻译、整理，很容易">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端 i18n 自动化实践">
+<meta property="og:url" content="http://example.com/2026/05/28/%E5%89%8D%E7%AB%AF%20i18n%20%E8%87%AA%E5%8A%A8%E5%8C%96%E5%AE%9E%E8%B7%B5/index.html">
+<meta property="og:site_name" content="luohuijie">
+<meta property="og:description" content="前端 i18n 自动化实践：从中文扫描到 TMS 导入我们现在管理后台的项目在处理 i18n 时，整个流程是比较繁琐的。项目里的翻译文件由 TMS 系统统一维护，前端通过 pnpm lang 拉取最新翻译文件。但新增文案时，中间有很多重复的人工操作： 12345678扫描中文翻译英文生成 key整理 Excel上传 TMS拉取翻译文件替换源码中文检查遗漏  如果每次都靠人工复制、翻译、整理，很容易">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-05-28T03:46:00.000Z">
+<meta property="article:modified_time" content="2026-05-29T03:16:31.150Z">
+<meta property="article:author" content="Laura">
+<meta property="article:tag" content="i18n">
+<meta property="article:tag" content="自动化">
+<meta name="twitter:card" content="summary">
+
+    <meta name="keywords" content="前端,js,jquery,javascript,html5,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,html,css,css3,用户体验">
+
+
+<title >前端 i18n 自动化实践</title>
+
+<!-- Favicon -->
+
+
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Laura","root":"/","typed_text":["Hungry | Stay Foolish"],"theme_version":"2.2.2","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":null,"icon16":null,"icon32":null,"apple_touch_icon":null,"webmanifest":null,"visibilitychange":true,"hidden":"failure.ico","show_text":"回来啦~","hide_text":"(●—●)看不见我！"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","sticky":"TOP","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":true,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":300},"toc":{"post_title":true},"live_time":{"start_time":"2020/05/16 17:00:00","prefix":"The blog has been lovely to run undefined day"},"danmu":{"enable":true,"el":".trm-banner","avatar":false,"delayRange":5000,"speed":80},"covers":["/img/block.jpg","https://img3.wallspic.com/previews/2/0/1/8/6/168102/168102-yi_shu-ka_tong-mian_bu_biao_qing-kuai_le_de-ji_qie-500x.jpg","https://img2.wallspic.com/previews/2/6/4/3/7/173462/173462-qi_fen-zi_se_de-zi_ran_jing_guan-yu_hui-de_ping_xian-500x.jpg","https://img2.wallspic.com/previews/3/3/9/1/3/131933/131933-mo_xing-xiao_jie-huang_se_de-nu_hai-fa_xing-500x.jpg","https://img1.wallspic.com/previews/8/3/4/6/2/126438/126438-wei_lai_zhu_yi-shu_ma_yi_shu-jie_duan-zi_ben_shi-yi_shu-500x.jpg","https://img2.wallspic.com/previews/0/1/5/0/7/170510/170510-guang-azure-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-500x.jpg","https://img2.wallspic.com/previews/3/6/9/6/5/156963/156963-yi_shu-qi_fen-yu_hui-shou_shi-ren_men_zai_zi_ran_jie-500x.jpg","https://img1.wallspic.com/previews/0/9/3/5/6/165390/165390-qi_fen-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-tian_wen_xue_dui_xiang-500x.jpg","https://img3.wallspic.com/previews/2/8/6/1/7/171682/171682-yi_kuai-xing_zhi-ye_ti-yi_shu-shui_xia-500x.jpg","https://img1.wallspic.com/previews/7/1/9/9/89917/89917-bo_xi_ta_nuo-an_zhuang_de_feng_jing-cheng_shi-suo_lun_tuo-shan_zhan-500x.jpg","https://img2.wallspic.com/previews/5/0/9/0/70905/70905-hai_yang-ma_er_dai_fu-tian_kong-du_jia_cun-huan_jiao-500x.jpg","https://img3.wallspic.com/previews/4/3/4/8/6/168434/168434-xing_zhi-zi_ran_jing_guan-dan_huang-shui_dao-zhi_bei-500x.jpg","https://img1.wallspic.com/previews/5/4/0/4/7/174045/174045-jian_ying-qi_fen-ren_men_zai_zi_ran_jie-tian_wen_xue_dui_xiang-yi_shu-500x.jpg","https://img1.wallspic.com/previews/9/3/1/6/5/156139/156139-feng_jing_hua-yi_shu-shu_ma_yi_shu-qi_fen-sheng_tai_qu-500x.jpg","https://img1.wallspic.com/previews/7/5/7/9/6/169757/169757-ji_bo_li_de_bo_wu_guan-zi_ran_jing_guan-yi_shu-ji_yun-500x.jpg","https://img1.wallspic.com/previews/5/2/0/6/7/176025/176025-qi_fen-tian_wen_xue_dui_xiang-yi_shu-dian_lan_se_de-yuan_quan-500x.jpg","https://img3.wallspic.com/previews/5/1/0/2/4/142015/142015-feng_ge-ka_ka_xi_qi_mu-huo_ying_ren_zhe-tu_xing_she_ji-shi_jue_yi_shu-500x.jpg"],"creative_commons":{"license":"by-nc-sa","language":"deed.zh-hans"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2026-05-29 11:16:31"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.2.2" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+
+ 
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+    
+        <div class="trm-logo-text">
+            La<span>ura</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    Home
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    Archives
+                </a>
+                
+                <ul>
+                    
+                    <li>
+                        <a  href="/tags/" target="">
+                            标签
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a  href="/categories/" target="">
+                            分类
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    Links
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/about/" target="">
+                    About
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont fas fa-search"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            前端 i18n 自动化实践
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2026
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/img1.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Laura
+    </h5>
+    
+        <div class="trm-label">
+            Stay
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/luohuijie" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                CITY:
+            </div>
+            <div class="trm-label trm-label-light">
+                HANGZHOU
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:miss_rowe@163.com" class="trm-btn">
+            Contact Me
+            <i class="iconfont far fa-envelope"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            05/28
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            11:46
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Laura
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="前端-i18n-自动化实践：从中文扫描到-TMS-导入"><a href="#前端-i18n-自动化实践：从中文扫描到-TMS-导入" class="headerlink" title="前端 i18n 自动化实践：从中文扫描到 TMS 导入"></a>前端 i18n 自动化实践：从中文扫描到 TMS 导入</h1><p>我们现在管理后台的项目在处理 i18n 时，整个流程是比较繁琐的。<br>项目里的翻译文件由 TMS 系统统一维护，前端通过 <code>pnpm lang</code> 拉取最新翻译文件。但新增文案时，中间有很多重复的人工操作：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">扫描中文</span><br><span class="line">翻译英文</span><br><span class="line">生成 key</span><br><span class="line">整理 Excel</span><br><span class="line">上传 TMS</span><br><span class="line">拉取翻译文件</span><br><span class="line">替换源码中文</span><br><span class="line">检查遗漏</span><br></pre></td></tr></table></figure>
+
+<p>如果每次都靠人工复制、翻译、整理，很容易浪费时间，也容易出错。</p>
+<p>所以就想做一套自动化方案，把最机械的部分自动化掉。</p>
+<p>具体流程：<br>通过 Node 脚本扫描源码中的中文，调用阿里云机器翻译生成英文译文，自动产出可导入 TMS 的 Excel，最后再拉取 TMS 翻译并替换源码中的中文文案。</p>
+<h2 id="原来的流程"><a href="#原来的流程" class="headerlink" title="原来的流程"></a>原来的流程</h2><p>原流程大概是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1. 执行 getZh.js 扫描 Vue / JS 文件里的中文，生成 zh.txt</span><br><span class="line">2. 复制 zh.txt 的中文到翻译工具</span><br><span class="line">3. 把英文复制到 index.txt</span><br><span class="line">4. 执行 getkey.js 生成 key</span><br><span class="line">5. 手动把中文、英文、key 整理到 Excel</span><br><span class="line">6. 上传 Excel 到 TMS</span><br><span class="line">7. 执行 pnpm lang 拉取翻译文件</span><br><span class="line">8. 再执行替换脚本，把源码里的中文替换成 key</span><br></pre></td></tr></table></figure>
+
+<p>这套流程的问题很明显：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">重复复制太多</span><br><span class="line">容易漏翻译</span><br><span class="line">key 容易重复</span><br><span class="line">Excel 整理耗时</span><br><span class="line">翻译缓存无法复用</span><br><span class="line">新增文案时效率很低</span><br></pre></td></tr></table></figure>
+
+<p>所以目标不是单纯写一个翻译脚本，而是把中间这些人工步骤尽量自动化。</p>
+<h2 id="最终目标"><a href="#最终目标" class="headerlink" title="最终目标"></a>最终目标</h2><p>希望新增一套命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm i18n:prepare</span><br></pre></td></tr></table></figure>
+
+<p>自动完成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">扫描中文</span><br><span class="line">过滤已有翻译</span><br><span class="line">调用阿里云机器翻译</span><br><span class="line">本地缓存翻译结果</span><br><span class="line">生成不重复 key</span><br><span class="line">生成 TMS Excel</span><br></pre></td></tr></table></figure>
+
+<p>然后人工检查 Excel，并上传 TMS。</p>
+<p>上传完成后，再执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm i18n:apply</span><br></pre></td></tr></table></figure>
+
+<p>自动完成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pnpm lang</span><br><span class="line">替换源码里的中文</span><br><span class="line">输出替换报告</span><br></pre></td></tr></table></figure>
+
+<p>最后执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm i18n:check</span><br></pre></td></tr></table></figure>
+
+<p>检查项目里是否还有未处理中文。</p>
+<p>完整流程变成：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pnpm i18n:prepare</span><br><span class="line"></span><br><span class="line"><span class="comment"># 人工检查 Excel，并上传到 TMS</span></span><br><span class="line"></span><br><span class="line">pnpm i18n:apply</span><br><span class="line">pnpm i18n:check</span><br></pre></td></tr></table></figure>
+
+<h2 id="翻译方案的选择"><a href="#翻译方案的选择" class="headerlink" title="翻译方案的选择"></a>翻译方案的选择</h2><p>最开始考虑过几种方案：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Google Translate API</span><br><span class="line">OpenAI API</span><br><span class="line">第三方 google-translate-api</span><br><span class="line">阿里云机器翻译</span><br></pre></td></tr></table></figure>
+
+<p>第三方 <code>google-translate-api</code> 虽然不需要 key，也不用绑定云服务，但它属于非官方方案，容易限流或失效，更适合临时本地工具，不太适合作为团队流程的一部分。</p>
+<p>Google 官方 API 稳定，但开通时需要绑卡和预付款，实现起来比较麻烦。</p>
+<p>最后选择阿里云机器翻译，主要是因为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">官方服务，稳定性更好</span><br><span class="line">国内账号体系接入更方便</span><br><span class="line">有明确的免费额度</span><br><span class="line">适合团队长期维护</span><br><span class="line">接入成本低</span><br></pre></td></tr></table></figure>
+
+<p>阿里云机器翻译的免费额度对后台管理系统文案来说基本够用。需要注意的是：一定要做缓存，不能每次全量重新翻译。</p>
+<h2 id="权限配置"><a href="#权限配置" class="headerlink" title="权限配置"></a>权限配置</h2><p>不要直接使用阿里云主账号 AccessKey。</p>
+<p>主账号 AccessKey 权限太大，泄露后风险很高。更合适的做法是创建一个 RAM 用户，例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n-translate-bot</span><br></pre></td></tr></table></figure>
+
+<p>只用于程序调用机器翻译 API。</p>
+<p>创建时访问方式只选择：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">使用永久 AccessKey 访问</span><br></pre></td></tr></table></figure>
+
+<p>权限策略只需要授权：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AliyunMTFullAccess</span><br></pre></td></tr></table></figure>
+
+<p>不要使用：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">PowerUserAccess</span><br><span class="line">AdministratorAccess</span><br></pre></td></tr></table></figure>
+
+<p>创建完成后，拿到：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AccessKey ID</span><br><span class="line">AccessKey Secret</span><br></pre></td></tr></table></figure>
+
+<p>最后本地用 <code>.env.local</code> 保存配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ALIBABA_CLOUD_ACCESS_KEY_ID=你的AccessKeyId</span><br><span class="line">ALIBABA_CLOUD_ACCESS_KEY_SECRET=你的AccessKeySecret</span><br><span class="line">ALIYUN_TRANSLATE_REGION=cn-hangzhou</span><br><span class="line">ALIYUN_TRANSLATE_SCENE=general</span><br></pre></td></tr></table></figure>
+
+<p><code>.env.local</code> 不提交 Git。</p>
+<h2 id="目录设计"><a href="#目录设计" class="headerlink" title="目录设计"></a>目录设计</h2><p>新的自动化脚本全部放在独立目录里，不改旧脚本：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">script/i18n/</span><br><span class="line">├── prepare.js</span><br><span class="line">├── extract.js</span><br><span class="line">├── translate-aliyun.js</span><br><span class="line">├── generate-key.js</span><br><span class="line">├── generate-excel.js</span><br><span class="line">├── cache.js</span><br><span class="line">├── quota.js</span><br><span class="line">├── config.js</span><br><span class="line">├── utils.js</span><br><span class="line">├── check.js</span><br><span class="line">├── replace/</span><br><span class="line">│   ├── index.js</span><br><span class="line">│   ├── vue.js</span><br><span class="line">│   ├── js.js</span><br><span class="line">│   └── router.js</span><br><span class="line">└── .cache/</span><br><span class="line">    ├── aliyun-translate-cache.json</span><br><span class="line">    └── aliyun-translate-quota.json</span><br></pre></td></tr></table></figure>
+
+<h2 id="package-json-命令"><a href="#package-json-命令" class="headerlink" title="package.json 命令"></a>package.json 命令</h2><p>新增命令：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;i18n:prepare&quot;</span><span class="punctuation">:</span> <span class="string">&quot;node script/i18n/prepare.js&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;i18n:replace&quot;</span><span class="punctuation">:</span> <span class="string">&quot;node script/i18n/replace/index.js&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;i18n:apply&quot;</span><span class="punctuation">:</span> <span class="string">&quot;pnpm lang &amp;&amp; pnpm i18n:replace&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;i18n:check&quot;</span><span class="punctuation">:</span> <span class="string">&quot;node script/i18n/check.js&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>保留原来的：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;lang&quot;</span><span class="punctuation">:</span> <span class="string">&quot;node lang.js&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>pnpm lang</code> 仍然负责从 TMS 拉取翻译文件。</p>
+<h2 id="第一步：扫描项目中文"><a href="#第一步：扫描项目中文" class="headerlink" title="第一步：扫描项目中文"></a>第一步：扫描项目中文</h2><p>扫描范围：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.vue</span><br><span class="line">.js</span><br><span class="line">.ts</span><br></pre></td></tr></table></figure>
+
+<p>需要忽略：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">node_modules</span><br><span class="line">dist</span><br><span class="line">build</span><br><span class="line">src/lang</span><br><span class="line">script/i18n/.cache</span><br></pre></td></tr></table></figure>
+
+<p>需要识别几类常见场景：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Vue template 文本</span><br><span class="line">Vue template 属性</span><br><span class="line">JS / TS 字符串</span><br><span class="line">$t(&#x27;中文&#x27;) 这类历史写法</span><br></pre></td></tr></table></figure>
+
+<h2 id="第二步：过滤已有翻译"><a href="#第二步：过滤已有翻译" class="headerlink" title="第二步：过滤已有翻译"></a>第二步：过滤已有翻译</h2><p>如果 <code>src/lang/zh_Hans.json</code> 里已经存在：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;Add_Activity_0&quot;</span><span class="punctuation">:</span> <span class="string">&quot;添加活动&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>那么再次扫描到“添加活动”时，就不需要重新生成 Excel，也不需要再次翻译。</p>
+<p>过滤逻辑大概是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">读取 src/lang/zh_Hans.json</span><br><span class="line">根据 value 建立已有中文集合</span><br><span class="line">扫描结果里命中的中文直接跳过</span><br><span class="line">只处理新增中文</span><br></pre></td></tr></table></figure>
+
+<p>这一步可以避免重复创建 TMS terms，也能减少翻译调用次数。</p>
+<p>同时还要从语言文件里读取已有 key，避免新生成的 key 和旧 key 冲突。</p>
+<h2 id="第三步：阿里云机器翻译"><a href="#第三步：阿里云机器翻译" class="headerlink" title="第三步：阿里云机器翻译"></a>第三步：阿里云机器翻译</h2><p>翻译模块使用阿里云机器翻译通用版 <code>TranslateGeneral</code>。</p>
+<p>请求参数：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SourceLanguage: zh</span><br><span class="line">TargetLanguage: en</span><br><span class="line">FormatType: text</span><br><span class="line">Scene: general</span><br></pre></td></tr></table></figure>
+
+<p>如果没有配置 AccessKey，脚本不能直接中断，而是降级处理：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">English(en) 留空</span><br><span class="line">控制台输出 warning</span><br><span class="line">Excel 继续生成</span><br></pre></td></tr></table></figure>
+
+<p>这样即使本地没配密钥，也可以先生成待翻译 Excel。</p>
+<p>示例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">translateText</span>(<span class="params">text</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> client = <span class="title function_">createClient</span>()</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!client) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">en</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">      <span class="attr">skipped</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="attr">reason</span>: <span class="string">&#x27;missing_access_key&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> response = <span class="keyword">await</span> client.<span class="title function_">translateGeneralWithOptions</span>(request, runtime)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">en</span>: response?.<span class="property">body</span>?.<span class="property">data</span>?.<span class="property">translated</span> || <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">      <span class="attr">skipped</span>: <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">warn</span>(<span class="string">`[warning] Aliyun translate failed: <span class="subst">$&#123;text&#125;</span>`</span>)</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">warn</span>(error.<span class="property">message</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">en</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">      <span class="attr">skipped</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="attr">reason</span>: <span class="string">&#x27;api_error&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>翻译失败时不要阻塞整个流程，可以让 Excel 里的 <code>English(en)</code> 为空，后续人工补齐。</p>
+<h2 id="第四步：本地翻译缓存"><a href="#第四步：本地翻译缓存" class="headerlink" title="第四步：本地翻译缓存"></a>第四步：本地翻译缓存</h2><p>缓存文件：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">script/i18n/.cache/aliyun-translate-cache.json</span><br></pre></td></tr></table></figure>
+
+<p>结构示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;添加活动&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;en&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Add Activity&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;source&quot;</span><span class="punctuation">:</span> <span class="string">&quot;zh&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;target&quot;</span><span class="punctuation">:</span> <span class="string">&quot;en&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;provider&quot;</span><span class="punctuation">:</span> <span class="string">&quot;aliyun&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;scene&quot;</span><span class="punctuation">:</span> <span class="string">&quot;general&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;updatedAt&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2026-05-20T10:00:00.000Z&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>流程是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">先查缓存</span><br><span class="line">缓存命中：直接使用英文，不请求 API</span><br><span class="line">缓存未命中：检查额度</span><br><span class="line">额度允许：请求阿里云翻译</span><br><span class="line">请求成功：写入缓存</span><br></pre></td></tr></table></figure>
+
+<p>这样同一句中文只会翻译一次。</p>
+<p>后台系统里很多文案是重复的：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">新增</span><br><span class="line">编辑</span><br><span class="line">删除</span><br><span class="line">保存</span><br><span class="line">取消</span><br><span class="line">保存成功</span><br><span class="line">删除成功</span><br><span class="line">请选择</span><br><span class="line">请输入</span><br></pre></td></tr></table></figure>
+
+<p>缓存可以减少很多不必要的 API 调用。</p>
+<h2 id="第五步：额度控制"><a href="#第五步：额度控制" class="headerlink" title="第五步：额度控制"></a>第五步：额度控制</h2><p>阿里云机器翻译有免费额度，但脚本里不能完全不控制。</p>
+<p>缓存额度文件：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">script/i18n/.cache/aliyun-translate-quota.json</span><br></pre></td></tr></table></figure>
+
+<p>结构示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;2026-05&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;usedChars&quot;</span><span class="punctuation">:</span> <span class="number">12340</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;limit&quot;</span><span class="punctuation">:</span> <span class="number">900000</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;provider&quot;</span><span class="punctuation">:</span> <span class="string">&quot;aliyun&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;updatedAt&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2026-05-20T10:00:00.000Z&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>统计规则：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">只统计真实请求 API 的字符</span><br><span class="line">缓存命中不计入额度</span><br><span class="line">按月份分开统计</span><br><span class="line">超过 900000 字符后停止调用 API</span><br><span class="line">Excel 继续生成，英文列留空</span><br></pre></td></tr></table></figure>
+
+<p>为什么设置 900000？</p>
+<p>因为免费额度是 100 万字符，留 10 万字符作为安全余量，避免误超。</p>
+<h2 id="第六步：自动生成-key"><a href="#第六步：自动生成-key" class="headerlink" title="第六步：自动生成 key"></a>第六步：自动生成 key</h2><p>一开始我尝试按“模块名 + 英文语义”生成 key，比如 <code>activity.addActivity</code>。</p>
+<p>这种方式语义更明显，但实际生成出来的 key 容易偏长，而且和原有 <code>getkey.js</code> 的规则不一致，迁移成本也会变高。</p>
+<p>所以现在 key 生成规则和原来保持一致：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">英文译文前 20 个字符 + 动态 index</span><br></pre></td></tr></table></figure>
+
+<p>处理规则是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">取英文译文前 20 个字符</span><br><span class="line">去掉特殊符号</span><br><span class="line">按单词切分</span><br><span class="line">每个单词首字母大写</span><br><span class="line">用下划线连接</span><br><span class="line">末尾追加动态 index</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Language Time -&gt; Language_Time_0</span><br><span class="line">Add Activity -&gt; Add_Activity_0</span><br></pre></td></tr></table></figure>
+
+<p>生成 key 时要同时检查两类重复：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">已有语言文件里的 key</span><br><span class="line">当前批次刚生成的 key</span><br></pre></td></tr></table></figure>
+
+<p>如果发现冲突，就递增动态 index，直到生成一个可用的 key：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Language_Time_0</span><br><span class="line">Language_Time_1</span><br></pre></td></tr></table></figure>
+
+<p>如果翻译失败，英文为空，可以兜底生成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Text_0</span><br><span class="line">Text_1</span><br></pre></td></tr></table></figure>
+
+<p>至少保证  key 不重复，后面人工再调整。</p>
+<h2 id="第七步：生成-TMS-Excel"><a href="#第七步：生成-TMS-Excel" class="headerlink" title="第七步：生成 TMS Excel"></a>第七步：生成 TMS Excel</h2><p>最终生成的 Excel 字段和 TMS 模板保持一致：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">版本</span><br><span class="line">模块</span><br><span class="line">描述</span><br><span class="line">唯一键（uniqueKey）</span><br><span class="line">English(en)</span><br><span class="line">Chinese(zh_Hans)</span><br></pre></td></tr></table></figure>
+
+<p>输出路径：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dist/i18n/Tapon_Manage_Web_import_YYYYMMDD_HHmmss.xlsx</span><br></pre></td></tr></table></figure>
+
+<p>示例：</p>
+<table>
+<thead>
+<tr>
+<th>版本</th>
+<th>模块</th>
+<th>描述</th>
+<th>唯一键（uniqueKey）</th>
+<th>English(en)</th>
+<th>Chinese(zh_Hans)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td></td>
+<td>Add_Activity_0</td>
+<td>Add Activity</td>
+<td>添加活动</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td>Saved_Successfully_0</td>
+<td>Saved successfully</td>
+<td>保存成功</td>
+</tr>
+</tbody></table>
+<p>执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm i18n:prepare</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">i18n prepare success</span><br><span class="line"></span><br><span class="line">Scan summary:</span><br><span class="line">Scanned Chinese: 120</span><br><span class="line">Existing translations: 95</span><br><span class="line">New translations: 25</span><br><span class="line"></span><br><span class="line">Aliyun Translate summary:</span><br><span class="line">Cache hit: 10</span><br><span class="line">API request: 15</span><br><span class="line">Skipped by quota: 0</span><br><span class="line">Skipped by missing AccessKey: 0</span><br><span class="line">API failed: 0</span><br><span class="line">Used chars this month: 24560 / 900000</span><br><span class="line"></span><br><span class="line">Key summary:</span><br><span class="line">Existing keys: 3164</span><br><span class="line">Generated keys: 25</span><br><span class="line">Key conflicts resolved: 3</span><br><span class="line"></span><br><span class="line">Excel generated:</span><br><span class="line">dist/i18n/Tapon_Manage_Web_import_20260520_180000.xlsx</span><br></pre></td></tr></table></figure>
+
+<p>如果没有配置 AccessKey，会输出 warning：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">i18n prepare success with warnings</span><br><span class="line"></span><br><span class="line">[warning] ALIBABA_CLOUD_ACCESS_KEY_ID or ALIBABA_CLOUD_ACCESS_KEY_SECRET is not configured.</span><br><span class="line">Excel generated, but some English(en) values are empty.</span><br><span class="line">Please complete them manually before importing to TMS.</span><br></pre></td></tr></table></figure>
+
+<h2 id="第八步：上传-TMS-后替换源码"><a href="#第八步：上传-TMS-后替换源码" class="headerlink" title="第八步：上传 TMS 后替换源码"></a>第八步：上传 TMS 后替换源码</h2><p>Excel 生成后，人工检查并上传到 TMS。</p>
+<p>然后执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm i18n:apply</span><br></pre></td></tr></table></figure>
+
+<p>这个命令内部做两件事：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pnpm lang</span><br><span class="line">pnpm i18n:replace</span><br></pre></td></tr></table></figure>
+
+<p>先通过 <code>pnpm lang</code> 从 TMS 拉取最新翻译，然后根据 <code>src/lang/zh_Hans.json</code> 里的 key，替换源码里的中文。</p>
+<h3 id="Vue-替换"><a href="#Vue-替换" class="headerlink" title="Vue 替换"></a>Vue 替换</h3><p>template 文本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;el-button&gt;添加活动&lt;/el-button&gt;</span><br></pre></td></tr></table></figure>
+
+<p>替换成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;el-button&gt;&#123;&#123; $t(&#x27;Add_Activity_0&#x27;) &#125;&#125;&lt;/el-button&gt;</span><br></pre></td></tr></table></figure>
+
+<p>template 属性：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;el-input placeholder=&quot;请输入名称&quot; /&gt;</span><br></pre></td></tr></table></figure>
+
+<p>替换成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;el-input :placeholder=&quot;$t(&#x27;Please_Enter_Name_0&#x27;)&quot; /&gt;</span><br></pre></td></tr></table></figure>
+
+<p>script 中的中文：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">success</span>(<span class="string">&#x27;保存成功&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>替换成：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">this</span>.<span class="property">$message</span>.<span class="title function_">success</span>(<span class="variable language_">this</span>.$t(<span class="string">&#x27;Saved_Successfully_0&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>这块需要注意，不能替换注释里的中文，也不能重复处理已经是 <code>$t(&#39;key&#39;)</code> 的内容。</p>
+<h3 id="router-特殊处理"><a href="#router-特殊处理" class="headerlink" title="router 特殊处理"></a>router 特殊处理</h3><p>路由文件单独处理。</p>
+<p>路由文件不要替换成：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">title</span>: i18n.<span class="title function_">t</span>(<span class="string">&#x27;Dashboard_Index_0&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>更适合保存 key：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">meta</span>: &#123;</span><br><span class="line">  <span class="attr">title</span>: <span class="string">&#x27;Dashboard_Index_0&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后在菜单渲染组件里统一处理：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; $t(route.meta.title) &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样路由配置更干净，也避免路由定义阶段依赖 i18n 实例。</p>
+<h2 id="第九步：检查遗漏中文"><a href="#第九步：检查遗漏中文" class="headerlink" title="第九步：检查遗漏中文"></a>第九步：检查遗漏中文</h2><p>最后加一个检查命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm i18n:check</span><br></pre></td></tr></table></figure>
+<p>扫描：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.vue</span><br><span class="line">.js</span><br><span class="line">.ts</span><br></pre></td></tr></table></figure>
+
+<p>如果发现还有中文，输出文件路径、行号和内容：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Found untranslated Chinese:</span><br><span class="line"></span><br><span class="line">src/views/activity/index.vue:23</span><br><span class="line">添加活动</span><br><span class="line"></span><br><span class="line">src/views/message/index.vue:88</span><br><span class="line">保存成功</span><br></pre></td></tr></table></figure>
+
+<p>如果没有问题：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n check success: no untranslated Chinese found.</span><br></pre></td></tr></table></figure>
+
+<h2 id="分阶段实现"><a href="#分阶段实现" class="headerlink" title="分阶段实现"></a>分阶段实现</h2><p>这个需求看起来只是“自动翻译”，但实际包含很多环节：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">扫描</span><br><span class="line">过滤</span><br><span class="line">翻译</span><br><span class="line">缓存</span><br><span class="line">额度</span><br><span class="line">key 生成</span><br><span class="line">Excel</span><br><span class="line">替换</span><br><span class="line">检查</span><br></pre></td></tr></table></figure>
+
+<p>如果一次性让 AI 编码工具全部实现，很容易中途上下文压缩，或者生成一堆不好维护的代码。</p>
+<p>更稳的方式是分阶段：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">阶段 1：扫描中文、读取已有翻译、生成 key</span><br><span class="line">阶段 2：接入阿里云翻译、缓存、额度控制、生成 Excel</span><br><span class="line">阶段 3：实现源码替换</span><br><span class="line">阶段 4：实现 i18n 检查</span><br></pre></td></tr></table></figure>
+
+<p>每个阶段完成后都更新一个交接文件：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">../i18n-task-handoff.md</span><br></pre></td></tr></table></figure>
+
+<p>记录：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">当前任务</span><br><span class="line">已完成</span><br><span class="line">未完成</span><br><span class="line">新增/修改文件</span><br><span class="line">已执行命令</span><br><span class="line">验证结果</span><br><span class="line">下一步建议</span><br></pre></td></tr></table></figure>
+
+<p>这样即使换账号、重开对话，也能继续执行，不需要从头解释。</p>
+<h2 id="最终效果"><a href="#最终效果" class="headerlink" title="最终效果"></a>最终效果</h2><p>原流程：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">getZh</span><br><span class="line">复制中文</span><br><span class="line">手动翻译</span><br><span class="line">复制英文</span><br><span class="line">生成 key</span><br><span class="line">整理 Excel</span><br><span class="line">上传 TMS</span><br><span class="line">pnpm lang</span><br><span class="line">替换源码</span><br></pre></td></tr></table></figure>
+
+<p>优化后：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pnpm i18n:prepare</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查 Excel，上传 TMS</span></span><br><span class="line"></span><br><span class="line">pnpm i18n:apply</span><br><span class="line">pnpm i18n:check</span><br></pre></td></tr></table></figure>
+
+<p>大部分重复劳动都可以自动化，只需要关注：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">检查翻译是否准确</span><br><span class="line">确认 Excel 是否可导入</span><br><span class="line">源码里是否还有中文遗漏</span><br></pre></td></tr></table></figure>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Laura
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a id="original-link" href="http://example.com/2026/05/28/前端 i18n 自动化实践/" title="前端 i18n 自动化实践">http://example.com/2026/05/28/前端 i18n 自动化实践/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2026/05/07/AI%20+%20Chrome%20DevTools:%E8%87%AA%E5%8A%A8%E8%B0%83%E8%AF%95%E5%89%8D%E7%AB%AF%E9%A1%B5%E9%9D%A2/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+                </span>
+                <h6 class="trm-op-title">Codex + Chrome DevTools：让 AI 直接调试前端页面</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>26/05/07</li>
+                <li>19:18</li>
+                <li>Unclassified</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-footer-card trm-scroll-animation">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2020- 2026</span>
+            <span class="footer-separator"data-separator=" · "></span>
+            <span class="trm-accent-color">Laura</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v7.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.2.2
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item blog-run-long"></div>
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            
+
+    <div id="post-toc" class="trm-post-toc">
+      <div class="trm-post-toc-header">
+        Article table of contents
+				<span id="post-toc-top">
+					TOP
+				</span>
+      </div>
+      <div class="trm-post-toc-content">
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-1" title="前端 i18n 自动化实践：从中文扫描到 TMS 导入"><a rel="nofollow" class="trm-toc-link" href="#前端-i18n-自动化实践：从中文扫描到-TMS-导入"><span class="trm-toc-text">前端 i18n 自动化实践：从中文扫描到 TMS 导入</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title="原来的流程"><a rel="nofollow" class="trm-toc-link" href="#原来的流程"><span class="trm-toc-text">原来的流程</span></a></li><li class="trm-toc-item trm-toc-level-2" title="最终目标"><a rel="nofollow" class="trm-toc-link" href="#最终目标"><span class="trm-toc-text">最终目标</span></a></li><li class="trm-toc-item trm-toc-level-2" title="翻译方案的选择"><a rel="nofollow" class="trm-toc-link" href="#翻译方案的选择"><span class="trm-toc-text">翻译方案的选择</span></a></li><li class="trm-toc-item trm-toc-level-2" title="权限配置"><a rel="nofollow" class="trm-toc-link" href="#权限配置"><span class="trm-toc-text">权限配置</span></a></li><li class="trm-toc-item trm-toc-level-2" title="目录设计"><a rel="nofollow" class="trm-toc-link" href="#目录设计"><span class="trm-toc-text">目录设计</span></a></li><li class="trm-toc-item trm-toc-level-2" title="package.json 命令"><a rel="nofollow" class="trm-toc-link" href="#package-json-命令"><span class="trm-toc-text">package.json 命令</span></a></li><li class="trm-toc-item trm-toc-level-2" title="第一步：扫描项目中文"><a rel="nofollow" class="trm-toc-link" href="#第一步：扫描项目中文"><span class="trm-toc-text">第一步：扫描项目中文</span></a></li><li class="trm-toc-item trm-toc-level-2" title="第二步：过滤已有翻译"><a rel="nofollow" class="trm-toc-link" href="#第二步：过滤已有翻译"><span class="trm-toc-text">第二步：过滤已有翻译</span></a></li><li class="trm-toc-item trm-toc-level-2" title="第三步：阿里云机器翻译"><a rel="nofollow" class="trm-toc-link" href="#第三步：阿里云机器翻译"><span class="trm-toc-text">第三步：阿里云机器翻译</span></a></li><li class="trm-toc-item trm-toc-level-2" title="第四步：本地翻译缓存"><a rel="nofollow" class="trm-toc-link" href="#第四步：本地翻译缓存"><span class="trm-toc-text">第四步：本地翻译缓存</span></a></li><li class="trm-toc-item trm-toc-level-2" title="第五步：额度控制"><a rel="nofollow" class="trm-toc-link" href="#第五步：额度控制"><span class="trm-toc-text">第五步：额度控制</span></a></li><li class="trm-toc-item trm-toc-level-2" title="第六步：自动生成 key"><a rel="nofollow" class="trm-toc-link" href="#第六步：自动生成-key"><span class="trm-toc-text">第六步：自动生成 key</span></a></li><li class="trm-toc-item trm-toc-level-2" title="第七步：生成 TMS Excel"><a rel="nofollow" class="trm-toc-link" href="#第七步：生成-TMS-Excel"><span class="trm-toc-text">第七步：生成 TMS Excel</span></a></li><li class="trm-toc-item trm-toc-level-2" title="第八步：上传 TMS 后替换源码"><a rel="nofollow" class="trm-toc-link" href="#第八步：上传-TMS-后替换源码"><span class="trm-toc-text">第八步：上传 TMS 后替换源码</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="Vue 替换"><a rel="nofollow" class="trm-toc-link" href="#Vue-替换"><span class="trm-toc-text">Vue 替换</span></a></li><li class="trm-toc-item trm-toc-level-3" title="router 特殊处理"><a rel="nofollow" class="trm-toc-link" href="#router-特殊处理"><span class="trm-toc-text">router 特殊处理</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="第九步：检查遗漏中文"><a rel="nofollow" class="trm-toc-link" href="#第九步：检查遗漏中文"><span class="trm-toc-text">第九步：检查遗漏中文</span></a></li><li class="trm-toc-item trm-toc-level-2" title="分阶段实现"><a rel="nofollow" class="trm-toc-link" href="#分阶段实现"><span class="trm-toc-text">分阶段实现</span></a></li><li class="trm-toc-item trm-toc-level-2" title="最终效果"><a rel="nofollow" class="trm-toc-link" href="#最终效果"><span class="trm-toc-text">最终效果</span></a></li></ol></li></ol>
+      </div>
+    </div>
+
+            
+<div class="trm-fixed-container">
+    
+        <div class="trm-fixed-btn post-toc-btn" data-title="Open toc">
+            <i class="iconfont fas fa-th-list"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="Read Mode" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn hidden-md" data-title="Toggle between single-column and double-column" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont fas fa-arrows-alt-h"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="Back To Top">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont fas fa-search"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="Searching...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont fas fa-times"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    Please enter keywords to search
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+<script src="https://unpkg.com/swup@2.0.19/dist/swup.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.2.2"></script>
+    
+
+    
+        
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.2.2"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+		
+			<script src="/js/plugins/danmu.js?v=2.2.2"></script>
+		
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+    <script data-swup-reload-script>
+        (function () {
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            }
+            else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+    </script>
+
+
+
+<script id="async-script" src="/js/main.js?v=2.2.2"></script>
+
+<!-- CDN -->
+
+
+    
+<script src="/demo.js"></script>
+
+
+    
+
+    
+
+
+
+</body>
+
+</html>
