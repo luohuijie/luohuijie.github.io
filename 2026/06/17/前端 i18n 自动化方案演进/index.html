@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="前端 i18n 自动化方案演进：弃用脚手架，转向 Skill Helper 和本地 CLI上一篇《前端 i18n 自动化实践》已经把人工处理文案的步骤收敛成了一套项目内自动化方案：由脚本负责提取中文、生成英文、生成 key、产出 TMS Excel，再配合 pnpm lang 和替换脚本完成源码替换。 它解决了“能不能自动化”，但还没有很好地解决“怎么低成本复用”和“怎么稳定地在多个项目里使用”。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端 i18n 自动化方案演进：弃用脚手架，转向 Skill Helper 和本地 CLI">
+<meta property="og:url" content="http://example.com/2026/06/17/%E5%89%8D%E7%AB%AF%20i18n%20%E8%87%AA%E5%8A%A8%E5%8C%96%E6%96%B9%E6%A1%88%E6%BC%94%E8%BF%9B/index.html">
+<meta property="og:site_name" content="luohuijie">
+<meta property="og:description" content="前端 i18n 自动化方案演进：弃用脚手架，转向 Skill Helper 和本地 CLI上一篇《前端 i18n 自动化实践》已经把人工处理文案的步骤收敛成了一套项目内自动化方案：由脚本负责提取中文、生成英文、生成 key、产出 TMS Excel，再配合 pnpm lang 和替换脚本完成源码替换。 它解决了“能不能自动化”，但还没有很好地解决“怎么低成本复用”和“怎么稳定地在多个项目里使用”。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-06-17T09:39:00.000Z">
+<meta property="article:modified_time" content="2026-06-18T03:39:44.248Z">
+<meta property="article:author" content="Laura">
+<meta property="article:tag" content="i18n">
+<meta property="article:tag" content="自动化">
+<meta property="article:tag" content="CLI">
+<meta property="article:tag" content="AI">
+<meta name="twitter:card" content="summary">
+
+    <meta name="keywords" content="前端,js,jquery,javascript,html5,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,html,css,css3,用户体验">
+
+
+<title >前端 i18n 自动化方案演进：弃用脚手架，转向 Skill Helper 和本地 CLI</title>
+
+<!-- Favicon -->
+
+
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Laura","root":"/","typed_text":["Hungry | Stay Foolish"],"theme_version":"2.2.2","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":null,"icon16":null,"icon32":null,"apple_touch_icon":null,"webmanifest":null,"visibilitychange":true,"hidden":"failure.ico","show_text":"回来啦~","hide_text":"(●—●)看不见我！"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","sticky":"TOP","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":true,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":300},"toc":{"post_title":true},"live_time":{"start_time":"2020/05/16 17:00:00","prefix":"The blog has been lovely to run undefined day"},"danmu":{"enable":true,"el":".trm-banner","avatar":false,"delayRange":5000,"speed":80},"covers":["/img/block.jpg","https://img3.wallspic.com/previews/2/0/1/8/6/168102/168102-yi_shu-ka_tong-mian_bu_biao_qing-kuai_le_de-ji_qie-500x.jpg","https://img2.wallspic.com/previews/2/6/4/3/7/173462/173462-qi_fen-zi_se_de-zi_ran_jing_guan-yu_hui-de_ping_xian-500x.jpg","https://img2.wallspic.com/previews/3/3/9/1/3/131933/131933-mo_xing-xiao_jie-huang_se_de-nu_hai-fa_xing-500x.jpg","https://img1.wallspic.com/previews/8/3/4/6/2/126438/126438-wei_lai_zhu_yi-shu_ma_yi_shu-jie_duan-zi_ben_shi-yi_shu-500x.jpg","https://img2.wallspic.com/previews/0/1/5/0/7/170510/170510-guang-azure-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-500x.jpg","https://img2.wallspic.com/previews/3/6/9/6/5/156963/156963-yi_shu-qi_fen-yu_hui-shou_shi-ren_men_zai_zi_ran_jie-500x.jpg","https://img1.wallspic.com/previews/0/9/3/5/6/165390/165390-qi_fen-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-tian_wen_xue_dui_xiang-500x.jpg","https://img3.wallspic.com/previews/2/8/6/1/7/171682/171682-yi_kuai-xing_zhi-ye_ti-yi_shu-shui_xia-500x.jpg","https://img1.wallspic.com/previews/7/1/9/9/89917/89917-bo_xi_ta_nuo-an_zhuang_de_feng_jing-cheng_shi-suo_lun_tuo-shan_zhan-500x.jpg","https://img2.wallspic.com/previews/5/0/9/0/70905/70905-hai_yang-ma_er_dai_fu-tian_kong-du_jia_cun-huan_jiao-500x.jpg","https://img3.wallspic.com/previews/4/3/4/8/6/168434/168434-xing_zhi-zi_ran_jing_guan-dan_huang-shui_dao-zhi_bei-500x.jpg","https://img1.wallspic.com/previews/5/4/0/4/7/174045/174045-jian_ying-qi_fen-ren_men_zai_zi_ran_jie-tian_wen_xue_dui_xiang-yi_shu-500x.jpg","https://img1.wallspic.com/previews/9/3/1/6/5/156139/156139-feng_jing_hua-yi_shu-shu_ma_yi_shu-qi_fen-sheng_tai_qu-500x.jpg","https://img1.wallspic.com/previews/7/5/7/9/6/169757/169757-ji_bo_li_de_bo_wu_guan-zi_ran_jing_guan-yi_shu-ji_yun-500x.jpg","https://img1.wallspic.com/previews/5/2/0/6/7/176025/176025-qi_fen-tian_wen_xue_dui_xiang-yi_shu-dian_lan_se_de-yuan_quan-500x.jpg","https://img3.wallspic.com/previews/5/1/0/2/4/142015/142015-feng_ge-ka_ka_xi_qi_mu-huo_ying_ren_zhe-tu_xing_she_ji-shi_jue_yi_shu-500x.jpg"],"creative_commons":{"license":"by-nc-sa","language":"deed.zh-hans"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2026-06-18 11:39:44"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.2.2" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+
+ 
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+    
+        <div class="trm-logo-text">
+            La<span>ura</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    Home
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    Archives
+                </a>
+                
+                <ul>
+                    
+                    <li>
+                        <a  href="/tags/" target="">
+                            标签
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a  href="/categories/" target="">
+                            分类
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    Links
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/about/" target="">
+                    About
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont fas fa-search"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            前端 i18n 自动化方案演进：弃用脚手架，转向 Skill Helper 和本地 CLI
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2026
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/img1.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Laura
+    </h5>
+    
+        <div class="trm-label">
+            Stay
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/luohuijie" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                CITY:
+            </div>
+            <div class="trm-label trm-label-light">
+                HANGZHOU
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:miss_rowe@163.com" class="trm-btn">
+            Contact Me
+            <i class="iconfont far fa-envelope"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            06/17
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            17:39
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Laura
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="前端-i18n-自动化方案演进：弃用脚手架，转向-Skill-Helper-和本地-CLI"><a href="#前端-i18n-自动化方案演进：弃用脚手架，转向-Skill-Helper-和本地-CLI" class="headerlink" title="前端 i18n 自动化方案演进：弃用脚手架，转向 Skill Helper 和本地 CLI"></a>前端 i18n 自动化方案演进：弃用脚手架，转向 Skill Helper 和本地 CLI</h1><p>上一篇《前端 i18n 自动化实践》已经把人工处理文案的步骤收敛成了一套项目内自动化方案：由脚本负责提取中文、生成英文、生成 key、产出 TMS Excel，再配合 <code>pnpm lang</code> 和替换脚本完成源码替换。</p>
+<p>它解决了“能不能自动化”，但还没有很好地解决“怎么低成本复用”和“怎么稳定地在多个项目里使用”。</p>
+<p>所以基于上个版本做了一些优化。</p>
+<h2 id="上个版本的问题"><a href="#上个版本的问题" class="headerlink" title="上个版本的问题"></a>上个版本的问题</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">需要在业务项目里维护 script/i18n</span><br><span class="line">需要修改 package.json scripts</span><br><span class="line">多个项目复用时只能复制脚本</span><br><span class="line">脚本升级后很难同步到所有项目</span><br><span class="line">早期默认扫描整个 src，不够适合多人分支协作</span><br></pre></td></tr></table></figure>
+
+<p>如果后续多个后台项目都要用，就会出现维护成本。</p>
+<p>尤其是多人协作时，我真正需要处理的不是整个项目里的中文，而是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">当前分支新增中文</span><br><span class="line">过滤已有翻译</span><br><span class="line">生成可导入 TMS 的 Excel</span><br></pre></td></tr></table></figure>
+
+<p>所以这次优化的重点是基于上个版本做拆分：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">把确定性逻辑从业务项目里拿出来</span><br><span class="line">只处理当前分支 diff 新增中文</span><br><span class="line">把密钥、缓存、quota 放到本机统一管理</span><br><span class="line">让 Excel 生成逻辑变得稳定可复用</span><br><span class="line">保留 AI 辅助能力，但不让固定流程完全依赖 AI</span><br></pre></td></tr></table></figure>
+
+<p>最后保留了两个方案：<strong>Skill Helper</strong> 和 <strong>本地 CLI</strong>。</p>
+<p>Skill Helper 更适合 Codex 辅助下的轻量任务，本地 CLI 则更适合日常固定流程。</p>
+<h2 id="方案一：完全使用-AI-完成"><a href="#方案一：完全使用-AI-完成" class="headerlink" title="方案一：完全使用 AI 完成"></a>方案一：完全使用 AI 完成</h2><p>最先尝试的是完全让 AI 来处理。</p>
+<p>流程是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Codex 读取当前分支 diff</span><br><span class="line">  -&gt; 识别新增中文</span><br><span class="line">  -&gt; 翻译英文</span><br><span class="line">  -&gt; 生成 key</span><br><span class="line">  -&gt; 整理 Excel</span><br></pre></td></tr></table></figure>
+
+<p>这个方案上手最快，不需要写脚本，也不用改项目。只要写好 Skill 规则，告诉 Codex：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">只处理当前分支新增中文</span><br><span class="line">不修改源码</span><br><span class="line">不新增脚本</span><br><span class="line">输出 Excel</span><br></pre></td></tr></table></figure>
+
+<p>但实际用下来问题也比较明显。</p>
+<p>首先是慢。完全让 AI 做扫描、判断、翻译、生成 key 和 Excel，整体耗时经常在二十多分钟或更久，而且不太稳定。</p>
+<p>其次是 Excel 格式不可靠。TMS 导入 Excel 不只是看表头，很多时候还会受到 sheet 名、表头行、列顺序、格式等影响。AI 从零生成的 Excel 看起来字段没问题，但实际导入 TMS 可能失败。</p>
+<p>还有一个问题是结果不稳定。AI 每次生成的英文翻译、待处理文案判断，可能会有细微差异。对于一次性处理少量文案可以接受，但如果大量文案需要处理，还是不够稳定。</p>
+<h2 id="方案二：AI-TMS-Excel-模板"><a href="#方案二：AI-TMS-Excel-模板" class="headerlink" title="方案二：AI + TMS Excel 模板"></a>方案二：AI + TMS Excel 模板</h2><p>为了解决 Excel 格式的问题，我把 Excel 生成方式改成使用项目里的模板：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">script/template.xlsx</span><br></pre></td></tr></table></figure>
+
+<p>也就是让 Codex 不再从零创建 Excel，而是读取 TMS 能正常导入的模板，只往数据区域写入内容。</p>
+<p>这个调整后，TMS 可以正常导入。</p>
+<p>流程变成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">AI 识别当前分支新增中文</span><br><span class="line">  -&gt; AI 翻译英文、生成 key</span><br><span class="line">  -&gt; 读取 script/template.xlsx</span><br><span class="line">  -&gt; 写入 Excel</span><br></pre></td></tr></table></figure>
+
+<p>后来又进一步加了“临时 Python&#x2F;openpyxl 命令”，让 Codex 不再自己慢慢构造 Excel，而是临时执行一段 Python 脚本读取模板并写入数据。</p>
+<p>它的优点是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">不新增项目脚本</span><br><span class="line">Excel 格式稳定</span><br><span class="line">仍然比较轻量</span><br><span class="line">适合少量文案处理</span><br></pre></td></tr></table></figure>
+
+<p>但它仍然没有解决根本问题：流程还是依赖 AI 调度。</p>
+<p>扫描、翻译、生成 key 仍然由 AI 参与，整体耗时还是偏长，只是比纯 AI 稍微稳定一些。</p>
+<h2 id="方案三：Skill-Helper"><a href="#方案三：Skill-Helper" class="headerlink" title="方案三：Skill Helper"></a>方案三：Skill Helper</h2><p>在不污染业务项目的前提下，尝试把一部分确定性逻辑放到 Codex Skill 目录里：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">~/.codex/skills/i18n-auto/tools/</span><br><span class="line">├── extract_diff.py</span><br><span class="line">└── fill_template.py</span><br></pre></td></tr></table></figure>
+
+<p>这套方案的定位是：<strong>Codex 专用的本地 helper</strong>。</p>
+<p>Codex 执行任务时，优先调用这两个 helper：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">extract_diff.py：提取当前分支新增中文</span><br><span class="line">fill_template.py：基于 script/template.xlsx 生成 Excel</span><br></pre></td></tr></table></figure>
+
+<p>AI 只负责：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">翻译英文</span><br><span class="line">生成 key</span><br><span class="line">判断哪些文案需要写入 Excel</span><br></pre></td></tr></table></figure>
+
+<p>这样比完全 AI 稳定一些，因为 diff 提取和 Excel 写入变成了固定脚本，不再每次都让 AI 临时发挥。</p>
+<p>这个方案的优点是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">不污染业务项目</span><br><span class="line">不需要内部 npm 平台</span><br><span class="line">不需要每个项目 copy 脚本</span><br><span class="line">本机多个项目可以复用</span><br><span class="line">比纯 AI 更快</span><br><span class="line">Excel 格式更稳定</span><br></pre></td></tr></table></figure>
+
+<p>但实际跑下来，仍然有两个明显问题。</p>
+<p>第一，强依赖 Codex。流程虽然拆出来一部分，但还是由 Codex 去执行，中间还要 AI 生成翻译和 key。</p>
+<p>第二，时间仍然不稳定。实际跑下来经常要十几分钟。比完全交给 AI 好一些，但没有达到“一个稳定工具”的程度。</p>
+<p>所以 Skill Helper 更适合：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">适合个人使用 Codex 时的轻量辅助方案</span><br><span class="line">适合临时任务、少量文案</span><br><span class="line">不是长期最理想的自动化方案</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="方案四：本地-CLI"><a href="#方案四：本地-CLI" class="headerlink" title="方案四：本地 CLI"></a>方案四：本地 CLI</h2><p>一套方案更稳定的方案是本地 CLI。<br>也就是安装在自己电脑上的命令行工具，不需要放在项目里，但可以在项目目录下执行 <code>i18n-auto prepare</code> 来完成 i18n 处理。</p>
+<p>这个方案：<strong>不再依赖 AI，不再依赖手动操作，执行一条命令完成整个准备流程。</strong></p>
+<p>CLI 放在本机：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/Tools/i18n-auto-cli/</span><br></pre></td></tr></table></figure>
+
+<p>全局命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n-auto prepare</span><br></pre></td></tr></table></figure>
+
+<p>默认等价于：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n-auto prepare --base origin/master</span><br></pre></td></tr></table></figure>
+
+<p>执行流程是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">当前分支 diff 新增中文</span><br><span class="line">  -&gt; 过滤 src/lang/zh_Hans.json 已有中文</span><br><span class="line">  -&gt; 阿里云机器翻译</span><br><span class="line">  -&gt; 本地缓存</span><br><span class="line">  -&gt; quota 控制</span><br><span class="line">  -&gt; 生成 key</span><br><span class="line">  -&gt; 生成 TMS 可导入 Excel</span><br></pre></td></tr></table></figure>
+
+<p>这里有几个关键点。</p>
+<h3 id="只处理当前分支-diff"><a href="#只处理当前分支-diff" class="headerlink" title="只处理当前分支 diff"></a>只处理当前分支 diff</h3><p>这里和之前项目内 <code>script/i18n</code> 的区别是：不再扫描整个 <code>src</code>，而是只处理当前分支相对 base 分支的新增行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git diff --unified=0 origin/master...HEAD</span><br></pre></td></tr></table></figure>
+
+<p>如果不传 <code>--base</code>，默认使用：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">origin/master</span><br></pre></td></tr></table></figure>
+
+<p>如果 <code>origin/master</code> 不存在，直接报错，提示手动传入 base，比如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n-auto prepare --base origin/web-dev</span><br></pre></td></tr></table></figure>
+
+<p>不会 fallback 到扫描整个 <code>src</code>。</p>
+<h3 id="阿里云密钥放本机"><a href="#阿里云密钥放本机" class="headerlink" title="阿里云密钥放本机"></a>阿里云密钥放本机</h3><p>阿里云 AccessKey 不放业务项目，统一放在本机：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/.i18n-auto/.env</span><br></pre></td></tr></table></figure>
+
+<p>示例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ALIBABA_CLOUD_ACCESS_KEY_ID=xxx</span><br><span class="line">ALIBABA_CLOUD_ACCESS_KEY_SECRET=xxx</span><br><span class="line">ALIYUN_TRANSLATE_REGION=cn-hangzhou</span><br><span class="line">ALIYUN_TRANSLATE_SCENE=general</span><br></pre></td></tr></table></figure>
+
+<p>缓存和 quota 也放在本机：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/.i18n-auto/.cache/</span><br></pre></td></tr></table></figure>
+
+<p>这样业务项目不需要保存密钥，也不需要维护缓存文件。</p>
+<h2 id="方案五：独立-Git-仓库-本地-npm-link"><a href="#方案五：独立-Git-仓库-本地-npm-link" class="headerlink" title="方案五：独立 Git 仓库 + 本地 npm link"></a>方案五：独立 Git 仓库 + 本地 npm link</h2><p>本地 CLI 适合个人使用，如果后续多个项目都要用，或者团队使用，就可以把 i18n 工具抽成独立 Git 仓库，例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">frontend-i18n-tool/</span><br><span class="line">├── bin/</span><br><span class="line">│   └── i18n-auto.js</span><br><span class="line">├── src/</span><br><span class="line">│   ├── extract.js</span><br><span class="line">│   ├── translate-aliyun.js</span><br><span class="line">│   ├── generate-key.js</span><br><span class="line">│   ├── generate-excel.js</span><br><span class="line">│   ├── cache.js</span><br><span class="line">│   ├── quota.js</span><br><span class="line">│   └── utils.js</span><br><span class="line">├── package.json</span><br><span class="line">└── README.md</span><br></pre></td></tr></table></figure>
+
+<p><code>package.json</code> 暴露命令：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;@company/i18n-auto&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.1.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;bin&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;i18n-auto&quot;</span><span class="punctuation">:</span> <span class="string">&quot;bin/i18n-auto.js&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>本地开发时可以使用 <code>pnpm link</code>。</p>
+<p>在工具仓库执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> frontend-i18n-tool</span><br><span class="line">pnpm install</span><br><span class="line">pnpm <span class="built_in">link</span> --global</span><br></pre></td></tr></table></figure>
+
+<p>在业务项目里执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm <span class="built_in">link</span> --global @company/i18n-auto</span><br></pre></td></tr></table></figure>
+
+<p>之后业务项目里就可以直接使用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n-auto prepare</span><br></pre></td></tr></table></figure>
+
+<p>或者在业务项目里加：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;i18n:prepare&quot;</span><span class="punctuation">:</span> <span class="string">&quot;i18n-auto prepare&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>优点是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">不用每个项目 copy</span><br><span class="line">工具代码有独立仓库维护</span><br><span class="line">本地调试方便</span><br><span class="line">不依赖内部 npm 平台</span><br></pre></td></tr></table></figure>
+
+<p>缺点是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">需要手动 link</span><br><span class="line">本地 link 容易受环境影响</span><br><span class="line">团队成员可能使用的版本不一致</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="方案六：独立-Git-仓库-Git-依赖安装"><a href="#方案六：独立-Git-仓库-Git-依赖安装" class="headerlink" title="方案六：独立 Git 仓库 + Git 依赖安装"></a>方案六：独立 Git 仓库 + Git 依赖安装</h2><p>团队使用也可以通过 Git 依赖安装。</p>
+<p>工具仓库打 tag：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git tag v0.1.0</span><br><span class="line">git push origin v0.1.0</span><br></pre></td></tr></table></figure>
+
+<p>业务项目中安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm add -D git+ssh://git@gitlab.xxx.com:frontend/frontend-i18n-tool.git#v0.1.0</span><br></pre></td></tr></table></figure>
+
+<p>然后在业务项目里配置命令：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;i18n:prepare&quot;</span><span class="punctuation">:</span> <span class="string">&quot;i18n-auto prepare&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;i18n:check&quot;</span><span class="punctuation">:</span> <span class="string">&quot;i18n-auto check&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;i18n:quota&quot;</span><span class="punctuation">:</span> <span class="string">&quot;i18n-auto quota&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>只需要执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm install</span><br></pre></td></tr></table></figure>
+
+<p>就可以拿到同一版本的工具。</p>
+<p>这种方式比本地 link 更适合团队使用，因为版本可以通过 tag 固定：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">v0.1.0</span><br><span class="line">v0.1.1</span><br><span class="line">v0.2.0</span><br></pre></td></tr></table></figure>
+
+<p>优点是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">不需要内部 npm 平台</span><br><span class="line">不用 copy 工具代码</span><br><span class="line">团队版本可以统一</span><br><span class="line">CI 环境也可以安装</span><br></pre></td></tr></table></figure>
+
+<p>缺点是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">依赖 Git 权限</span><br><span class="line">每次发版需要打 tag</span><br><span class="line">工具调试不如 pnpm link 方便</span><br><span class="line">安装依赖时依赖 Git 仓库可访问性</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="各方案优缺点总结"><a href="#各方案优缺点总结" class="headerlink" title="各方案优缺点总结"></a>各方案优缺点总结</h2><table>
+<thead>
+<tr>
+<th>方案</th>
+<th>适合场景</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>项目内脚手架</td>
+<td>单项目深度集成</td>
+<td>流程完整，命令清晰</td>
+<td>多项目复用困难，污染项目</td>
+</tr>
+<tr>
+<td>完全 AI</td>
+<td>快速验证想法</td>
+<td>启动最快，不写工具</td>
+<td>慢，不稳定，Excel 容易出问题</td>
+</tr>
+<tr>
+<td>AI + Excel 模板</td>
+<td>少量文案处理</td>
+<td>Excel 导入稳定</td>
+<td>仍依赖 AI，耗时不稳定</td>
+</tr>
+<tr>
+<td>Skill Helper</td>
+<td>个人 Codex 工作流</td>
+<td>不污染项目，本机可复用</td>
+<td>依赖 AI 和 Codex</td>
+</tr>
+<tr>
+<td>本地 CLI</td>
+<td>个人日常稳定使用</td>
+<td>全自动，不依赖 AI，输出稳定</td>
+<td>只在本机可用，需要维护</td>
+</tr>
+<tr>
+<td>独立 Git + pnpm link</td>
+<td>工具开发调试</td>
+<td>调试方便，不依赖 npm 平台</td>
+<td>团队版本不统一</td>
+</tr>
+<tr>
+<td>独立 Git + Git 依赖</td>
+<td>团队使用方案</td>
+<td>版本可控，团队可安装</td>
+<td>依赖 Git 权限和 tag 管理</td>
+</tr>
+<tr>
+<td>内部 npm 包</td>
+<td>长期方案</td>
+<td>最规范，使用体验最好</td>
+<td>需要 npm 私服</td>
+</tr>
+</tbody></table>
+<h2 id="最终选择"><a href="#最终选择" class="headerlink" title="最终选择"></a>最终选择</h2><p>目前我保留两套方案。</p>
+<h3 id="1、Skill-Helper："><a href="#1、Skill-Helper：" class="headerlink" title="1、Skill Helper："></a>1、Skill Helper：</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/.codex/skills/i18n-auto/tools/</span><br></pre></td></tr></table></figure>
+
+<p>适合在 Codex 里处理一些临时场景，用于临时任务、探索场景、需要 AI 判断的场景。</p>
+<h3 id="2、本地-CLI："><a href="#2、本地-CLI：" class="headerlink" title="2、本地 CLI："></a>2、本地 CLI：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n-auto prepare</span><br></pre></td></tr></table></figure>
+
+<p>作为主流程，用于稳定处理当前分支新增中文，自动调用阿里云翻译，并生成 TMS 可导入 Excel。</p>
+<p>如果后续团队也要接入，可以把本地 CLI 抽成独立 Git 仓库，先用 <code>pnpm link</code> 调试，再通过 Git 依赖安装给团队使用。</p>
+<p>这次实践下来，最大的感受是：AI 很适合探索流程，也适合做一些不确定性的判断；但高频、固定、可复用的流程，还是应该沉淀成工具。</p>
+<p>i18n 这种任务尤其明显。扫描、去重、缓存、额度、Excel 输出，都应该交给程序。翻译可以接机器翻译，最后再人工 review。</p>
+<p>最终比较理想的状态不是“全部交给 AI”，而是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AI 帮我探索方案</span><br><span class="line">工具负责稳定执行</span><br><span class="line">人负责最后审核</span><br></pre></td></tr></table></figure>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Laura
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a id="original-link" href="http://example.com/2026/06/17/前端 i18n 自动化方案演进/" title="前端 i18n 自动化方案演进：弃用脚手架，转向 Skill Helper 和本地 CLI">http://example.com/2026/06/17/前端 i18n 自动化方案演进/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2026/05/28/%E5%89%8D%E7%AB%AF%20i18n%20%E8%87%AA%E5%8A%A8%E5%8C%96%E5%AE%9E%E8%B7%B5/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+                </span>
+                <h6 class="trm-op-title">前端 i18n 自动化实践</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>26/05/28</li>
+                <li>11:46</li>
+                <li>Unclassified</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-footer-card trm-scroll-animation">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2020- 2026</span>
+            <span class="footer-separator"data-separator=" · "></span>
+            <span class="trm-accent-color">Laura</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v7.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.2.2
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item blog-run-long"></div>
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            
+
+    <div id="post-toc" class="trm-post-toc">
+      <div class="trm-post-toc-header">
+        Article table of contents
+				<span id="post-toc-top">
+					TOP
+				</span>
+      </div>
+      <div class="trm-post-toc-content">
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-1" title="前端 i18n 自动化方案演进：弃用脚手架，转向 Skill Helper 和本地 CLI"><a rel="nofollow" class="trm-toc-link" href="#前端-i18n-自动化方案演进：弃用脚手架，转向-Skill-Helper-和本地-CLI"><span class="trm-toc-text">前端 i18n 自动化方案演进：弃用脚手架，转向 Skill Helper 和本地 CLI</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title="上个版本的问题"><a rel="nofollow" class="trm-toc-link" href="#上个版本的问题"><span class="trm-toc-text">上个版本的问题</span></a></li><li class="trm-toc-item trm-toc-level-2" title="方案一：完全使用 AI 完成"><a rel="nofollow" class="trm-toc-link" href="#方案一：完全使用-AI-完成"><span class="trm-toc-text">方案一：完全使用 AI 完成</span></a></li><li class="trm-toc-item trm-toc-level-2" title="方案二：AI + TMS Excel 模板"><a rel="nofollow" class="trm-toc-link" href="#方案二：AI-TMS-Excel-模板"><span class="trm-toc-text">方案二：AI + TMS Excel 模板</span></a></li><li class="trm-toc-item trm-toc-level-2" title="方案三：Skill Helper"><a rel="nofollow" class="trm-toc-link" href="#方案三：Skill-Helper"><span class="trm-toc-text">方案三：Skill Helper</span></a></li><li class="trm-toc-item trm-toc-level-2" title="方案四：本地 CLI"><a rel="nofollow" class="trm-toc-link" href="#方案四：本地-CLI"><span class="trm-toc-text">方案四：本地 CLI</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="只处理当前分支 diff"><a rel="nofollow" class="trm-toc-link" href="#只处理当前分支-diff"><span class="trm-toc-text">只处理当前分支 diff</span></a></li><li class="trm-toc-item trm-toc-level-3" title="阿里云密钥放本机"><a rel="nofollow" class="trm-toc-link" href="#阿里云密钥放本机"><span class="trm-toc-text">阿里云密钥放本机</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="方案五：独立 Git 仓库 + 本地 npm link"><a rel="nofollow" class="trm-toc-link" href="#方案五：独立-Git-仓库-本地-npm-link"><span class="trm-toc-text">方案五：独立 Git 仓库 + 本地 npm link</span></a></li><li class="trm-toc-item trm-toc-level-2" title="方案六：独立 Git 仓库 + Git 依赖安装"><a rel="nofollow" class="trm-toc-link" href="#方案六：独立-Git-仓库-Git-依赖安装"><span class="trm-toc-text">方案六：独立 Git 仓库 + Git 依赖安装</span></a></li><li class="trm-toc-item trm-toc-level-2" title="各方案优缺点总结"><a rel="nofollow" class="trm-toc-link" href="#各方案优缺点总结"><span class="trm-toc-text">各方案优缺点总结</span></a></li><li class="trm-toc-item trm-toc-level-2" title="最终选择"><a rel="nofollow" class="trm-toc-link" href="#最终选择"><span class="trm-toc-text">最终选择</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1、Skill Helper："><a rel="nofollow" class="trm-toc-link" href="#1、Skill-Helper："><span class="trm-toc-text">1、Skill Helper：</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2、本地 CLI："><a rel="nofollow" class="trm-toc-link" href="#2、本地-CLI："><span class="trm-toc-text">2、本地 CLI：</span></a></li></ol></li></ol></li></ol>
+      </div>
+    </div>
+
+            
+<div class="trm-fixed-container">
+    
+        <div class="trm-fixed-btn post-toc-btn" data-title="Open toc">
+            <i class="iconfont fas fa-th-list"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="Read Mode" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn hidden-md" data-title="Toggle between single-column and double-column" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont fas fa-arrows-alt-h"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="Back To Top">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont fas fa-search"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="Searching...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont fas fa-times"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    Please enter keywords to search
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+<script src="https://unpkg.com/swup@2.0.19/dist/swup.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.2.2"></script>
+    
+
+    
+        
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.2.2"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+		
+			<script src="/js/plugins/danmu.js?v=2.2.2"></script>
+		
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+    <script data-swup-reload-script>
+        (function () {
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            }
+            else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+    </script>
+
+
+
+<script id="async-script" src="/js/main.js?v=2.2.2"></script>
+
+<!-- CDN -->
+
+
+    
+<script src="/demo.js"></script>
+
+
+    
+
+    
+
+
+
+</body>
+
+</html>
