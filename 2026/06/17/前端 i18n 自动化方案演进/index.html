@@ -15,7 +15,7 @@
 <meta property="og:description" content="前端 i18n 自动化方案演进：弃用脚手架，转向 Skill Helper 和本地 CLI上一篇《前端 i18n 自动化实践》已经把人工处理文案的步骤收敛成了一套项目内自动化方案：由脚本负责提取中文、生成英文、生成 key、产出 TMS Excel，再配合 pnpm lang 和替换脚本完成源码替换。 它解决了“能不能自动化”，但还没有很好地解决“怎么低成本复用”和“怎么稳定地在多个项目里使用”。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-06-17T09:39:00.000Z">
-<meta property="article:modified_time" content="2026-06-18T03:39:44.248Z">
+<meta property="article:modified_time" content="2026-06-24T06:27:42.289Z">
 <meta property="article:author" content="Laura">
 <meta property="article:tag" content="i18n">
 <meta property="article:tag" content="自动化">
@@ -61,7 +61,7 @@
 
 <!-- Variable -->
 <script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Laura","root":"/","typed_text":["Hungry | Stay Foolish"],"theme_version":"2.2.2","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":null,"icon16":null,"icon32":null,"apple_touch_icon":null,"webmanifest":null,"visibilitychange":true,"hidden":"failure.ico","show_text":"回来啦~","hide_text":"(●—●)看不见我！"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","sticky":"TOP","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":true,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":300},"toc":{"post_title":true},"live_time":{"start_time":"2020/05/16 17:00:00","prefix":"The blog has been lovely to run undefined day"},"danmu":{"enable":true,"el":".trm-banner","avatar":false,"delayRange":5000,"speed":80},"covers":["/img/block.jpg","https://img3.wallspic.com/previews/2/0/1/8/6/168102/168102-yi_shu-ka_tong-mian_bu_biao_qing-kuai_le_de-ji_qie-500x.jpg","https://img2.wallspic.com/previews/2/6/4/3/7/173462/173462-qi_fen-zi_se_de-zi_ran_jing_guan-yu_hui-de_ping_xian-500x.jpg","https://img2.wallspic.com/previews/3/3/9/1/3/131933/131933-mo_xing-xiao_jie-huang_se_de-nu_hai-fa_xing-500x.jpg","https://img1.wallspic.com/previews/8/3/4/6/2/126438/126438-wei_lai_zhu_yi-shu_ma_yi_shu-jie_duan-zi_ben_shi-yi_shu-500x.jpg","https://img2.wallspic.com/previews/0/1/5/0/7/170510/170510-guang-azure-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-500x.jpg","https://img2.wallspic.com/previews/3/6/9/6/5/156963/156963-yi_shu-qi_fen-yu_hui-shou_shi-ren_men_zai_zi_ran_jie-500x.jpg","https://img1.wallspic.com/previews/0/9/3/5/6/165390/165390-qi_fen-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-tian_wen_xue_dui_xiang-500x.jpg","https://img3.wallspic.com/previews/2/8/6/1/7/171682/171682-yi_kuai-xing_zhi-ye_ti-yi_shu-shui_xia-500x.jpg","https://img1.wallspic.com/previews/7/1/9/9/89917/89917-bo_xi_ta_nuo-an_zhuang_de_feng_jing-cheng_shi-suo_lun_tuo-shan_zhan-500x.jpg","https://img2.wallspic.com/previews/5/0/9/0/70905/70905-hai_yang-ma_er_dai_fu-tian_kong-du_jia_cun-huan_jiao-500x.jpg","https://img3.wallspic.com/previews/4/3/4/8/6/168434/168434-xing_zhi-zi_ran_jing_guan-dan_huang-shui_dao-zhi_bei-500x.jpg","https://img1.wallspic.com/previews/5/4/0/4/7/174045/174045-jian_ying-qi_fen-ren_men_zai_zi_ran_jie-tian_wen_xue_dui_xiang-yi_shu-500x.jpg","https://img1.wallspic.com/previews/9/3/1/6/5/156139/156139-feng_jing_hua-yi_shu-shu_ma_yi_shu-qi_fen-sheng_tai_qu-500x.jpg","https://img1.wallspic.com/previews/7/5/7/9/6/169757/169757-ji_bo_li_de_bo_wu_guan-zi_ran_jing_guan-yi_shu-ji_yun-500x.jpg","https://img1.wallspic.com/previews/5/2/0/6/7/176025/176025-qi_fen-tian_wen_xue_dui_xiang-yi_shu-dian_lan_se_de-yuan_quan-500x.jpg","https://img3.wallspic.com/previews/5/1/0/2/4/142015/142015-feng_ge-ka_ka_xi_qi_mu-huo_ying_ren_zhe-tu_xing_she_ji-shi_jue_yi_shu-500x.jpg"],"creative_commons":{"license":"by-nc-sa","language":"deed.zh-hans"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto"}};</script>
-<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2026-06-18 11:39:44"};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2026-06-24 14:27:42"};</script>
 
 <!-- Theme mode css -->
 <link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.2.2" id="trm-switch-style">
@@ -413,47 +413,70 @@
 
 <p>这套方案的定位是：<strong>Codex 专用的本地 helper</strong>。</p>
 <p>Codex 执行任务时，优先调用这两个 helper：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">extract_diff.py：提取当前分支新增中文</span><br><span class="line">fill_template.py：基于 script/template.xlsx 生成 Excel</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">extract_diff.py：提取当前分支新增中文</span><br><span class="line">fill_template.py：基于 script/Manage_Web_import.xlsx 生成 Excel</span><br></pre></td></tr></table></figure>
 
 <p>AI 只负责：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">翻译英文</span><br><span class="line">生成 key</span><br><span class="line">判断哪些文案需要写入 Excel</span><br></pre></td></tr></table></figure>
+
+<p>实际使用时，只需要在 Codex 里描述任务。</p>
+<p>例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">使用 i18n-auto skill，帮我提取当前分支新增中文，生成可导入 TMS 的 Excel 文件。</span><br></pre></td></tr></table></figure>
+
+<p>Codex 背后主要执行两类命令。</p>
+<p>先提取当前分支新增中文：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">python3 ~/.codex/skills/i18n-auto/tools/extract_diff.py \</span><br><span class="line">  --base origin/master \</span><br><span class="line">  --out dist/i18n/extracted-diff-chinese.json \</span><br><span class="line">  --pretty</span><br></pre></td></tr></table></figure>
+
+<p>然后 Codex 基于提取结果翻译英文、生成 key，整理成待写入的 rows JSON，再调用模板写入脚本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">python3 ~/.codex/skills/i18n-auto/tools/fill_template.py \</span><br><span class="line">  --template script/Manage_Web_import.xlsx \</span><br><span class="line">  --rows dist/i18n/reviewed-i18n-rows.json \</span><br><span class="line">  --out dist/i18n/Manage_Web_import_20260622_113705.xlsx \</span><br><span class="line">  --report dist/i18n/Manage_Web_import_20260622_113705.md \</span><br><span class="line">  --pretty</span><br></pre></td></tr></table></figure>
 
 <p>这样比完全 AI 稳定一些，因为 diff 提取和 Excel 写入变成了固定脚本，不再每次都让 AI 临时发挥。</p>
 <p>这个方案的优点是：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">不污染业务项目</span><br><span class="line">不需要内部 npm 平台</span><br><span class="line">不需要每个项目 copy 脚本</span><br><span class="line">本机多个项目可以复用</span><br><span class="line">比纯 AI 更快</span><br><span class="line">Excel 格式更稳定</span><br></pre></td></tr></table></figure>
 
-<p>但实际跑下来，仍然有两个明显问题。</p>
+<p>但实际跑下来，有两个问题。</p>
 <p>第一，强依赖 Codex。流程虽然拆出来一部分，但还是由 Codex 去执行，中间还要 AI 生成翻译和 key。</p>
 <p>第二，时间仍然不稳定。实际跑下来经常要十几分钟。比完全交给 AI 好一些，但没有达到“一个稳定工具”的程度。</p>
 <p>所以 Skill Helper 更适合：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">适合个人使用 Codex 时的轻量辅助方案</span><br><span class="line">适合临时任务、少量文案</span><br><span class="line">不是长期最理想的自动化方案</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">适合个人使用 Codex 时的轻量辅助方案</span><br><span class="line">适合临时任务、少量文案</span><br></pre></td></tr></table></figure>
 
 
-<h2 id="方案四：本地-CLI"><a href="#方案四：本地-CLI" class="headerlink" title="方案四：本地 CLI"></a>方案四：本地 CLI</h2><p>一套方案更稳定的方案是本地 CLI。<br>也就是安装在自己电脑上的命令行工具，不需要放在项目里，但可以在项目目录下执行 <code>i18n-auto prepare</code> 来完成 i18n 处理。</p>
-<p>这个方案：<strong>不再依赖 AI，不再依赖手动操作，执行一条命令完成整个准备流程。</strong></p>
+<h2 id="方案四：本地-CLI"><a href="#方案四：本地-CLI" class="headerlink" title="方案四：本地 CLI"></a>方案四：本地 CLI</h2><p>安装在自己电脑上的命令行工具，不需要放在项目里，但可以在项目目录下执行 <code>i18n-auto prepare</code> 来完成 i18n 处理。</p>
+<p>这个方案：<strong>不依赖 AI，不依赖手动操作，执行一条命令完成整个准备流程。</strong></p>
 <p>CLI 放在本机：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/Tools/i18n-auto-cli/</span><br></pre></td></tr></table></figure>
 
-<p>全局命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n-auto prepare</span><br></pre></td></tr></table></figure>
+<p>首次安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Tools/i18n-auto-cli</span><br><span class="line">pnpm install</span><br><span class="line">pnpm <span class="built_in">link</span> --global</span><br></pre></td></tr></table></figure>
 
-<p>默认等价于：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n-auto prepare --base origin/master</span><br></pre></td></tr></table></figure>
+<h3 id="全局命令："><a href="#全局命令：" class="headerlink" title="全局命令："></a>全局命令：</h3><h4 id="全量扫描-src-下所有中文："><a href="#全量扫描-src-下所有中文：" class="headerlink" title="全量扫描 src 下所有中文："></a>全量扫描 <code>src</code> 下所有中文：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n-auto prepare</span><br></pre></td></tr></table></figure>
+<p>适合第一次接入项目，或者想完整检查项目内中文文案的场景。</p>
+<h4 id="diff-增量扫描，只处理当前分支相对-origin-master-的新增中文："><a href="#diff-增量扫描，只处理当前分支相对-origin-master-的新增中文：" class="headerlink" title="diff 增量扫描，只处理当前分支相对 origin/master 的新增中文："></a>diff 增量扫描，只处理当前分支相对 <code>origin/master</code> 的新增中文：</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n-auto prepare --base origin/master</span><br></pre></td></tr></table></figure>
 
-<p>执行流程是：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">当前分支 diff 新增中文</span><br><span class="line">  -&gt; 过滤 src/lang/zh_Hans.json 已有中文</span><br><span class="line">  -&gt; 阿里云机器翻译</span><br><span class="line">  -&gt; 本地缓存</span><br><span class="line">  -&gt; quota 控制</span><br><span class="line">  -&gt; 生成 key</span><br><span class="line">  -&gt; 生成 TMS 可导入 Excel</span><br></pre></td></tr></table></figure>
-
-<p>这里有几个关键点。</p>
-<h3 id="只处理当前分支-diff"><a href="#只处理当前分支-diff" class="headerlink" title="只处理当前分支 diff"></a>只处理当前分支 diff</h3><p>这里和之前项目内 <code>script/i18n</code> 的区别是：不再扫描整个 <code>src</code>，而是只处理当前分支相对 base 分支的新增行：</p>
+<p>这种方式会走：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git diff --unified=0 origin/master...HEAD</span><br></pre></td></tr></table></figure>
 
-<p>如果不传 <code>--base</code>，默认使用：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">origin/master</span><br></pre></td></tr></table></figure>
-
-<p>如果 <code>origin/master</code> 不存在，直接报错，提示手动传入 base，比如：</p>
+<p>如果项目的 base 分支不是 <code>origin/master</code>，可以手动指定：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n-auto prepare --base origin/web-dev</span><br></pre></td></tr></table></figure>
 
-<p>不会 fallback 到扫描整个 <code>src</code>。</p>
+<p>这样就会扫描当前分支相对 <code>origin/web-dev...HEAD</code> 的新增中文。</p>
+<p>执行流程是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">根据 prepare 参数选择扫描模式</span><br><span class="line">  -&gt; 过滤 src/lang/zh_Hans.json 已有中文</span><br><span class="line">  -&gt; 阿里云机器翻译</span><br><span class="line">  -&gt; 本地缓存</span><br><span class="line">  -&gt; quota 控制</span><br><span class="line">  -&gt; 生成 key</span><br><span class="line">  -&gt; 生成 TMS 可导入 Excel</span><br></pre></td></tr></table></figure>
+
+<p>只想先看本次会提取哪些中文，可以执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">i18n-auto extract</span><br><span class="line">i18n-auto extract --base origin/web-dev</span><br></pre></td></tr></table></figure>
+
+<p>如果要检查项目里是否还存在未替换的中文：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n-auto check</span><br></pre></td></tr></table></figure>
+
+<p>如果要查看阿里云翻译额度使用情况：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n-auto quota</span><br></pre></td></tr></table></figure>
+
+<p>如果已经把翻译写入 <code>src/lang/zh_Hans.json</code>，想把源码里的中文替换成 i18n key，可以先 dry run：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n-auto replace --base origin/master --dry-run</span><br></pre></td></tr></table></figure>
+
+<p>确认没问题后再真正替换：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n-auto replace --base origin/master</span><br></pre></td></tr></table></figure>
+
 <h3 id="阿里云密钥放本机"><a href="#阿里云密钥放本机" class="headerlink" title="阿里云密钥放本机"></a>阿里云密钥放本机</h3><p>阿里云 AccessKey 不放业务项目，统一放在本机：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/.i18n-auto/.env</span><br></pre></td></tr></table></figure>
 
@@ -579,8 +602,8 @@
 <h3 id="2、本地-CLI："><a href="#2、本地-CLI：" class="headerlink" title="2、本地 CLI："></a>2、本地 CLI：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n-auto prepare</span><br></pre></td></tr></table></figure>
 
 <p>作为主流程，用于稳定处理当前分支新增中文，自动调用阿里云翻译，并生成 TMS 可导入 Excel。</p>
-<p>如果后续团队也要接入，可以把本地 CLI 抽成独立 Git 仓库，先用 <code>pnpm link</code> 调试，再通过 Git 依赖安装给团队使用。</p>
-<p>这次实践下来，最大的感受是：AI 很适合探索流程，也适合做一些不确定性的判断；但高频、固定、可复用的流程，还是应该沉淀成工具。</p>
+<p>如果后续团队也要接入，可以把本地 CLI 抽成独立 Git 仓库，先用 <code>pnpm link</code> 调试，再通过 Git 依赖安装使用。</p>
+<p>这次实践下来的感受是：AI 很适合探索流程，也适合做一些不确定性的判断；但高频、固定、可复用的流程，还是应该沉淀成工具。</p>
 <p>i18n 这种任务尤其明显。扫描、去重、缓存、额度、Excel 输出，都应该交给程序。翻译可以接机器翻译，最后再人工 review。</p>
 <p>最终比较理想的状态不是“全部交给 AI”，而是：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AI 帮我探索方案</span><br><span class="line">工具负责稳定执行</span><br><span class="line">人负责最后审核</span><br></pre></td></tr></table></figure>
@@ -696,7 +719,7 @@
 				</span>
       </div>
       <div class="trm-post-toc-content">
-        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-1" title="前端 i18n 自动化方案演进：弃用脚手架，转向 Skill Helper 和本地 CLI"><a rel="nofollow" class="trm-toc-link" href="#前端-i18n-自动化方案演进：弃用脚手架，转向-Skill-Helper-和本地-CLI"><span class="trm-toc-text">前端 i18n 自动化方案演进：弃用脚手架，转向 Skill Helper 和本地 CLI</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title="上个版本的问题"><a rel="nofollow" class="trm-toc-link" href="#上个版本的问题"><span class="trm-toc-text">上个版本的问题</span></a></li><li class="trm-toc-item trm-toc-level-2" title="方案一：完全使用 AI 完成"><a rel="nofollow" class="trm-toc-link" href="#方案一：完全使用-AI-完成"><span class="trm-toc-text">方案一：完全使用 AI 完成</span></a></li><li class="trm-toc-item trm-toc-level-2" title="方案二：AI + TMS Excel 模板"><a rel="nofollow" class="trm-toc-link" href="#方案二：AI-TMS-Excel-模板"><span class="trm-toc-text">方案二：AI + TMS Excel 模板</span></a></li><li class="trm-toc-item trm-toc-level-2" title="方案三：Skill Helper"><a rel="nofollow" class="trm-toc-link" href="#方案三：Skill-Helper"><span class="trm-toc-text">方案三：Skill Helper</span></a></li><li class="trm-toc-item trm-toc-level-2" title="方案四：本地 CLI"><a rel="nofollow" class="trm-toc-link" href="#方案四：本地-CLI"><span class="trm-toc-text">方案四：本地 CLI</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="只处理当前分支 diff"><a rel="nofollow" class="trm-toc-link" href="#只处理当前分支-diff"><span class="trm-toc-text">只处理当前分支 diff</span></a></li><li class="trm-toc-item trm-toc-level-3" title="阿里云密钥放本机"><a rel="nofollow" class="trm-toc-link" href="#阿里云密钥放本机"><span class="trm-toc-text">阿里云密钥放本机</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="方案五：独立 Git 仓库 + 本地 npm link"><a rel="nofollow" class="trm-toc-link" href="#方案五：独立-Git-仓库-本地-npm-link"><span class="trm-toc-text">方案五：独立 Git 仓库 + 本地 npm link</span></a></li><li class="trm-toc-item trm-toc-level-2" title="方案六：独立 Git 仓库 + Git 依赖安装"><a rel="nofollow" class="trm-toc-link" href="#方案六：独立-Git-仓库-Git-依赖安装"><span class="trm-toc-text">方案六：独立 Git 仓库 + Git 依赖安装</span></a></li><li class="trm-toc-item trm-toc-level-2" title="各方案优缺点总结"><a rel="nofollow" class="trm-toc-link" href="#各方案优缺点总结"><span class="trm-toc-text">各方案优缺点总结</span></a></li><li class="trm-toc-item trm-toc-level-2" title="最终选择"><a rel="nofollow" class="trm-toc-link" href="#最终选择"><span class="trm-toc-text">最终选择</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1、Skill Helper："><a rel="nofollow" class="trm-toc-link" href="#1、Skill-Helper："><span class="trm-toc-text">1、Skill Helper：</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2、本地 CLI："><a rel="nofollow" class="trm-toc-link" href="#2、本地-CLI："><span class="trm-toc-text">2、本地 CLI：</span></a></li></ol></li></ol></li></ol>
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-1" title="前端 i18n 自动化方案演进：弃用脚手架，转向 Skill Helper 和本地 CLI"><a rel="nofollow" class="trm-toc-link" href="#前端-i18n-自动化方案演进：弃用脚手架，转向-Skill-Helper-和本地-CLI"><span class="trm-toc-text">前端 i18n 自动化方案演进：弃用脚手架，转向 Skill Helper 和本地 CLI</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-2" title="上个版本的问题"><a rel="nofollow" class="trm-toc-link" href="#上个版本的问题"><span class="trm-toc-text">上个版本的问题</span></a></li><li class="trm-toc-item trm-toc-level-2" title="方案一：完全使用 AI 完成"><a rel="nofollow" class="trm-toc-link" href="#方案一：完全使用-AI-完成"><span class="trm-toc-text">方案一：完全使用 AI 完成</span></a></li><li class="trm-toc-item trm-toc-level-2" title="方案二：AI + TMS Excel 模板"><a rel="nofollow" class="trm-toc-link" href="#方案二：AI-TMS-Excel-模板"><span class="trm-toc-text">方案二：AI + TMS Excel 模板</span></a></li><li class="trm-toc-item trm-toc-level-2" title="方案三：Skill Helper"><a rel="nofollow" class="trm-toc-link" href="#方案三：Skill-Helper"><span class="trm-toc-text">方案三：Skill Helper</span></a></li><li class="trm-toc-item trm-toc-level-2" title="方案四：本地 CLI"><a rel="nofollow" class="trm-toc-link" href="#方案四：本地-CLI"><span class="trm-toc-text">方案四：本地 CLI</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="全局命令："><a rel="nofollow" class="trm-toc-link" href="#全局命令："><span class="trm-toc-text">全局命令：</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-4" title="全量扫描 src 下所有中文："><a rel="nofollow" class="trm-toc-link" href="#全量扫描-src-下所有中文："><span class="trm-toc-text">全量扫描 src 下所有中文：</span></a></li><li class="trm-toc-item trm-toc-level-4" title="diff 增量扫描，只处理当前分支相对 origin&#x2F;master 的新增中文："><a rel="nofollow" class="trm-toc-link" href="#diff-增量扫描，只处理当前分支相对-origin-master-的新增中文："><span class="trm-toc-text">diff 增量扫描，只处理当前分支相对 origin&#x2F;master 的新增中文：</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-3" title="阿里云密钥放本机"><a rel="nofollow" class="trm-toc-link" href="#阿里云密钥放本机"><span class="trm-toc-text">阿里云密钥放本机</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="方案五：独立 Git 仓库 + 本地 npm link"><a rel="nofollow" class="trm-toc-link" href="#方案五：独立-Git-仓库-本地-npm-link"><span class="trm-toc-text">方案五：独立 Git 仓库 + 本地 npm link</span></a></li><li class="trm-toc-item trm-toc-level-2" title="方案六：独立 Git 仓库 + Git 依赖安装"><a rel="nofollow" class="trm-toc-link" href="#方案六：独立-Git-仓库-Git-依赖安装"><span class="trm-toc-text">方案六：独立 Git 仓库 + Git 依赖安装</span></a></li><li class="trm-toc-item trm-toc-level-2" title="各方案优缺点总结"><a rel="nofollow" class="trm-toc-link" href="#各方案优缺点总结"><span class="trm-toc-text">各方案优缺点总结</span></a></li><li class="trm-toc-item trm-toc-level-2" title="最终选择"><a rel="nofollow" class="trm-toc-link" href="#最终选择"><span class="trm-toc-text">最终选择</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1、Skill Helper："><a rel="nofollow" class="trm-toc-link" href="#1、Skill-Helper："><span class="trm-toc-text">1、Skill Helper：</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2、本地 CLI："><a rel="nofollow" class="trm-toc-link" href="#2、本地-CLI："><span class="trm-toc-text">2、本地 CLI：</span></a></li></ol></li></ol></li></ol>
       </div>
     </div>
 
