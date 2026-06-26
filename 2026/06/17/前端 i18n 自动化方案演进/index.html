@@ -15,7 +15,7 @@
 <meta property="og:description" content="前言上一篇《前端 i18n 自动化实践》已经把人工处理文案的步骤收敛成了一套项目内自动化方案：由脚本负责提取中文、生成英文、生成 key、产出 TMS Excel，再配合 pnpm lang 和替换脚本完成源码替换。 它解决了“能不能自动化”，但还没有很好地解决“怎么低成本复用”和“怎么稳定地在多个项目里使用”。 所以基于上个版本做了一些优化。 上个版本的问题12345需要在业务项目里维护 scr">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-06-17T09:39:00.000Z">
-<meta property="article:modified_time" content="2026-06-24T06:33:59.076Z">
+<meta property="article:modified_time" content="2026-06-26T03:26:42.258Z">
 <meta property="article:author" content="Laura">
 <meta property="article:tag" content="i18n">
 <meta property="article:tag" content="自动化">
@@ -61,7 +61,7 @@
 
 <!-- Variable -->
 <script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Laura","root":"/","typed_text":["Hungry | Stay Foolish"],"theme_version":"2.2.2","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":null,"icon16":null,"icon32":null,"apple_touch_icon":null,"webmanifest":null,"visibilitychange":true,"hidden":"failure.ico","show_text":"回来啦~","hide_text":"(●—●)看不见我！"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","sticky":"TOP","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":true,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":300},"toc":{"post_title":true},"live_time":{"start_time":"2020/05/16 17:00:00","prefix":"The blog has been lovely to run undefined day"},"danmu":{"enable":true,"el":".trm-banner","avatar":false,"delayRange":5000,"speed":80},"covers":["/img/block.jpg","https://img3.wallspic.com/previews/2/0/1/8/6/168102/168102-yi_shu-ka_tong-mian_bu_biao_qing-kuai_le_de-ji_qie-500x.jpg","https://img2.wallspic.com/previews/2/6/4/3/7/173462/173462-qi_fen-zi_se_de-zi_ran_jing_guan-yu_hui-de_ping_xian-500x.jpg","https://img2.wallspic.com/previews/3/3/9/1/3/131933/131933-mo_xing-xiao_jie-huang_se_de-nu_hai-fa_xing-500x.jpg","https://img1.wallspic.com/previews/8/3/4/6/2/126438/126438-wei_lai_zhu_yi-shu_ma_yi_shu-jie_duan-zi_ben_shi-yi_shu-500x.jpg","https://img2.wallspic.com/previews/0/1/5/0/7/170510/170510-guang-azure-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-500x.jpg","https://img2.wallspic.com/previews/3/6/9/6/5/156963/156963-yi_shu-qi_fen-yu_hui-shou_shi-ren_men_zai_zi_ran_jie-500x.jpg","https://img1.wallspic.com/previews/0/9/3/5/6/165390/165390-qi_fen-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-tian_wen_xue_dui_xiang-500x.jpg","https://img3.wallspic.com/previews/2/8/6/1/7/171682/171682-yi_kuai-xing_zhi-ye_ti-yi_shu-shui_xia-500x.jpg","https://img1.wallspic.com/previews/7/1/9/9/89917/89917-bo_xi_ta_nuo-an_zhuang_de_feng_jing-cheng_shi-suo_lun_tuo-shan_zhan-500x.jpg","https://img2.wallspic.com/previews/5/0/9/0/70905/70905-hai_yang-ma_er_dai_fu-tian_kong-du_jia_cun-huan_jiao-500x.jpg","https://img3.wallspic.com/previews/4/3/4/8/6/168434/168434-xing_zhi-zi_ran_jing_guan-dan_huang-shui_dao-zhi_bei-500x.jpg","https://img1.wallspic.com/previews/5/4/0/4/7/174045/174045-jian_ying-qi_fen-ren_men_zai_zi_ran_jie-tian_wen_xue_dui_xiang-yi_shu-500x.jpg","https://img1.wallspic.com/previews/9/3/1/6/5/156139/156139-feng_jing_hua-yi_shu-shu_ma_yi_shu-qi_fen-sheng_tai_qu-500x.jpg","https://img1.wallspic.com/previews/7/5/7/9/6/169757/169757-ji_bo_li_de_bo_wu_guan-zi_ran_jing_guan-yi_shu-ji_yun-500x.jpg","https://img1.wallspic.com/previews/5/2/0/6/7/176025/176025-qi_fen-tian_wen_xue_dui_xiang-yi_shu-dian_lan_se_de-yuan_quan-500x.jpg","https://img3.wallspic.com/previews/5/1/0/2/4/142015/142015-feng_ge-ka_ka_xi_qi_mu-huo_ying_ren_zhe-tu_xing_she_ji-shi_jue_yi_shu-500x.jpg"],"creative_commons":{"license":"by-nc-sa","language":"deed.zh-hans"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto"}};</script>
-<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2026-06-24 14:33:59"};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2026-06-26 11:26:42"};</script>
 
 <!-- Theme mode css -->
 <link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.2.2" id="trm-switch-style">
@@ -434,8 +434,8 @@
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">不污染业务项目</span><br><span class="line">不需要内部 npm 平台</span><br><span class="line">不需要每个项目 copy 脚本</span><br><span class="line">本机多个项目可以复用</span><br><span class="line">比纯 AI 更快</span><br><span class="line">Excel 格式更稳定</span><br></pre></td></tr></table></figure>
 
 <p>但实际跑下来，有两个问题。</p>
-<p>第一，强依赖 Codex。流程虽然拆出来一部分，但还是由 Codex 去执行，中间还要 AI 生成翻译和 key。</p>
-<p>第二，时间仍然不稳定。实际跑下来经常要十几分钟。比完全交给 AI 好一些，但没有达到“一个稳定工具”的程度。</p>
+<p>第一，强依赖 Codex。流程虽然拆出来一部分，但还是由 Codex 去执行，中间需要 AI 生成翻译和 key。</p>
+<p>第二，时间不稳定。实际跑下来经常要十几分钟，不过比完全交给 AI 好一些。</p>
 <p>所以 Skill Helper 更适合：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">适合个人使用 Codex 时的轻量辅助方案</span><br><span class="line">适合临时任务、少量文案</span><br></pre></td></tr></table></figure>
 
@@ -588,12 +588,6 @@
 <td>版本可控，团队可安装</td>
 <td>依赖 Git 权限和 tag 管理</td>
 </tr>
-<tr>
-<td>内部 npm 包</td>
-<td>长期方案</td>
-<td>最规范，使用体验最好</td>
-<td>需要 npm 私服</td>
-</tr>
 </tbody></table>
 <h2 id="最终选择"><a href="#最终选择" class="headerlink" title="最终选择"></a>最终选择</h2><p>目前我保留两套方案。</p>
 <h3 id="1、Skill-Helper："><a href="#1、Skill-Helper：" class="headerlink" title="1、Skill Helper："></a>1、Skill Helper：</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/.codex/skills/i18n-auto/tools/</span><br></pre></td></tr></table></figure>
@@ -602,11 +596,12 @@
 <h3 id="2、本地-CLI："><a href="#2、本地-CLI：" class="headerlink" title="2、本地 CLI："></a>2、本地 CLI：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i18n-auto prepare</span><br></pre></td></tr></table></figure>
 
 <p>作为主流程，用于稳定处理当前分支新增中文，自动调用阿里云翻译，并生成 TMS 可导入 Excel。</p>
-<p>如果后续团队也要接入，可以把本地 CLI 抽成独立 Git 仓库，先用 <code>pnpm link</code> 调试，再通过 Git 依赖安装使用。</p>
-<p>这次实践下来的感受是：AI 很适合探索流程，也适合做一些不确定性的判断；但高频、固定、可复用的流程，还是应该沉淀成工具。</p>
-<p>i18n 这种任务尤其明显。扫描、去重、缓存、额度、Excel 输出，都应该交给程序。翻译可以接机器翻译，最后再人工 review。</p>
+<p>如果后续需要，也可以把本地 CLI 抽成独立 Git 仓库，先用 <code>pnpm link</code> 调试，再通过 Git 依赖安装使用。</p>
+<p>这次实践下来的感受是：AI 更适合帮我把流程跑通，或者在一些边界不太确定的地方给判断。但如果这个流程比较高频、固定、可复用，就没必要每次都靠对话去跑一遍了，可以沉淀成工具。</p>
+<p>i18n 这类任务比较明显，像扫描、去重、缓存、额度控制、Excel 输出这些，都适合交给程序执行。翻译可以接机器翻译，最后再人工 review。</p>
 <p>最终比较理想的状态不是“全部交给 AI”，而是：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AI 帮我探索方案</span><br><span class="line">工具负责稳定执行</span><br><span class="line">人负责最后审核</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">AI 把方案和边界摸清楚</span><br><span class="line">工具负责稳定执行</span><br><span class="line">人负责最后审核</span><br></pre></td></tr></table></figure>
+
 
 </article>
     
