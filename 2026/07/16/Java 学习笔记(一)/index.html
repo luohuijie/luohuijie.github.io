@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="前言最近开始自学 Java，准备在前端基础上继续往全栈方向发展，并把学习过程整理记录下来。 这篇主要记录目前已经完成的学习内容：  确认公司的 Java 技术栈 搭建本地开发环境 选择适合入门的开源项目 跑通第一个 Spring Boot 项目 初步理解 Java 后端项目结构 整理后续学习规划  一、明确学习目标现阶段希望先做到：  能看懂 Java 后端项目 能本地启动和调试 Spring B">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 学习笔记：跑通第一个 Spring Boot 项目">
+<meta property="og:url" content="http://example.com/2026/07/16/Java%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%80)/index.html">
+<meta property="og:site_name" content="luohuijie">
+<meta property="og:description" content="前言最近开始自学 Java，准备在前端基础上继续往全栈方向发展，并把学习过程整理记录下来。 这篇主要记录目前已经完成的学习内容：  确认公司的 Java 技术栈 搭建本地开发环境 选择适合入门的开源项目 跑通第一个 Spring Boot 项目 初步理解 Java 后端项目结构 整理后续学习规划  一、明确学习目标现阶段希望先做到：  能看懂 Java 后端项目 能本地启动和调试 Spring B">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-07-16T10:52:00.000Z">
+<meta property="article:modified_time" content="2026-07-17T03:19:24.258Z">
+<meta property="article:author" content="Laura">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Spring Boot">
+<meta name="twitter:card" content="summary">
+
+    <meta name="keywords" content="前端,js,jquery,javascript,html5,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,html,css,css3,用户体验">
+
+
+<title >Java 学习笔记：跑通第一个 Spring Boot 项目</title>
+
+<!-- Favicon -->
+
+
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Laura","root":"/","typed_text":["Hungry | Stay Foolish"],"theme_version":"2.2.2","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":null,"icon16":null,"icon32":null,"apple_touch_icon":null,"webmanifest":null,"visibilitychange":true,"hidden":"failure.ico","show_text":"回来啦~","hide_text":"(●—●)看不见我！"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","sticky":"TOP","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":true,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":300},"toc":{"post_title":true},"live_time":{"start_time":"2020/05/16 17:00:00","prefix":"The blog has been lovely to run undefined day"},"danmu":{"enable":true,"el":".trm-banner","avatar":false,"delayRange":5000,"speed":80},"covers":["/img/block.jpg","https://img3.wallspic.com/previews/2/0/1/8/6/168102/168102-yi_shu-ka_tong-mian_bu_biao_qing-kuai_le_de-ji_qie-500x.jpg","https://img2.wallspic.com/previews/2/6/4/3/7/173462/173462-qi_fen-zi_se_de-zi_ran_jing_guan-yu_hui-de_ping_xian-500x.jpg","https://img2.wallspic.com/previews/3/3/9/1/3/131933/131933-mo_xing-xiao_jie-huang_se_de-nu_hai-fa_xing-500x.jpg","https://img1.wallspic.com/previews/8/3/4/6/2/126438/126438-wei_lai_zhu_yi-shu_ma_yi_shu-jie_duan-zi_ben_shi-yi_shu-500x.jpg","https://img2.wallspic.com/previews/0/1/5/0/7/170510/170510-guang-azure-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-500x.jpg","https://img2.wallspic.com/previews/3/6/9/6/5/156963/156963-yi_shu-qi_fen-yu_hui-shou_shi-ren_men_zai_zi_ran_jie-500x.jpg","https://img1.wallspic.com/previews/0/9/3/5/6/165390/165390-qi_fen-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-tian_wen_xue_dui_xiang-500x.jpg","https://img3.wallspic.com/previews/2/8/6/1/7/171682/171682-yi_kuai-xing_zhi-ye_ti-yi_shu-shui_xia-500x.jpg","https://img1.wallspic.com/previews/7/1/9/9/89917/89917-bo_xi_ta_nuo-an_zhuang_de_feng_jing-cheng_shi-suo_lun_tuo-shan_zhan-500x.jpg","https://img2.wallspic.com/previews/5/0/9/0/70905/70905-hai_yang-ma_er_dai_fu-tian_kong-du_jia_cun-huan_jiao-500x.jpg","https://img3.wallspic.com/previews/4/3/4/8/6/168434/168434-xing_zhi-zi_ran_jing_guan-dan_huang-shui_dao-zhi_bei-500x.jpg","https://img1.wallspic.com/previews/5/4/0/4/7/174045/174045-jian_ying-qi_fen-ren_men_zai_zi_ran_jie-tian_wen_xue_dui_xiang-yi_shu-500x.jpg","https://img1.wallspic.com/previews/9/3/1/6/5/156139/156139-feng_jing_hua-yi_shu-shu_ma_yi_shu-qi_fen-sheng_tai_qu-500x.jpg","https://img1.wallspic.com/previews/7/5/7/9/6/169757/169757-ji_bo_li_de_bo_wu_guan-zi_ran_jing_guan-yi_shu-ji_yun-500x.jpg","https://img1.wallspic.com/previews/5/2/0/6/7/176025/176025-qi_fen-tian_wen_xue_dui_xiang-yi_shu-dian_lan_se_de-yuan_quan-500x.jpg","https://img3.wallspic.com/previews/5/1/0/2/4/142015/142015-feng_ge-ka_ka_xi_qi_mu-huo_ying_ren_zhe-tu_xing_she_ji-shi_jue_yi_shu-500x.jpg"],"creative_commons":{"license":"by-nc-sa","language":"deed.zh-hans"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2026-07-17 11:19:24"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.2.2" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+
+ 
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+    
+        <div class="trm-logo-text">
+            La<span>ura</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    Home
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    Archives
+                </a>
+                
+                <ul>
+                    
+                    <li>
+                        <a  href="/tags/" target="">
+                            标签
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a  href="/categories/" target="">
+                            分类
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    Links
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/about/" target="">
+                    About
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont fas fa-search"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            Java 学习笔记：跑通第一个 Spring Boot 项目
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2026
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/img1.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Laura
+    </h5>
+    
+        <div class="trm-label">
+            Stay
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/luohuijie" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                CITY:
+            </div>
+            <div class="trm-label trm-label-light">
+                HANGZHOU
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:miss_rowe@163.com" class="trm-btn">
+            Contact Me
+            <i class="iconfont far fa-envelope"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            07/16
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            18:52
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Laura
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近开始自学 Java，准备在前端基础上继续往全栈方向发展，并把学习过程整理记录下来。</p>
+<p>这篇主要记录目前已经完成的学习内容：</p>
+<ul>
+<li>确认公司的 Java 技术栈</li>
+<li>搭建本地开发环境</li>
+<li>选择适合入门的开源项目</li>
+<li>跑通第一个 Spring Boot 项目</li>
+<li>初步理解 Java 后端项目结构</li>
+<li>整理后续学习规划</li>
+</ul>
+<h2 id="一、明确学习目标"><a href="#一、明确学习目标" class="headerlink" title="一、明确学习目标"></a>一、明确学习目标</h2><p>现阶段希望先做到：</p>
+<ol>
+<li>能看懂 Java 后端项目</li>
+<li>能本地启动和调试 Spring Boot 项目</li>
+<li>能理解一个接口从请求到数据库的完整流程</li>
+<li>能修改简单接口</li>
+<li>能独立完成基础 CRUD 模块</li>
+<li>后续能够参与公司 Java 项目的实际开发</li>
+</ol>
+<p>所以不需要按照传统路线，花几个月把 Java 基础、JVM、多线程、Spring 全部学完，再开始做项目。</p>
+<p>我的学习路线是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">先确认公司技术栈</span><br><span class="line">→ 搭建开发环境</span><br><span class="line">→ 跑通一个小项目</span><br><span class="line">→ 根据项目补基础知识</span><br><span class="line">→ 自己完成一个业务模块</span><br></pre></td></tr></table></figure>
+
+<p>这样更容易建立整体认识，也能更快得到反馈。</p>
+<h2 id="二、确认公司的-Java-技术栈"><a href="#二、确认公司的-Java-技术栈" class="headerlink" title="二、确认公司的 Java 技术栈"></a>二、确认公司的 Java 技术栈</h2><p>开始学习前，我先向公司后端同事了解了当前 Java 项目的技术栈。涉及的内容很多，但现阶段先关注完成基础接口开发所需的核心技术：</p>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Java 21</td>
+<td>开发语言</td>
+</tr>
+<tr>
+<td>Spring Boot 3.2.2</td>
+<td>项目基础框架</td>
+</tr>
+<tr>
+<td>Maven</td>
+<td>项目构建和依赖管理</td>
+</tr>
+<tr>
+<td>MyBatis-Plus</td>
+<td>数据库访问</td>
+</tr>
+<tr>
+<td>MySQL 8</td>
+<td>数据存储</td>
+</tr>
+<tr>
+<td>Redis</td>
+<td>缓存</td>
+</tr>
+<tr>
+<td>Sa-Token</td>
+<td>登录认证和权限管理</td>
+</tr>
+</tbody></table>
+<p>Spring Cloud、Nacos、RocketMQ 等微服务相关技术暂时不展开，等熟悉基础接口和 CRUD 开发后再逐步学习。</p>
+<h2 id="三、搭建-Java-开发环境"><a href="#三、搭建-Java-开发环境" class="headerlink" title="三、搭建 Java 开发环境"></a>三、搭建 Java 开发环境</h2><p>根据公司技术栈，本地基础开发环境选择：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">JDK 21</span><br><span class="line">Maven</span><br><span class="line">IntelliJ IDEA</span><br><span class="line">MySQL 8</span><br><span class="line">Redis 8</span><br><span class="line">Git</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-安装-JDK-21"><a href="#1-安装-JDK-21" class="headerlink" title="1. 安装 JDK 21"></a>1. 安装 JDK 21</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install openjdk@21</span><br></pre></td></tr></table></figure>
+
+<p>配置环境变量：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> JAVA_HOME=<span class="string">&quot;<span class="subst">$(brew --prefix openjdk@21)</span>&quot;</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$PATH</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>将配置写入 <code>~/.zshrc</code> 后重新加载：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.zshrc</span><br></pre></td></tr></table></figure>
+
+<p>验证安装结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">java -version</span><br><span class="line">javac -version</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$JAVA_HOME</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-安装-Maven"><a href="#2-安装-Maven" class="headerlink" title="2. 安装 Maven"></a>2. 安装 Maven</h3><p>Maven 主要用于管理 Java 项目的依赖、编译、测试和打包，可以理解为 Java 项目中的包管理和构建工具。</p>
+<p>主要负责：</p>
+<ul>
+<li>下载项目依赖</li>
+<li>编译代码</li>
+<li>执行测试</li>
+<li>打包 jar</li>
+<li>管理不同环境配置</li>
+</ul>
+<p>安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install maven</span><br></pre></td></tr></table></figure>
+
+<p>验证：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn -v</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-安装-MySQL"><a href="#3-安装-MySQL" class="headerlink" title="3. 安装 MySQL"></a>3. 安装 MySQL</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install mysql@8.0</span><br></pre></td></tr></table></figure>
+
+<p>验证：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql --version</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-安装-Redis"><a href="#4-安装-Redis" class="headerlink" title="4. 安装 Redis"></a>4. 安装 Redis</h3><p>安装 Redis：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install redis</span><br></pre></td></tr></table></figure>
+
+<p>验证：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">redis-server --version</span><br><span class="line">redis-cli --version</span><br></pre></td></tr></table></figure>
+
+<p>目前暂时没有重点使用 Redis，先将环境准备好，后续学习缓存和登录状态时可以直接使用。</p>
+<h3 id="5-IntelliJ-IDEA"><a href="#5-IntelliJ-IDEA" class="headerlink" title="5. IntelliJ IDEA"></a>5. IntelliJ IDEA</h3><p>IntelliJ IDEA 是一款集成开发环境，主要用于 Java 项目的编写、运行、调试和管理。常用功能包括：</p>
+<ul>
+<li>Maven 项目识别</li>
+<li>Java 类和方法跳转</li>
+<li>Spring Boot 启动</li>
+<li>断点调试</li>
+<li>Bean 和配置文件提示</li>
+<li>数据库连接</li>
+<li>Git 集成</li>
+<li>代码重构</li>
+</ul>
+<p>IDEA 有两个版本：</p>
+<ul>
+<li>Community：免费版</li>
+<li>Ultimate：商业版</li>
+</ul>
+<p>个人学习可以先使用 Community。</p>
+<h2 id="四、选择第一个学习项目"><a href="#四、选择第一个学习项目" class="headerlink" title="四、选择第一个学习项目"></a>四、选择第一个学习项目</h2><p>环境搭建完成后，接下来就是选择一个合适的项目练习。</p>
+<p>公司现有的 Java 项目规模较大，涉及的业务和模块较多，不太适合直接作为入门项目，所以我决定先从开源项目入手。</p>
+<p>开始看了RuoYi-Vue3、RuoYi-Vue-Plus 等后台管理项目，功能比较完整，但结构和模块也比较复杂，不适合入门学习，所以先选择了一个相对简单的 <code>nuanyu-backend</code>。先理解 Spring Boot、MyBatis-Plus 等技术后再逐步学习。</p>
+<p>这个项目核心技术包括：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Java 21</span><br><span class="line">Spring Boot 3</span><br><span class="line">Maven</span><br><span class="line">MyBatis-Plus</span><br><span class="line">MySQL</span><br><span class="line">Sa-Token</span><br></pre></td></tr></table></figure>
+
+<p>和公司的技术栈比较接近，同时包含：</p>
+<ul>
+<li>用户注册</li>
+<li>用户登录</li>
+<li>Token 获取</li>
+<li>当前用户信息查询</li>
+<li>基础业务查询接口</li>
+</ul>
+<p>适合先理解一个完整的 Java 后端请求链路。</p>
+<h2 id="五、了解关键文件"><a href="#五、了解关键文件" class="headerlink" title="五、了解关键文件"></a>五、了解关键文件</h2><p>在启动项目之前，先查看几个重要文件。</p>
+<h3 id="README-md"><a href="#README-md" class="headerlink" title="README.md"></a>README.md</h3><p>主要用于了解：</p>
+<ul>
+<li>项目介绍</li>
+<li>环境要求</li>
+<li>数据库初始化方式</li>
+<li>启动命令</li>
+<li>接口说明</li>
+</ul>
+<h3 id="pom-xml"><a href="#pom-xml" class="headerlink" title="pom.xml"></a>pom.xml</h3><p><code>pom.xml</code> 是 Maven 项目的核心配置文件。</p>
+<p>可以在这里查看：</p>
+<ul>
+<li>Spring Boot 版本</li>
+<li>Java 版本</li>
+<li>项目依赖</li>
+<li>MyBatis-Plus</li>
+<li>Sa-Token</li>
+<li>MySQL 驱动</li>
+<li>Lombok</li>
+<li>打包配置</li>
+</ul>
+<h3 id="application-yml"><a href="#application-yml" class="headerlink" title="application.yml"></a>application.yml</h3><p><code>application.yml</code> 是项目运行配置文件，主要包括：</p>
+<ul>
+<li>服务端口</li>
+<li>数据库地址</li>
+<li>数据库用户名和密码</li>
+<li>MyBatis-Plus 配置</li>
+<li>Sa-Token 配置</li>
+</ul>
+<h3 id="init-sql"><a href="#init-sql" class="headerlink" title="init.sql"></a>init.sql</h3><p>用于初始化：</p>
+<ul>
+<li>数据库表结构</li>
+<li>基础数据</li>
+<li>测试数据</li>
+</ul>
+<h2 id="六、处理本地数据库配置"><a href="#六、处理本地数据库配置" class="headerlink" title="六、处理本地数据库配置"></a>六、处理本地数据库配置</h2><p>要让项目连接本机的 MySQL，需要完成以下三步。</p>
+<h3 id="1-修改数据库地址"><a href="#1-修改数据库地址" class="headerlink" title="1. 修改数据库地址"></a>1. 修改数据库地址</h3><p>项目默认使用 <code>mysql:3306</code>，其中 <code>mysql</code> 是 Docker 环境中的服务名称。因为我是在本机直接运行 MySQL，所以需要将主机名改为 <code>localhost</code>，端口仍然使用 <code>3306</code>：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">localhost:3306</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-初始化数据库"><a href="#2-初始化数据库" class="headerlink" title="2. 初始化数据库"></a>2. 初始化数据库</h3><p>先在 MySQL 中创建一个名为 <code>nuanyu</code> 的空数据库，再执行项目提供的 SQL 文件：</p>
+<ol>
+<li>执行 <code>init.sql</code>，创建项目所需的表结构</li>
+<li>执行其他初始化 SQL，写入项目运行需要的基础数据</li>
+</ol>
+<h3 id="3-配置数据库账号"><a href="#3-配置数据库账号" class="headerlink" title="3. 配置数据库账号"></a>3. 配置数据库账号</h3><p>为了不让项目直接使用权限较高的 root 账号，我创建了一个独立的 MySQL 用户，并只授予它访问 <code>nuanyu</code> 数据库的权限：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">用户名：nuanyu</span><br><span class="line">密码：nuanyu123</span><br></pre></td></tr></table></figure>
+
+<p>最后，将数据库地址、数据库名、用户名和密码填写到项目的本地配置中。配置内容必须与本机 MySQL 中实际创建的数据库和账号保持一致，项目才能正常连接。</p>
+<h2 id="七、启动项目"><a href="#七、启动项目" class="headerlink" title="七、启动项目"></a>七、启动项目</h2><p>项目配置完成后，我尝试了在 IDEA 中直接运行和打包成 jar 文件运行。</p>
+<h3 id="1-在-IDEA-中运行项目"><a href="#1-在-IDEA-中运行项目" class="headerlink" title="1. 在 IDEA 中运行项目"></a>1. 在 IDEA 中运行项目</h3><p>先在 IDEA 中为项目选择 JDK 21，再运行启动类 <code>NuanyuApplication.java</code>。</p>
+<p>第一次运行时，IDEA 会自动创建运行配置。之后可以通过 Run、Stop 和 Rerun 启动、停止或重新运行项目，也可以直接查看日志和进行断点调试。</p>
+<h3 id="2-使用-Maven-打包运行"><a href="#2-使用-Maven-打包运行" class="headerlink" title="2. 使用 Maven 打包运行"></a>2. 使用 Maven 打包运行</h3><p>这里执行 Maven 打包，是为了确认项目能够正常编译，并生成可通过 <code>java -jar</code> 启动的 jar 文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn -DskipTests package</span><br></pre></td></tr></table></figure>
+
+<p>其中：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-DskipTests</span><br></pre></td></tr></table></figure>
+
+<p>表示打包时跳过测试。</p>
+<p>打包成功后，会在 <code>target</code> 目录中生成 jar 文件。</p>
+<p>启动项目：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar target/nuanyu-backend-1.0.0.jar</span><br></pre></td></tr></table></figure>
+
+<p>服务成功运行在：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost:8080</span><br></pre></td></tr></table></figure>
+
+<p>之后验证以下接口：</p>
+<ul>
+<li>普通业务查询接口</li>
+<li>用户注册</li>
+<li>用户登录</li>
+<li>携带 Token 获取用户信息</li>
+</ul>
+<p>验证完成，第一个 Spring Boot 项目正式跑通。</p>
+<h2 id="八、初步理解后端项目结构"><a href="#八、初步理解后端项目结构" class="headerlink" title="八、初步理解后端项目结构"></a>八、初步理解后端项目结构</h2><p>项目跑通之后，真正的学习才刚开始。</p>
+<p>刚开始主要理解 Java 后端项目中几个最常见的分层。</p>
+<h3 id="1-Controller：接口层"><a href="#1-Controller：接口层" class="headerlink" title="1. Controller：接口层"></a>1. Controller：接口层</h3><p>Controller 用来接收前端请求。</p>
+<p>例如前端发送一个登录请求：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST /api/user/login</span><br></pre></td></tr></table></figure>
+
+<p>请求会先进入对应的 Controller 方法。</p>
+<p>Controller 通常负责：</p>
+<ul>
+<li>定义接口地址</li>
+<li>接收请求参数</li>
+<li>进行基础参数校验</li>
+<li>调用 Service</li>
+<li>返回统一格式的数据</li>
+</ul>
+<p>可以简单理解为，Controller 是后端接口的入口。</p>
+<h3 id="2-Service：业务层"><a href="#2-Service：业务层" class="headerlink" title="2. Service：业务层"></a>2. Service：业务层</h3><p>Service 负责具体的业务逻辑。</p>
+<p>例如一个登录接口，可能需要完成：</p>
+<ol>
+<li>根据用户名查询用户</li>
+<li>判断用户是否存在</li>
+<li>校验密码</li>
+<li>创建登录状态</li>
+<li>生成 Token</li>
+<li>返回登录结果</li>
+</ol>
+<p>这些逻辑一般不会全部写在 Controller 中，而是交给 Service 处理。</p>
+<p>这样做可以让接口层和业务层职责更加清晰。</p>
+<h3 id="3-Mapper：数据访问层"><a href="#3-Mapper：数据访问层" class="headerlink" title="3. Mapper：数据访问层"></a>3. Mapper：数据访问层</h3><p>Mapper 负责和数据库交互。</p>
+<p>项目使用 MyBatis-Plus，所以很多基础数据库操作不需要手写完整 SQL。</p>
+<p>例如根据主键查询：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">userMapper.selectById(id);</span><br></pre></td></tr></table></figure>
+
+<p>根据条件查询：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">LambdaQueryWrapper&lt;User&gt; wrapper = <span class="keyword">new</span> <span class="title class_">LambdaQueryWrapper</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">wrapper.eq(User::getUsername, username);</span><br><span class="line"></span><br><span class="line"><span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> userMapper.selectOne(wrapper);</span><br></pre></td></tr></table></figure>
+
+<p>可以简单理解为，Mapper 就是用来操作数据库的，负责执行增删改查等操作。</p>
+<h3 id="4-Entity：数据库实体"><a href="#4-Entity：数据库实体" class="headerlink" title="4. Entity：数据库实体"></a>4. Entity：数据库实体</h3><p>Entity 是用来表示数据库数据的 Java 类。通常一张表对应一个 Entity 类，表中的字段对应类的属性，表中的一行数据对应一个 Entity 对象。</p>
+<p>例如，数据库中有一张 <code>user</code> 表，在 Java 中可以定义对应的 <code>User</code> 类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String password;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>查询数据库时，Mapper 会将查询结果转换成 <code>User</code> 对象：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> userMapper.selectById(<span class="number">1L</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在 Java 代码中，数据库中的一条记录会用一个 Entity 对象来表示。</p>
+<h3 id="5-DTO：数据传输对象"><a href="#5-DTO：数据传输对象" class="headerlink" title="5. DTO：数据传输对象"></a>5. DTO：数据传输对象</h3><p>DTO 是用来传递接口数据的，用于接收请求参数或者组织返回结果。</p>
+<!-- 与 Entity 不同，DTO 不需要对应完整的数据库表，只保留当前接口需要的字段。 -->
+
+<p>例如，登录时前端只需要提交用户名和密码：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;username&quot;</span><span class="punctuation">:</span> <span class="string">&quot;luoluo&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;password&quot;</span><span class="punctuation">:</span> <span class="string">&quot;123456&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>后端可以定义一个对应的 DTO：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LoginRequestDTO</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String password;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当前端提交 JSON 请求时，Spring Boot 会通过内置的消息转换器，将请求数据转换成 <code>LoginRequestDTO</code> 对象，Controller 可以直接读取其中的用户名和密码，不需要让前端提交完整的 <code>User</code> 实体。</p>
+<p>这样做的好处是：</p>
+<ul>
+<li>接口字段更明确</li>
+<li>避免前端传入无关字段</li>
+<li>请求对象和数据库实体解耦</li>
+<li>后续接口调整更方便</li>
+</ul>
+<h2 id="九、理解一次完整的请求链路"><a href="#九、理解一次完整的请求链路" class="headerlink" title="九、理解一次完整的请求链路"></a>九、理解一次完整的请求链路</h2><p>通过这个项目可以初步建立后端接口调用链：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">前端发送请求</span><br><span class="line">      ↓</span><br><span class="line">Controller 通过 DTO 接收参数</span><br><span class="line">      ↓</span><br><span class="line">Service 处理业务</span><br><span class="line">      ↓</span><br><span class="line">Mapper 查询数据库</span><br><span class="line">      ↓</span><br><span class="line">查询结果转换成 Entity</span><br><span class="line">      ↓</span><br><span class="line">Service 组织返回数据</span><br><span class="line">      ↓</span><br><span class="line">Controller 返回响应</span><br></pre></td></tr></table></figure>
+
+<p>以登录接口为例：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">前端提交用户名和密码</span><br><span class="line">        ↓</span><br><span class="line">Controller 接收 LoginRequestDTO</span><br><span class="line">        ↓</span><br><span class="line">Service 调用 Mapper 查询用户</span><br><span class="line">        ↓</span><br><span class="line">Mapper 查询 MySQL 用户表</span><br><span class="line">        ↓</span><br><span class="line">Mapper 返回 User Entity</span><br><span class="line">        ↓</span><br><span class="line">Service 校验账号和密码</span><br><span class="line">        ↓</span><br><span class="line">Sa-Token 创建登录状态</span><br><span class="line">        ↓</span><br><span class="line">Controller 返回 Token</span><br></pre></td></tr></table></figure>
+
+<p>这条链路和前端平时处理登录的逻辑可以对应起来：</p>
+<table>
+<thead>
+<tr>
+<th>前端操作</th>
+<th>后端处理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>提交登录表单</td>
+<td>Controller 接收登录请求</td>
+</tr>
+<tr>
+<td>调用登录接口</td>
+<td>Service 处理登录逻辑</td>
+</tr>
+<tr>
+<td>保存 Token</td>
+<td>Sa-Token 创建并返回 Token</td>
+</tr>
+<tr>
+<td>请求携带 Token</td>
+<td>Sa-Token 校验 Token</td>
+</tr>
+<tr>
+<td>处理未登录状态</td>
+<td>返回未登录响应</td>
+</tr>
+<tr>
+<td>控制路由权限</td>
+<td>校验接口权限</td>
+</tr>
+</tbody></table>
+<p>因为已经熟悉前端 Token 登录流程，所以从前端请求出发理解后端各层的处理过程，会比单独记概念更容易。</p>
+<h3 id="使用断点调试验证登录流程"><a href="#使用断点调试验证登录流程" class="headerlink" title="使用断点调试验证登录流程"></a>使用断点调试验证登录流程</h3><p>为了跟踪完整的登录流程，我在以下位置设置了断点：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">登录 Controller</span><br><span class="line">用户查询 Service</span><br><span class="line">用户 Mapper 调用位置</span><br><span class="line">Sa-Token 登录调用位置</span><br><span class="line">Token 返回位置</span><br></pre></td></tr></table></figure>
+
+<p>通过断点调试，可以按照执行顺序跟踪登录请求，并观察：</p>
+<ul>
+<li>请求参数如何变成 Java 对象</li>
+<li>Service 是如何被调用的</li>
+<li>用户信息如何从数据库中查询</li>
+<li>密码如何校验</li>
+<li>Token 如何生成</li>
+<li>登录用户信息保存在哪里</li>
+</ul>
+<h2 id="十、后续学习规划"><a href="#十、后续学习规划" class="headerlink" title="十、后续学习规划"></a>十、后续学习规划</h2><p>后续按照“学习基础 → 在项目中验证 → 独立完成模块”的顺序推进，不急着学习完整后台框架或微服务。</p>
+<p>每学一个知识点，都先写一个小例子，再回到 <code>nuanyu-backend</code> 中寻找对应代码。</p>
+<h3 id="1-补齐-Java-基础"><a href="#1-补齐-Java-基础" class="headerlink" title="1. 补齐 Java 基础"></a>1. 补齐 Java 基础</h3><p><strong>学习内容</strong></p>
+<ul>
+<li>变量、<code>String</code>、条件判断、循环、方法和数组</li>
+<li>类与对象、构造方法、接口、集合、泛型和异常</li>
+<li><code>package</code> 和 <code>import</code></li>
+</ul>
+<p><strong>项目练习</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/test → Result → /login → LoginDTO → UserService → UserServiceImpl → UserMapper → MySQL</span><br></pre></td></tr></table></figure>
+
+<p><strong>完成目标</strong>：看到一个简单方法时，能够说清楚它接收什么参数、做了什么、调用了谁，以及返回什么结果</p>
+<h3 id="2-理解-Web-和数据库基础"><a href="#2-理解-Web-和数据库基础" class="headerlink" title="2. 理解 Web 和数据库基础"></a>2. 理解 Web 和数据库基础</h3><p><strong>学习内容</strong></p>
+<ul>
+<li>HTTP 请求、URL、GET、POST、PUT、DELETE、JSON、请求参数、请求体和常见状态码</li>
+<li>数据库、表、字段、主键，以及 SQL 的增删改查</li>
+</ul>
+<p><strong>项目练习</strong>：沿着登录接口理解“前端提交 JSON → Controller 接收数据 → Mapper 查询 MySQL → 返回结果”的过程</p>
+<h3 id="3-学习-Spring-Boot-和项目常用技术"><a href="#3-学习-Spring-Boot-和项目常用技术" class="headerlink" title="3. 学习 Spring Boot 和项目常用技术"></a>3. 学习 Spring Boot 和项目常用技术</h3><p><strong>学习内容</strong></p>
+<ul>
+<li>Spring Boot 常用注解、依赖注入和 <code>application.yml</code></li>
+<li>Maven、Lombok、参数校验、全局异常处理和 Sa-Token</li>
+<li>MyBatis-Plus 的查询、增删改、条件查询和分页</li>
+</ul>
+<p><strong>完成目标</strong>：修改一个已有接口，并独立增加一个简单接口</p>
+<h3 id="4-独立完成公告管理-CRUD"><a href="#4-独立完成公告管理-CRUD" class="headerlink" title="4. 独立完成公告管理 CRUD"></a>4. 独立完成公告管理 CRUD</h3><p><strong>练习模块</strong>：以 <code>notice</code> 公告管理为例</p>
+<p><strong>需要完成</strong></p>
+<ul>
+<li>从数据库表开始编写 Entity、DTO、Mapper、Service 和 Controller</li>
+<li>补上参数校验、统一返回和接口测试</li>
+<li>实现分页列表、详情、新增、编辑、删除和启用&#x2F;禁用接口</li>
+</ul>
+<p><strong>完成目标</strong>：独立写出一组可运行的 CRUD 接口，而不是只修改现有代码</p>
+<h3 id="5-完成前后端联调和权限控制"><a href="#5-完成前后端联调和权限控制" class="headerlink" title="5. 完成前后端联调和权限控制"></a>5. 完成前后端联调和权限控制</h3><p><strong>前后端联调</strong></p>
+<ul>
+<li>实现公告管理页面，包括分页列表、标题搜索、新增和编辑表单、删除和状态切换</li>
+<li>处理 Token 携带和接口错误提示</li>
+</ul>
+<p><strong>权限控制</strong></p>
+<ul>
+<li>使用 Sa-Token 学习登录拦截、获取当前用户、接口权限、角色权限、401、403 和退出登录</li>
+<li>例如，未登录用户不能新增公告，普通用户只能查看，管理员才能编辑和删除</li>
+</ul>
+<p><strong>完成目标</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">前端页面</span><br><span class="line">→ Spring Boot 接口</span><br><span class="line">→ MyBatis-Plus</span><br><span class="line">→ MySQL</span><br><span class="line">→ 返回数据并更新页面</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-按业务需要补充常用能力"><a href="#6-按业务需要补充常用能力" class="headerlink" title="6. 按业务需要补充常用能力"></a>6. 按业务需要补充常用能力</h3><p>完成一个模块后，再按实际需求补充：</p>
+<ul>
+<li>Redis 缓存</li>
+<li>文件上传</li>
+<li>操作日志</li>
+<li>定时任务</li>
+<li>GitLab CI</li>
+</ul>
+<p>例如，可以缓存公告详情、上传公告附件，或定时发布公告。</p>
+<h3 id="7-最后学习完整后台和微服务"><a href="#7-最后学习完整后台和微服务" class="headerlink" title="7. 最后学习完整后台和微服务"></a>7. 最后学习完整后台和微服务</h3><p><strong>完整后台系统</strong></p>
+<ul>
+<li>学习 SmartAdmin、RuoYi-Vue-Plus 等项目</li>
+<li>重点关注用户、角色、菜单、数据权限、字典和代码生成</li>
+</ul>
+<p><strong>微服务组件</strong></p>
+<p>Spring Cloud、Nacos、Gateway、Dubbo、RocketMQ、Seata、Elasticsearch 和 XXL-Job 放在最后。开始这些内容前，先确保能够熟练完成普通 Spring Boot 接口和数据库操作。</p>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>主要作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Spring Cloud</td>
+<td>提供服务注册、配置管理、路由等微服务常用能力</td>
+</tr>
+<tr>
+<td>Nacos</td>
+<td>服务注册与发现、配置管理</td>
+</tr>
+<tr>
+<td>Gateway</td>
+<td>统一接收和转发前端请求的网关</td>
+</tr>
+<tr>
+<td>Dubbo</td>
+<td>服务之间的 RPC 调用</td>
+</tr>
+<tr>
+<td>RocketMQ</td>
+<td>异步消息传递</td>
+</tr>
+<tr>
+<td>Seata</td>
+<td>保证多个服务之间的数据一致性</td>
+</tr>
+<tr>
+<td>Elasticsearch</td>
+<td>全文搜索和数据分析</td>
+</tr>
+<tr>
+<td>XXL-Job</td>
+<td>分布式定时任务</td>
+</tr>
+</tbody></table>
+<!-- ## 十一、总结
+
+通过这个项目，初步理解了 Java 后端开发的基本流程和常见分层。
+
+后面继续学习，从 MyBatis-Plus 和数据库映射开始，独立完成一个完整的 CRUD 模块，并实现前后端联调。后续再逐步补充权限、缓存和其他业务能力。 -->
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Laura
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a id="original-link" href="http://example.com/2026/07/16/Java 学习笔记(一)/" title="Java 学习笔记：跑通第一个 Spring Boot 项目">http://example.com/2026/07/16/Java 学习笔记(一)/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2026/06/17/%E5%89%8D%E7%AB%AF%20i18n%20%E8%87%AA%E5%8A%A8%E5%8C%96%E6%96%B9%E6%A1%88%E6%BC%94%E8%BF%9B/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+                </span>
+                <h6 class="trm-op-title">前端 i18n 自动化方案演进：弃用脚手架，转向 Skill Helper 和本地 CLI</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>26/06/17</li>
+                <li>17:39</li>
+                <li>Unclassified</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-footer-card trm-scroll-animation">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2020- 2026</span>
+            <span class="footer-separator"data-separator=" · "></span>
+            <span class="trm-accent-color">Laura</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v7.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.2.2
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item blog-run-long"></div>
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            
+
+    <div id="post-toc" class="trm-post-toc">
+      <div class="trm-post-toc-header">
+        Article table of contents
+				<span id="post-toc-top">
+					TOP
+				</span>
+      </div>
+      <div class="trm-post-toc-content">
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-2" title="前言"><a rel="nofollow" class="trm-toc-link" href="#前言"><span class="trm-toc-text">前言</span></a></li><li class="trm-toc-item trm-toc-level-2" title="一、明确学习目标"><a rel="nofollow" class="trm-toc-link" href="#一、明确学习目标"><span class="trm-toc-text">一、明确学习目标</span></a></li><li class="trm-toc-item trm-toc-level-2" title="二、确认公司的 Java 技术栈"><a rel="nofollow" class="trm-toc-link" href="#二、确认公司的-Java-技术栈"><span class="trm-toc-text">二、确认公司的 Java 技术栈</span></a></li><li class="trm-toc-item trm-toc-level-2" title="三、搭建 Java 开发环境"><a rel="nofollow" class="trm-toc-link" href="#三、搭建-Java-开发环境"><span class="trm-toc-text">三、搭建 Java 开发环境</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1. 安装 JDK 21"><a rel="nofollow" class="trm-toc-link" href="#1-安装-JDK-21"><span class="trm-toc-text">1. 安装 JDK 21</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2. 安装 Maven"><a rel="nofollow" class="trm-toc-link" href="#2-安装-Maven"><span class="trm-toc-text">2. 安装 Maven</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3. 安装 MySQL"><a rel="nofollow" class="trm-toc-link" href="#3-安装-MySQL"><span class="trm-toc-text">3. 安装 MySQL</span></a></li><li class="trm-toc-item trm-toc-level-3" title="4. 安装 Redis"><a rel="nofollow" class="trm-toc-link" href="#4-安装-Redis"><span class="trm-toc-text">4. 安装 Redis</span></a></li><li class="trm-toc-item trm-toc-level-3" title="5. IntelliJ IDEA"><a rel="nofollow" class="trm-toc-link" href="#5-IntelliJ-IDEA"><span class="trm-toc-text">5. IntelliJ IDEA</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="四、选择第一个学习项目"><a rel="nofollow" class="trm-toc-link" href="#四、选择第一个学习项目"><span class="trm-toc-text">四、选择第一个学习项目</span></a></li><li class="trm-toc-item trm-toc-level-2" title="五、了解关键文件"><a rel="nofollow" class="trm-toc-link" href="#五、了解关键文件"><span class="trm-toc-text">五、了解关键文件</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="README.md"><a rel="nofollow" class="trm-toc-link" href="#README-md"><span class="trm-toc-text">README.md</span></a></li><li class="trm-toc-item trm-toc-level-3" title="pom.xml"><a rel="nofollow" class="trm-toc-link" href="#pom-xml"><span class="trm-toc-text">pom.xml</span></a></li><li class="trm-toc-item trm-toc-level-3" title="application.yml"><a rel="nofollow" class="trm-toc-link" href="#application-yml"><span class="trm-toc-text">application.yml</span></a></li><li class="trm-toc-item trm-toc-level-3" title="init.sql"><a rel="nofollow" class="trm-toc-link" href="#init-sql"><span class="trm-toc-text">init.sql</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="六、处理本地数据库配置"><a rel="nofollow" class="trm-toc-link" href="#六、处理本地数据库配置"><span class="trm-toc-text">六、处理本地数据库配置</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1. 修改数据库地址"><a rel="nofollow" class="trm-toc-link" href="#1-修改数据库地址"><span class="trm-toc-text">1. 修改数据库地址</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2. 初始化数据库"><a rel="nofollow" class="trm-toc-link" href="#2-初始化数据库"><span class="trm-toc-text">2. 初始化数据库</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3. 配置数据库账号"><a rel="nofollow" class="trm-toc-link" href="#3-配置数据库账号"><span class="trm-toc-text">3. 配置数据库账号</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="七、启动项目"><a rel="nofollow" class="trm-toc-link" href="#七、启动项目"><span class="trm-toc-text">七、启动项目</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1. 在 IDEA 中运行项目"><a rel="nofollow" class="trm-toc-link" href="#1-在-IDEA-中运行项目"><span class="trm-toc-text">1. 在 IDEA 中运行项目</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2. 使用 Maven 打包运行"><a rel="nofollow" class="trm-toc-link" href="#2-使用-Maven-打包运行"><span class="trm-toc-text">2. 使用 Maven 打包运行</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="八、初步理解后端项目结构"><a rel="nofollow" class="trm-toc-link" href="#八、初步理解后端项目结构"><span class="trm-toc-text">八、初步理解后端项目结构</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1. Controller：接口层"><a rel="nofollow" class="trm-toc-link" href="#1-Controller：接口层"><span class="trm-toc-text">1. Controller：接口层</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2. Service：业务层"><a rel="nofollow" class="trm-toc-link" href="#2-Service：业务层"><span class="trm-toc-text">2. Service：业务层</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3. Mapper：数据访问层"><a rel="nofollow" class="trm-toc-link" href="#3-Mapper：数据访问层"><span class="trm-toc-text">3. Mapper：数据访问层</span></a></li><li class="trm-toc-item trm-toc-level-3" title="4. Entity：数据库实体"><a rel="nofollow" class="trm-toc-link" href="#4-Entity：数据库实体"><span class="trm-toc-text">4. Entity：数据库实体</span></a></li><li class="trm-toc-item trm-toc-level-3" title="5. DTO：数据传输对象"><a rel="nofollow" class="trm-toc-link" href="#5-DTO：数据传输对象"><span class="trm-toc-text">5. DTO：数据传输对象</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="九、理解一次完整的请求链路"><a rel="nofollow" class="trm-toc-link" href="#九、理解一次完整的请求链路"><span class="trm-toc-text">九、理解一次完整的请求链路</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="使用断点调试验证登录流程"><a rel="nofollow" class="trm-toc-link" href="#使用断点调试验证登录流程"><span class="trm-toc-text">使用断点调试验证登录流程</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="十、后续学习规划"><a rel="nofollow" class="trm-toc-link" href="#十、后续学习规划"><span class="trm-toc-text">十、后续学习规划</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="1. 补齐 Java 基础"><a rel="nofollow" class="trm-toc-link" href="#1-补齐-Java-基础"><span class="trm-toc-text">1. 补齐 Java 基础</span></a></li><li class="trm-toc-item trm-toc-level-3" title="2. 理解 Web 和数据库基础"><a rel="nofollow" class="trm-toc-link" href="#2-理解-Web-和数据库基础"><span class="trm-toc-text">2. 理解 Web 和数据库基础</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3. 学习 Spring Boot 和项目常用技术"><a rel="nofollow" class="trm-toc-link" href="#3-学习-Spring-Boot-和项目常用技术"><span class="trm-toc-text">3. 学习 Spring Boot 和项目常用技术</span></a></li><li class="trm-toc-item trm-toc-level-3" title="4. 独立完成公告管理 CRUD"><a rel="nofollow" class="trm-toc-link" href="#4-独立完成公告管理-CRUD"><span class="trm-toc-text">4. 独立完成公告管理 CRUD</span></a></li><li class="trm-toc-item trm-toc-level-3" title="5. 完成前后端联调和权限控制"><a rel="nofollow" class="trm-toc-link" href="#5-完成前后端联调和权限控制"><span class="trm-toc-text">5. 完成前后端联调和权限控制</span></a></li><li class="trm-toc-item trm-toc-level-3" title="6. 按业务需要补充常用能力"><a rel="nofollow" class="trm-toc-link" href="#6-按业务需要补充常用能力"><span class="trm-toc-text">6. 按业务需要补充常用能力</span></a></li><li class="trm-toc-item trm-toc-level-3" title="7. 最后学习完整后台和微服务"><a rel="nofollow" class="trm-toc-link" href="#7-最后学习完整后台和微服务"><span class="trm-toc-text">7. 最后学习完整后台和微服务</span></a></li></ol></li></ol>
+      </div>
+    </div>
+
+            
+<div class="trm-fixed-container">
+    
+        <div class="trm-fixed-btn post-toc-btn" data-title="Open toc">
+            <i class="iconfont fas fa-th-list"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="Read Mode" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn hidden-md" data-title="Toggle between single-column and double-column" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont fas fa-arrows-alt-h"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="Back To Top">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont fas fa-search"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="Searching...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont fas fa-times"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    Please enter keywords to search
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+<script src="https://unpkg.com/swup@2.0.19/dist/swup.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.2.2"></script>
+    
+
+    
+        
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.2.2"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+		
+			<script src="/js/plugins/danmu.js?v=2.2.2"></script>
+		
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+    <script data-swup-reload-script>
+        (function () {
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            }
+            else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+    </script>
+
+
+
+<script id="async-script" src="/js/main.js?v=2.2.2"></script>
+
+<!-- CDN -->
+
+
+    
+<script src="/demo.js"></script>
+
+
+    
+
+    
+
+
+
+</body>
+
+</html>
