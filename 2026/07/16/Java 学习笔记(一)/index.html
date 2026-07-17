@@ -7,15 +7,15 @@
 <meta name="full-screen" content="yes">
 <meta name="theme-color" content="#317EFB" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="前言最近开始自学 Java，准备在前端基础上继续往全栈方向发展，并把学习过程整理记录下来。 这篇主要记录目前已经完成的学习内容：  确认公司的 Java 技术栈 搭建本地开发环境 选择适合入门的开源项目 跑通第一个 Spring Boot 项目 初步理解 Java 后端项目结构 整理后续学习规划  一、明确学习目标现阶段希望先做到：  能看懂 Java 后端项目 能本地启动和调试 Spring B">
+<meta name="description" content="前言最近开始自学 Java，准备在前端基础上继续往全栈方向发展，并把学习过程整理记录下来。 目前已经完成的学习内容：  确认公司的 Java 技术栈 搭建本地开发环境 选择适合入门的开源项目 跑通第一个 Spring Boot 项目 初步理解 Java 后端项目结构 整理后续学习规划  一、明确学习目标现阶段希望先做到：  能看懂 Java 后端项目 能本地启动和调试 Spring Boot 项目">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 学习笔记：跑通第一个 Spring Boot 项目">
 <meta property="og:url" content="http://example.com/2026/07/16/Java%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%80)/index.html">
 <meta property="og:site_name" content="luohuijie">
-<meta property="og:description" content="前言最近开始自学 Java，准备在前端基础上继续往全栈方向发展，并把学习过程整理记录下来。 这篇主要记录目前已经完成的学习内容：  确认公司的 Java 技术栈 搭建本地开发环境 选择适合入门的开源项目 跑通第一个 Spring Boot 项目 初步理解 Java 后端项目结构 整理后续学习规划  一、明确学习目标现阶段希望先做到：  能看懂 Java 后端项目 能本地启动和调试 Spring B">
+<meta property="og:description" content="前言最近开始自学 Java，准备在前端基础上继续往全栈方向发展，并把学习过程整理记录下来。 目前已经完成的学习内容：  确认公司的 Java 技术栈 搭建本地开发环境 选择适合入门的开源项目 跑通第一个 Spring Boot 项目 初步理解 Java 后端项目结构 整理后续学习规划  一、明确学习目标现阶段希望先做到：  能看懂 Java 后端项目 能本地启动和调试 Spring Boot 项目">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-07-16T10:52:00.000Z">
-<meta property="article:modified_time" content="2026-07-17T03:19:24.258Z">
+<meta property="article:modified_time" content="2026-07-17T03:37:19.174Z">
 <meta property="article:author" content="Laura">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Spring Boot">
@@ -59,7 +59,7 @@
 
 <!-- Variable -->
 <script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Laura","root":"/","typed_text":["Hungry | Stay Foolish"],"theme_version":"2.2.2","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":null,"icon16":null,"icon32":null,"apple_touch_icon":null,"webmanifest":null,"visibilitychange":true,"hidden":"failure.ico","show_text":"回来啦~","hide_text":"(●—●)看不见我！"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","sticky":"TOP","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":true,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":300},"toc":{"post_title":true},"live_time":{"start_time":"2020/05/16 17:00:00","prefix":"The blog has been lovely to run undefined day"},"danmu":{"enable":true,"el":".trm-banner","avatar":false,"delayRange":5000,"speed":80},"covers":["/img/block.jpg","https://img3.wallspic.com/previews/2/0/1/8/6/168102/168102-yi_shu-ka_tong-mian_bu_biao_qing-kuai_le_de-ji_qie-500x.jpg","https://img2.wallspic.com/previews/2/6/4/3/7/173462/173462-qi_fen-zi_se_de-zi_ran_jing_guan-yu_hui-de_ping_xian-500x.jpg","https://img2.wallspic.com/previews/3/3/9/1/3/131933/131933-mo_xing-xiao_jie-huang_se_de-nu_hai-fa_xing-500x.jpg","https://img1.wallspic.com/previews/8/3/4/6/2/126438/126438-wei_lai_zhu_yi-shu_ma_yi_shu-jie_duan-zi_ben_shi-yi_shu-500x.jpg","https://img2.wallspic.com/previews/0/1/5/0/7/170510/170510-guang-azure-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-500x.jpg","https://img2.wallspic.com/previews/3/6/9/6/5/156963/156963-yi_shu-qi_fen-yu_hui-shou_shi-ren_men_zai_zi_ran_jie-500x.jpg","https://img1.wallspic.com/previews/0/9/3/5/6/165390/165390-qi_fen-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-tian_wen_xue_dui_xiang-500x.jpg","https://img3.wallspic.com/previews/2/8/6/1/7/171682/171682-yi_kuai-xing_zhi-ye_ti-yi_shu-shui_xia-500x.jpg","https://img1.wallspic.com/previews/7/1/9/9/89917/89917-bo_xi_ta_nuo-an_zhuang_de_feng_jing-cheng_shi-suo_lun_tuo-shan_zhan-500x.jpg","https://img2.wallspic.com/previews/5/0/9/0/70905/70905-hai_yang-ma_er_dai_fu-tian_kong-du_jia_cun-huan_jiao-500x.jpg","https://img3.wallspic.com/previews/4/3/4/8/6/168434/168434-xing_zhi-zi_ran_jing_guan-dan_huang-shui_dao-zhi_bei-500x.jpg","https://img1.wallspic.com/previews/5/4/0/4/7/174045/174045-jian_ying-qi_fen-ren_men_zai_zi_ran_jie-tian_wen_xue_dui_xiang-yi_shu-500x.jpg","https://img1.wallspic.com/previews/9/3/1/6/5/156139/156139-feng_jing_hua-yi_shu-shu_ma_yi_shu-qi_fen-sheng_tai_qu-500x.jpg","https://img1.wallspic.com/previews/7/5/7/9/6/169757/169757-ji_bo_li_de_bo_wu_guan-zi_ran_jing_guan-yi_shu-ji_yun-500x.jpg","https://img1.wallspic.com/previews/5/2/0/6/7/176025/176025-qi_fen-tian_wen_xue_dui_xiang-yi_shu-dian_lan_se_de-yuan_quan-500x.jpg","https://img3.wallspic.com/previews/5/1/0/2/4/142015/142015-feng_ge-ka_ka_xi_qi_mu-huo_ying_ren_zhe-tu_xing_she_ji-shi_jue_yi_shu-500x.jpg"],"creative_commons":{"license":"by-nc-sa","language":"deed.zh-hans"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto"}};</script>
-<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2026-07-17 11:19:24"};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2026-07-17 11:37:19"};</script>
 
 <!-- Theme mode css -->
 <link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.2.2" id="trm-switch-style">
@@ -368,7 +368,7 @@
 <div class="trm-card ">
     <article id="article-container" class="trm-publication">
     <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近开始自学 Java，准备在前端基础上继续往全栈方向发展，并把学习过程整理记录下来。</p>
-<p>这篇主要记录目前已经完成的学习内容：</p>
+<p>目前已经完成的学习内容：</p>
 <ul>
 <li>确认公司的 Java 技术栈</li>
 <li>搭建本地开发环境</li>
@@ -391,7 +391,7 @@
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">先确认公司技术栈</span><br><span class="line">→ 搭建开发环境</span><br><span class="line">→ 跑通一个小项目</span><br><span class="line">→ 根据项目补基础知识</span><br><span class="line">→ 自己完成一个业务模块</span><br></pre></td></tr></table></figure>
 
 <p>这样更容易建立整体认识，也能更快得到反馈。</p>
-<h2 id="二、确认公司的-Java-技术栈"><a href="#二、确认公司的-Java-技术栈" class="headerlink" title="二、确认公司的 Java 技术栈"></a>二、确认公司的 Java 技术栈</h2><p>开始学习前，我先向公司后端同事了解了当前 Java 项目的技术栈。涉及的内容很多，但现阶段先关注完成基础接口开发所需的核心技术：</p>
+<h2 id="二、确认公司的-Java-技术栈"><a href="#二、确认公司的-Java-技术栈" class="headerlink" title="二、确认公司的 Java 技术栈"></a>二、确认公司的 Java 技术栈</h2><p>开始学习前，我先向公司后端同事了解了当前 Java 项目的技术栈。涉及的内容很多，但现在先关注完成基础接口开发所需的核心技术：</p>
 <table>
 <thead>
 <tr>
@@ -469,7 +469,7 @@
 <p>验证：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">redis-server --version</span><br><span class="line">redis-cli --version</span><br></pre></td></tr></table></figure>
 
-<p>目前暂时没有重点使用 Redis，先将环境准备好，后续学习缓存和登录状态时可以直接使用。</p>
+<p>先将环境准备好，后续学习缓存和登录状态时可以直接使用。</p>
 <h3 id="5-IntelliJ-IDEA"><a href="#5-IntelliJ-IDEA" class="headerlink" title="5. IntelliJ IDEA"></a>5. IntelliJ IDEA</h3><p>IntelliJ IDEA 是一款集成开发环境，主要用于 Java 项目的编写、运行、调试和管理。常用功能包括：</p>
 <ul>
 <li>Maven 项目识别</li>
@@ -487,9 +487,10 @@
 <li>Ultimate：商业版</li>
 </ul>
 <p>个人学习可以先使用 Community。</p>
-<h2 id="四、选择第一个学习项目"><a href="#四、选择第一个学习项目" class="headerlink" title="四、选择第一个学习项目"></a>四、选择第一个学习项目</h2><p>环境搭建完成后，接下来就是选择一个合适的项目练习。</p>
-<p>公司现有的 Java 项目规模较大，涉及的业务和模块较多，不太适合直接作为入门项目，所以我决定先从开源项目入手。</p>
-<p>开始看了RuoYi-Vue3、RuoYi-Vue-Plus 等后台管理项目，功能比较完整，但结构和模块也比较复杂，不适合入门学习，所以先选择了一个相对简单的 <code>nuanyu-backend</code>。先理解 Spring Boot、MyBatis-Plus 等技术后再逐步学习。</p>
+<h2 id="四、选择第一个学习项目"><a href="#四、选择第一个学习项目" class="headerlink" title="四、选择第一个学习项目"></a>四、选择第一个学习项目</h2><p>环境搭建完成后，需要选择一个合适的项目练习。</p>
+<p>公司现有的 Java 项目规模较大，涉及的业务和模块较多，不太适合作为入门项目，所以决定先从开源项目入手。</p>
+<!-- 开始看了RuoYi-Vue3、RuoYi-Vue-Plus 等后台管理项目，功能比较完整，但结构和模块也比较复杂，不适合入门学习，所以先 -->
+<p>选择了一个相对简单的 <code>nuanyu-backend</code>。先理解 Spring Boot、MyBatis-Plus 等技术后再逐步学习。</p>
 <p>这个项目核心技术包括：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Java 21</span><br><span class="line">Spring Boot 3</span><br><span class="line">Maven</span><br><span class="line">MyBatis-Plus</span><br><span class="line">MySQL</span><br><span class="line">Sa-Token</span><br></pre></td></tr></table></figure>
 
@@ -575,8 +576,8 @@
 <li>携带 Token 获取用户信息</li>
 </ul>
 <p>验证完成，第一个 Spring Boot 项目正式跑通。</p>
-<h2 id="八、初步理解后端项目结构"><a href="#八、初步理解后端项目结构" class="headerlink" title="八、初步理解后端项目结构"></a>八、初步理解后端项目结构</h2><p>项目跑通之后，真正的学习才刚开始。</p>
-<p>刚开始主要理解 Java 后端项目中几个最常见的分层。</p>
+<h2 id="八、初步理解后端项目结构"><a href="#八、初步理解后端项目结构" class="headerlink" title="八、初步理解后端项目结构"></a>八、初步理解后端项目结构</h2><!-- 刚开始主要理解 Java 后端项目中几个最常见的分层。 -->
+
 <h3 id="1-Controller：接口层"><a href="#1-Controller：接口层" class="headerlink" title="1. Controller：接口层"></a>1. Controller：接口层</h3><p>Controller 用来接收前端请求。</p>
 <p>例如前端发送一个登录请求：</p>
 <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST /api/user/login</span><br></pre></td></tr></table></figure>
@@ -677,7 +678,7 @@
 </tr>
 </tbody></table>
 <p>因为已经熟悉前端 Token 登录流程，所以从前端请求出发理解后端各层的处理过程，会比单独记概念更容易。</p>
-<h3 id="使用断点调试验证登录流程"><a href="#使用断点调试验证登录流程" class="headerlink" title="使用断点调试验证登录流程"></a>使用断点调试验证登录流程</h3><p>为了跟踪完整的登录流程，我在以下位置设置了断点：</p>
+<h3 id="使用断点调试验证登录流程"><a href="#使用断点调试验证登录流程" class="headerlink" title="使用断点调试验证登录流程"></a>使用断点调试验证登录流程</h3><p>设置断点，跟踪完整的登录流程：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">登录 Controller</span><br><span class="line">用户查询 Service</span><br><span class="line">用户 Mapper 调用位置</span><br><span class="line">Sa-Token 登录调用位置</span><br><span class="line">Token 返回位置</span><br></pre></td></tr></table></figure>
 
 <p>通过断点调试，可以按照执行顺序跟踪登录请求，并观察：</p>
@@ -689,8 +690,9 @@
 <li>Token 如何生成</li>
 <li>登录用户信息保存在哪里</li>
 </ul>
-<h2 id="十、后续学习规划"><a href="#十、后续学习规划" class="headerlink" title="十、后续学习规划"></a>十、后续学习规划</h2><p>后续按照“学习基础 → 在项目中验证 → 独立完成模块”的顺序推进，不急着学习完整后台框架或微服务。</p>
-<p>每学一个知识点，都先写一个小例子，再回到 <code>nuanyu-backend</code> 中寻找对应代码。</p>
+<h2 id="十、后续学习规划"><a href="#十、后续学习规划" class="headerlink" title="十、后续学习规划"></a>十、后续学习规划</h2><!-- 后续按照“学习基础 → 在项目中验证 → 独立完成模块”的顺序推进，不急着学习完整后台框架或微服务。
+每学一个知识点，都先写一个小例子，再回到 `nuanyu-backend` 中寻找对应代码。 -->
+
 <h3 id="1-补齐-Java-基础"><a href="#1-补齐-Java-基础" class="headerlink" title="1. 补齐 Java 基础"></a>1. 补齐 Java 基础</h3><p><strong>学习内容</strong></p>
 <ul>
 <li>变量、<code>String</code>、条件判断、循环、方法和数组</li>
