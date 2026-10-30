@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="介绍 AIHOT 的资讯精选、热点和日报功能，记录在 Codex 中安装 Skill、查询新闻的实际过程，以及使用方式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AIHOT：查看 AI 新闻和热点">
+<meta property="og:url" content="http://example.com/2026/10/29/aihot/index.html">
+<meta property="og:site_name" content="luohuijie">
+<meta property="og:description" content="介绍 AIHOT 的资讯精选、热点和日报功能，记录在 Codex 中安装 Skill、查询新闻的实际过程，以及使用方式。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/404.jpg">
+<meta property="article:published_time" content="2026-10-29T08:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-30T03:04:58.848Z">
+<meta property="article:author" content="Laura">
+<meta property="article:tag" content="Codex">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Skill">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/404.jpg">
+
+    <meta name="keywords" content="前端,js,jquery,javascript,html5,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,html,css,css3,用户体验">
+
+
+<title >AIHOT：查看 AI 新闻和热点</title>
+
+<!-- Favicon -->
+
+
+
+
+
+<!-- Plugin -->
+
+
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"example.com","author":"Laura","root":"/","typed_text":["Hungry | Stay Foolish"],"theme_version":"2.2.2","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":null,"icon16":null,"icon32":null,"apple_touch_icon":null,"webmanifest":null,"visibilitychange":true,"hidden":"failure.ico","show_text":"回来啦~","hide_text":"(●—●)看不见我！"},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}.","hits":"${hits} results found","hits_time":"${hits} results found in ${time} ms","author":"Post author: ","copyright_link":"Post link: ","copyright_license_title":"Copyright Notice: ","copyright_license_content":"All articles in this blog are licensed under undefined unless otherwise stated.","copy_success":"Copied","copy_failure":"Copy failed","open_read_mode":"Enter reading mode","exit_read_mode":"Exit reading mode","notice_outdate_message":"It has been undefined days since the last update, the content of the article may be outdated.","sticky":"TOP","just":"Just","min":"minutes ago","hour":"hours ago","day":"days ago","month":"months ago"},"swup":true,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"mac","height_limit":300},"toc":{"post_title":true},"live_time":{"start_time":"2020/05/16 17:00:00","prefix":"The blog has been lovely to run undefined day"},"danmu":{"enable":true,"el":".trm-banner","avatar":false,"delayRange":5000,"speed":80},"covers":["/img/block.jpg","https://img3.wallspic.com/previews/2/0/1/8/6/168102/168102-yi_shu-ka_tong-mian_bu_biao_qing-kuai_le_de-ji_qie-500x.jpg","https://img2.wallspic.com/previews/2/6/4/3/7/173462/173462-qi_fen-zi_se_de-zi_ran_jing_guan-yu_hui-de_ping_xian-500x.jpg","https://img2.wallspic.com/previews/3/3/9/1/3/131933/131933-mo_xing-xiao_jie-huang_se_de-nu_hai-fa_xing-500x.jpg","https://img1.wallspic.com/previews/8/3/4/6/2/126438/126438-wei_lai_zhu_yi-shu_ma_yi_shu-jie_duan-zi_ben_shi-yi_shu-500x.jpg","https://img2.wallspic.com/previews/0/1/5/0/7/170510/170510-guang-azure-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-500x.jpg","https://img2.wallspic.com/previews/3/6/9/6/5/156963/156963-yi_shu-qi_fen-yu_hui-shou_shi-ren_men_zai_zi_ran_jie-500x.jpg","https://img1.wallspic.com/previews/0/9/3/5/6/165390/165390-qi_fen-zi_se_de-zi_ran_huan_jing-zi_ran_jing_guan-tian_wen_xue_dui_xiang-500x.jpg","https://img3.wallspic.com/previews/2/8/6/1/7/171682/171682-yi_kuai-xing_zhi-ye_ti-yi_shu-shui_xia-500x.jpg","https://img1.wallspic.com/previews/7/1/9/9/89917/89917-bo_xi_ta_nuo-an_zhuang_de_feng_jing-cheng_shi-suo_lun_tuo-shan_zhan-500x.jpg","https://img2.wallspic.com/previews/5/0/9/0/70905/70905-hai_yang-ma_er_dai_fu-tian_kong-du_jia_cun-huan_jiao-500x.jpg","https://img3.wallspic.com/previews/4/3/4/8/6/168434/168434-xing_zhi-zi_ran_jing_guan-dan_huang-shui_dao-zhi_bei-500x.jpg","https://img1.wallspic.com/previews/5/4/0/4/7/174045/174045-jian_ying-qi_fen-ren_men_zai_zi_ran_jie-tian_wen_xue_dui_xiang-yi_shu-500x.jpg","https://img1.wallspic.com/previews/9/3/1/6/5/156139/156139-feng_jing_hua-yi_shu-shu_ma_yi_shu-qi_fen-sheng_tai_qu-500x.jpg","https://img1.wallspic.com/previews/7/5/7/9/6/169757/169757-ji_bo_li_de_bo_wu_guan-zi_ran_jing_guan-yi_shu-ji_yun-500x.jpg","https://img1.wallspic.com/previews/5/2/0/6/7/176025/176025-qi_fen-tian_wen_xue_dui_xiang-yi_shu-dian_lan_se_de-yuan_quan-500x.jpg","https://img3.wallspic.com/previews/5/1/0/2/4/142015/142015-feng_ge-ka_ka_xi_qi_mu-huo_ying_ren_zhe-tu_xing_she_ji-shi_jue_yi_shu-500x.jpg"],"creative_commons":{"license":"by-nc-sa","language":"deed.zh-hans"},"search":{"enable":true,"type":"local","href":"https://www.google.com/search?q=site:","domain":null,"preload":true,"trigger":"auto"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2026-10-30 11:04:58"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.2.2" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+
+ 
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
+
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+    
+        <div class="trm-logo-text">
+            La<span>ura</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    Home
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    Archives
+                </a>
+                
+                <ul>
+                    
+                    <li>
+                        <a  href="/tags/" target="">
+                            标签
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a  href="/categories/" target="">
+                            分类
+                        </a>
+                    </li>
+                    
+                </ul>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/links/" target="">
+                    Links
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a data-no-swup href="/about/" target="">
+                    About
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+    
+    <div id="trm-search-btn" class="trm-search-btn">
+        <i class="iconfont fas fa-search"></i>
+    </div>
+     
+
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            AIHOT：查看 AI 新闻和热点
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2026
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/img1.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        Laura
+    </h5>
+    
+        <div class="trm-label">
+            Stay
+            <span class="trm-typed-text">
+                <!-- Words for theme.user.typedText -->
+            </span>
+        </div>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com/luohuijie" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
+</div>
+
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
+    
+        <li>
+            <div class="trm-label">
+                CITY:
+            </div>
+            <div class="trm-label trm-label-light">
+                HANGZHOU
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
+
+        
+    <div class="trm-divider trm-mb-40 trm-mt-40"></div>
+    <!-- action button -->
+    <div class="text-center">
+        <a href="mailto:miss_rowe@163.com" class="trm-btn">
+            Contact Me
+            <i class="iconfont far fa-envelope"></i>
+        </a>
+    </div>
+    <!-- action button end -->
+
+    </div>
+</div>
+                    <!-- main card end -->
+                </div>
+            
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            10/29
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            16:00
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Laura
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h2 id="1-AIHOT-是什么"><a href="#1-AIHOT-是什么" class="headerlink" title="1. AIHOT 是什么"></a>1. AIHOT 是什么</h2><p><a target="_blank" rel="noopener" href="https://aihot.news/">AIHOT</a> 是一个 AI 资讯项目。它会收集多个信源的内容，筛选值得关注的消息，提供中文摘要，把内容整理出来。也提供热点榜、日报、周报和月报。它还提供了 Skill，可以直接接到 Codex 里。</p>
+<p>主要为下面这个流程：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">收集不同来源的 AI 动态</span><br><span class="line">→ 去重、筛选和评分</span><br><span class="line">→ 整理中文标题、摘要和推荐理由</span><br><span class="line">→ 把同一件事的不同报道归并成事件</span><br><span class="line">→ 展示精选、热点，编成日报、周报和月报</span><br></pre></td></tr></table></figure>
+
+<p>常用功能主要有这些：</p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>用来做什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>精选</td>
+<td>快速浏览经过筛选的 AI 动态，先看摘要和推荐理由</td>
+</tr>
+<tr>
+<td>全部 AI 动态</td>
+<td>查看精选以外的公开动态，覆盖更多信息</td>
+</tr>
+<tr>
+<td>热点榜</td>
+<td>看当前哪些事件有多个来源在讨论，以及后续进展</td>
+</tr>
+<tr>
+<td>日报、周报、月报</td>
+<td>按时间集中回顾，适合隔几天再补看</td>
+</tr>
+<tr>
+<td>主题与搜索</td>
+<td>按公司、产品或话题查找相关内容</td>
+</tr>
+</tbody></table>
+<p>它解决的是资讯收集和初步整理的问题。对读者来说，最有用的是：<strong>减少重复阅读、快速理解消息、继续追踪进展。</strong></p>
+<p>例如，一次模型发布可能同时出现在官方博客、媒体文章和多个社交账号里。按文章刷，你会看到很多条相似消息；按事件看，就可以先理解这次发布，再查看不同来源的补充和后续变化。</p>
+<p>信源包含：RSS、网页列表、JSON 接口、X 账号、微信公众号等等。</p>
+<h2 id="2-直接在网站上看"><a href="#2-直接在网站上看" class="headerlink" title="2. 直接在网站上看"></a>2. 直接在网站上看</h2><p>最简单的方式是打开官网：</p>
+<p><a target="_blank" rel="noopener" href="https://aihot.news/">https://aihot.news/</a></p>
+<ul>
+<li><strong>只想快速了解今天发生了什么</strong>：看精选，通过摘要和推荐理由决定是否继续读。</li>
+<li><strong>想知道大家在关注什么</strong>：看热点榜，再进入具体事件了解不同报道和进展。</li>
+<li><strong>几天没关注 AI 动态</strong>：看日报或周报，集中补上这段时间的内容。</li>
+<li><strong>只关注某家公司或工具</strong>：用主题和搜索缩小范围。</li>
+</ul>
+<h2 id="3-把-AIHOT-接入-Agent，用一句话查资讯"><a href="#3-把-AIHOT-接入-Agent，用一句话查资讯" class="headerlink" title="3. 把 AIHOT 接入 Agent，用一句话查资讯"></a>3. 把 AIHOT 接入 Agent，用一句话查资讯</h2><p>如果平时已经在使用 Codex、Claude Code 等工具，可以进一步让 AI 助手帮你查询和整理 AIHOT。</p>
+<p>这里的 <strong>Skill</strong> 可以理解成一份给助手的使用说明：告诉它什么时候查 AIHOT、去哪里查，以及怎样组织结果。</p>
+<h3 id="3-1-让-Codex-安装"><a href="#3-1-让-Codex-安装" class="headerlink" title="3.1 让 Codex 安装"></a>3.1 让 Codex 安装</h3><p>发给 Codex：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">请安装 AIHOT Skill：https://aihot.news/aihot-skill/README.md</span><br><span class="line">装完告诉我是否需要开启新会话。</span><br></pre></td></tr></table></figure>
+
+<p>安装目录是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/.agents/skills/aihot</span><br></pre></td></tr></table></figure>
+
+<p>安装后验证工具是否识别到 <code>aihot</code>。</p>
+<h3 id="3-2-手动安装方式"><a href="#3-2-手动安装方式" class="headerlink" title="3.2 手动安装方式"></a>3.2 手动安装方式</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash &lt;(curl -fsSL https://aihot.news/aihot-skill/install.sh) --target agents</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-实际查询一次-AI-新闻"><a href="#4-实际查询一次-AI-新闻" class="headerlink" title="4. 实际查询一次 AI 新闻"></a>4. 实际查询一次 AI 新闻</h2><p>安装完成后，直接问一句：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">过去 24 小时 AI 圈最重要的 5 件事是什么？</span><br></pre></td></tr></table></figure>
+
+<p>也可以明确指定来源和输出格式：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">使用 AIHOT，整理过去 24 小时最重要的 5 条 AI 新闻。</span><br><span class="line">每条包含简短摘要、来源、发布时间和阅读链接。</span><br></pre></td></tr></table></figure>
+
+<p>Codex 查询后，会给出时间范围，再整理出新闻标题、中文摘要、来源和链接。</p>
+<p><img src="/assets/aihot/aihot-news-result.png" alt="通过 AIHOT Skill 查询过去 24 小时 AI 新闻的实际结果"  data-tag='post-image' loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p>可以在当前对话里先看一遍摘要，再决定哪些新闻值得展开阅读。</p>
+<p>“最重要的 5 件事” 是助手的筛选判断，并不是固定排名。把自己的关注点说清楚，结果通常会更贴近需要。</p>
+<h2 id="5-可以直接使用的提问方式"><a href="#5-可以直接使用的提问方式" class="headerlink" title="5. 可以直接使用的提问方式"></a>5. 可以直接使用的提问方式</h2><p>除了每天看新闻，还可以按自己的关注点查询。</p>
+<h3 id="5-1-关注-AI-编程和开发工具"><a href="#5-1-关注-AI-编程和开发工具" class="headerlink" title="5.1 关注 AI 编程和开发工具"></a>5.1 关注 AI 编程和开发工具</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">用 AIHOT 查最近 7 天的 AI 产品更新，优先关注开发者工具。</span><br><span class="line">每条说明更新了什么，并附上来源链接。</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-查看某家公司或产品的消息"><a href="#5-2-查看某家公司或产品的消息" class="headerlink" title="5.2 查看某家公司或产品的消息"></a>5.2 查看某家公司或产品的消息</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用 AIHOT 查询最近一周 Claude 的动态，把模型发布、产品更新和其他消息分开整理。</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-追踪一个热点事件"><a href="#5-3-追踪一个热点事件" class="headerlink" title="5.3 追踪一个热点事件"></a>5.3 追踪一个热点事件</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">查一下 AIHOT 当前最热的事件，再解释排名第一的事件的来龙去脉。</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-4-阅读日报或周报"><a href="#5-4-阅读日报或周报" class="headerlink" title="5.4 阅读日报或周报"></a>5.4 阅读日报或周报</h3><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">给我最新一期 AIHOT 日报，简要说明每条新闻值得关注的原因。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">使用 AIHOT，整理最新一期 AI 周报里的重点，优先保留与开发者相关的内容。</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-开发者搭建自己的资讯站"><a href="#6-开发者搭建自己的资讯站" class="headerlink" title="6. 开发者搭建自己的资讯站"></a>6. 开发者搭建自己的资讯站</h2><p>可以复用 AIHOT 的开源框架，做一个按你自己的关注范围和筛选规则运行的资讯网站。</p>
+<p>比如你想做一个「前端技术资讯站」：</p>
+<ul>
+<li><strong>选信源</strong>：关注 Vue、React、浏览器等项目的官方动态。</li>
+<li><strong>定范围</strong>：重点展示版本发布、功能变化、迁移说明。</li>
+<li><strong>集中查看</strong>：把这些信息放在一个网站里，供开发者阅读。</li>
+<li><strong>换品牌</strong>：使用自己的站名、域名和栏目。</li>
+</ul>
+<p><strong>选好要关注的来源，AIHOT 再定时采集、筛选、整理，展示到自己的站点。</strong></p>
+<p>例如，接入 Vue 官方博客后，整个过程是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Vue 官方发布新文章</span><br><span class="line">    ↓</span><br><span class="line">你的站点定时检查 RSS，发现新内容</span><br><span class="line">    ↓</span><br><span class="line">采集文章，判重，再由模型按你的标准筛选、生成摘要</span><br><span class="line">    ↓</span><br><span class="line">在你的前端资讯站展示，符合规则的内容进入日报</span><br></pre></td></tr></table></figure>
+
+<p>这些采集和整理流程由框架提供。<strong>你需要自己决定“关注哪些网站、什么内容值得收录”</strong>。</p>
+<h3 id="启动自己的站点"><a href="#启动自己的站点" class="headerlink" title="启动自己的站点"></a>启动自己的站点</h3><p>本地试用需要 Docker、Node.js 24，以及一个兼容 OpenAI 接口格式的模型服务 API Key。</p>
+<p>官方启动示例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/KKKKhazix/AIHOT.git myhot</span><br><span class="line"><span class="built_in">cd</span> myhot</span><br><span class="line">node scripts/init-env.ts --llm-key <span class="string">&quot;替换成你的模型 API Key&quot;</span></span><br><span class="line">docker compose up -d --build</span><br></pre></td></tr></table></figure>
+
+<p>初始化工具会生成 <code>.env</code>。启动后，本地访问地址是 <code>http://localhost:3000</code>，后台入口是 <code>/admin</code>，管理员密码保存在 <code>.env</code> 的 <code>ADMIN_PASSWORD</code> 中。</p>
+<p>初始化默认使用 DeepSeek 配置；如果使用其他提供商，需要按 <code>.env.example</code> 调整模型地址与模型名。公网部署还要配置站点地址、域名、HTTPS 等，可阅读<a target="_blank" rel="noopener" href="https://github.com/KKKKhazix/AIHOT/blob/main/docs/deploy.md">官方部署文档</a>。</p>
+<h2 id="7-总结"><a href="#7-总结" class="headerlink" title="7. 总结"></a>7. 总结</h2><p>如果想保持对 AI 行业的了解，可以每天花几分钟看精选或日报，遇到重要消息再详细阅读。</p>
+<p>如果你是开发者，可以按自己的关注点查询 AIHOT，快速了解行业动态。也可以在项目开发中，把 AIHOT 的结果作为参考，或直接集成到文档、博客等地方。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://aihot.news/">AIHOT 官网</a></li>
+<li><a target="_blank" rel="noopener" href="https://aihot.news/about">关于 AIHOT</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/KKKKhazix/AIHOT">AIHOT GitHub 仓库</a></li>
+</ul>
+
+</article>
+    
+    
+
+<ul class="trm-post-copyright">
+    <li class="trm-post-copyright-author">
+        <strong>Post author: </strong>
+        Laura
+    </li>
+    <li class="trm-post-copyright-link">
+        <strong>Post link: </strong>
+        <a id="original-link" href="http://example.com/2026/10/29/aihot/" title="AIHOT：查看 AI 新闻和热点">http://example.com/2026/10/29/aihot/</a>
+    </li>
+    <li class="trm-post-copyright-license">
+        <strong>Copyright Notice: </strong>
+        All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 ">CC BY-NC-SA 4.0</a> unless otherwise stated.
+    </li>
+</ul>
+
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            Other Articles
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-older-publications-card trm-scroll-animation trm-active-el">
+        <div class="trm-older-publication">
+            
+            <a class="trm-op-top trm-anima-link" href="/2026/10/10/iTerm2%20%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/">
+                <span class="trm-op-cover">
+                    <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+                </span>
+                <h6 class="trm-op-title">iTerm2 安装与使用：让终端更好用</h6>
+            </a>
+            <div class="trm-divider trm-mb-15 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>26/10/10</li>
+                <li>11:20</li>
+                <li>工具</li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-footer-card trm-scroll-animation">
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>© 2020- 2026</span>
+            <span class="footer-separator"data-separator=" · "></span>
+            <span class="trm-accent-color">Laura</span>
+        </div>
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                Powered by <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> v7.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                Theme - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.2.2
+            </span>
+        </div>
+      
+
+    
+        <div class="trm-footer-item blog-run-long"></div>
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
+
+            
+
+    <div id="post-toc" class="trm-post-toc">
+      <div class="trm-post-toc-header">
+        Article table of contents
+				<span id="post-toc-top">
+					TOP
+				</span>
+      </div>
+      <div class="trm-post-toc-content">
+        <ol class="trm-toc"><li class="trm-toc-item trm-toc-level-2" title="1. AIHOT 是什么"><a rel="nofollow" class="trm-toc-link" href="#1-AIHOT-是什么"><span class="trm-toc-text">1. AIHOT 是什么</span></a></li><li class="trm-toc-item trm-toc-level-2" title="2. 直接在网站上看"><a rel="nofollow" class="trm-toc-link" href="#2-直接在网站上看"><span class="trm-toc-text">2. 直接在网站上看</span></a></li><li class="trm-toc-item trm-toc-level-2" title="3. 把 AIHOT 接入 Agent，用一句话查资讯"><a rel="nofollow" class="trm-toc-link" href="#3-把-AIHOT-接入-Agent，用一句话查资讯"><span class="trm-toc-text">3. 把 AIHOT 接入 Agent，用一句话查资讯</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="3.1 让 Codex 安装"><a rel="nofollow" class="trm-toc-link" href="#3-1-让-Codex-安装"><span class="trm-toc-text">3.1 让 Codex 安装</span></a></li><li class="trm-toc-item trm-toc-level-3" title="3.2 手动安装方式"><a rel="nofollow" class="trm-toc-link" href="#3-2-手动安装方式"><span class="trm-toc-text">3.2 手动安装方式</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="4. 实际查询一次 AI 新闻"><a rel="nofollow" class="trm-toc-link" href="#4-实际查询一次-AI-新闻"><span class="trm-toc-text">4. 实际查询一次 AI 新闻</span></a></li><li class="trm-toc-item trm-toc-level-2" title="5. 可以直接使用的提问方式"><a rel="nofollow" class="trm-toc-link" href="#5-可以直接使用的提问方式"><span class="trm-toc-text">5. 可以直接使用的提问方式</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="5.1 关注 AI 编程和开发工具"><a rel="nofollow" class="trm-toc-link" href="#5-1-关注-AI-编程和开发工具"><span class="trm-toc-text">5.1 关注 AI 编程和开发工具</span></a></li><li class="trm-toc-item trm-toc-level-3" title="5.2 查看某家公司或产品的消息"><a rel="nofollow" class="trm-toc-link" href="#5-2-查看某家公司或产品的消息"><span class="trm-toc-text">5.2 查看某家公司或产品的消息</span></a></li><li class="trm-toc-item trm-toc-level-3" title="5.3 追踪一个热点事件"><a rel="nofollow" class="trm-toc-link" href="#5-3-追踪一个热点事件"><span class="trm-toc-text">5.3 追踪一个热点事件</span></a></li><li class="trm-toc-item trm-toc-level-3" title="5.4 阅读日报或周报"><a rel="nofollow" class="trm-toc-link" href="#5-4-阅读日报或周报"><span class="trm-toc-text">5.4 阅读日报或周报</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="6. 开发者搭建自己的资讯站"><a rel="nofollow" class="trm-toc-link" href="#6-开发者搭建自己的资讯站"><span class="trm-toc-text">6. 开发者搭建自己的资讯站</span></a><ol class="trm-toc-child"><li class="trm-toc-item trm-toc-level-3" title="启动自己的站点"><a rel="nofollow" class="trm-toc-link" href="#启动自己的站点"><span class="trm-toc-text">启动自己的站点</span></a></li></ol></li><li class="trm-toc-item trm-toc-level-2" title="7. 总结"><a rel="nofollow" class="trm-toc-link" href="#7-总结"><span class="trm-toc-text">7. 总结</span></a></li><li class="trm-toc-item trm-toc-level-2" title="参考资料"><a rel="nofollow" class="trm-toc-link" href="#参考资料"><span class="trm-toc-text">参考资料</span></a></li></ol>
+      </div>
+    </div>
+
+            
+<div class="trm-fixed-container">
+    
+        <div class="trm-fixed-btn post-toc-btn" data-title="Open toc">
+            <i class="iconfont fas fa-th-list"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn" data-title="Read Mode" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+        <div class="trm-fixed-btn hidden-md" data-title="Toggle between single-column and double-column" onclick="asyncFun.switchSingleColumn()">
+            <i class="iconfont fas fa-arrows-alt-h"></i>
+        </div>
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="Back To Top">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
+        </div>
+      </div>
+      <!-- scroll container end -->
+  </div>
+  <!-- app wrapper end -->
+
+  
+    <div class="trm-search-popup">
+        <div class="trm-search-wrapper">
+            <div class="form trm-search-form">
+                <div class="trm-search-input-icon">
+                    <i class="iconfont fas fa-search"></i>
+                </div>
+                <input class="trm-search-input" type="text" placeholder="Searching...">
+                <div class="trm-search-btn-close">
+                    <i class="iconfont fas fa-times"></i>
+                </div>
+            </div>
+            <div class="trm-search-result-container">
+                <div class="trm-search-empty">
+                    Please enter keywords to search
+                </div>
+            </div>
+            <div class="trm-search-footer">
+                <div class="trm-search-stats"></div>
+                <ul class="trm-search-commands">
+                    <li>
+                        <kbd class="command-palette-commands-key">
+                            <svg width="15" height="15" aria-label="Escape key" role="img">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="1.2">
+                                    <path
+                                        d="M13.6167 8.936c-.1065.3583-.6883.962-1.4875.962-.7993 0-1.653-.9165-1.653-2.1258v-.5678c0-1.2548.7896-2.1016 1.653-2.1016.8634 0 1.3601.4778 1.4875 1.0724M9 6c-.1352-.4735-.7506-.9219-1.46-.8972-.7092.0246-1.344.57-1.344 1.2166s.4198.8812 1.3445.9805C8.465 7.3992 8.968 7.9337 9 8.5c.032.5663-.454 1.398-1.4595 1.398C6.6593 9.898 6 9 5.963 8.4851m-1.4748.5368c-.2635.5941-.8099.876-1.5443.876s-1.7073-.6248-1.7073-2.204v-.4603c0-1.0416.721-2.131 1.7073-2.131.9864 0 1.6425 1.031 1.5443 2.2492h-2.956">
+                                    </path>
+                                </g>
+                            </svg>
+                        </kbd>
+                        <span class="command-palette-Label">to close</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- Plugin -->
+
+
+
+
+    
+<script src="https://unpkg.com/swup@2.0.19/dist/swup.min.js"></script>
+
+    
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
+
+    
+
+    
+        <script src="/js/plugins/typing.js?v=2.2.2"></script>
+    
+
+    
+        
+<script src="https://unpkg.com/hexo-generator-searchdb@1.4.0/dist/search.js"></script>
+
+        <script src="/js/plugins/local_search.js?v=2.2.2"></script>
+    
+
+    <!-- 数学公式 -->
+    
+
+    <!-- 评论插件 -->
+    
+        
+
+        
+    
+
+		
+			<script src="/js/plugins/danmu.js?v=2.2.2"></script>
+		
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+    <script data-swup-reload-script>
+        (function () {
+            var bp = document.createElement('script');
+            var curProtocol = window.location.protocol.split(':')[0];
+            if (curProtocol === 'https') {
+                bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+            }
+            else {
+                bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+            }
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(bp, s);
+        })();
+    </script>
+
+
+
+<script id="async-script" src="/js/main.js?v=2.2.2"></script>
+
+<!-- CDN -->
+
+
+    
+<script src="/demo.js"></script>
+
+
+    
+
+    
+
+
+
+</body>
+
+</html>
